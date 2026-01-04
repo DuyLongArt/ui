@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Configure Docker
     # Define the tag once so both steps use the exact same value
     env:
       IMAGE_TAG: ${{ github.sha }} 
