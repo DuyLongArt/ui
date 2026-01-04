@@ -24,7 +24,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag duylongcontainer/ui:${{ env.IMAGE_TAG }}
+      run: docker build . --file Dockerfile --tag duylongcontainer/ui:${{ env.IMAGE_TAG }} \ --tag duylongcontainer/ui:latest
 
     - name: Push to Dockerhub
       run: docker push duylongcontainer/ui:${{ env.IMAGE_TAG }}
