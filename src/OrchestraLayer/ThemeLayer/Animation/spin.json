@@ -1,0 +1,24 @@
+{
+  "component": "MotionImageSpinner",
+  "library": "framer-motion",
+  "element": "motion.img",
+  "general": {
+    "name": "Spinning Button",
+    "style": {
+      "width": "55px",
+      "height": "55px",
+      "cursor": "pointer"
+    }
+  },
+  "animationConfig": {
+    "trigger": "whileHover",
+    "animate": {
+      "rotate": 360
+    },
+    "transition": {
+      "repeat": "Infinity",
+      "ease": "linear",
+      "duration": 1.5
+    }
+  }
+}
