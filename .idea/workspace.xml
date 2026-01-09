@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e34c82b4-9533-46cf-b608-fd4ab007a20f" name="Changes" comment="Update widget and protocol">
+      <change beforePath="$PROJECT_DIR$/../IOT/ESP32/esp32.py" beforeDir="false" afterPath="$PROJECT_DIR$/../IOT/ESP32/esp32.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataLayer/LocalDataLayer/assets/IconAssets.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataLayer/LocalDataLayer/assets/IconAssets.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UILayer/components/OrchestraButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/UILayer/components/OrchestraButton.tsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="30964U0mYu30ZljljpsM3XFWyea" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="openDirectoriesWithSingleClick" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Node.js.NavigatorList.ts.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.RouterProtocol.ts.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.SpinConfig.ts.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ToolWindow.Run.ShowToolbar&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;tailwind__ui&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.16.0&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.16.5&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/duylong/Code/PersonalProject/DuyLongMain/DuyLongMainApp/ui&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.dev.executor&quot;: &quot;Run&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/duylong/Code/PersonalProject/DuyLongMain/DuyLongMainApp/ui/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/OrchestraLayer" />
+      <recent name="$PROJECT_DIR$/src/OrchestraLayer/StateManager" />
+      <recent name="$PROJECT_DIR$/src/RouterLayer" />
+      <recent name="$PROJECT_DIR$/src/UILayer/components" />
+      <recent name="$PROJECT_DIR$/src/DataLayer/APILayer/DatabaseData" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.dev">
+    <configuration name="RouterProtocol.ts" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/RouterLayer/RouterProtocol.ts" typescript-loader="bundled" working-dir="$PROJECT_DIR$/src/RouterLayer">
+      <method v="2" />
+    </configuration>
+    <configuration name="SpinConfigProtocol.ts" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/src/OrchestraLayer/ThemeLayer/Animation/SpinConfigProtocol.ts" typescript-loader="bundled" working-dir="$PROJECT_DIR$/src/OrchestraLayer/ThemeLayer/Animation">
+      <method v="2" />
+    </configuration>
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+        <item itemvalue="Node.js.SpinConfigProtocol.ts" />
+        <item itemvalue="Node.js.RouterProtocol.ts" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-WS-251.27812.50" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e34c82b4-9533-46cf-b608-fd4ab007a20f" name="Changes" comment="" />
+      <created>1753027250121</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1753027250121</updated>
+      <workItem from="1753027251367" duration="1006000" />
+      <workItem from="1753367206894" duration="2613000" />
+      <workItem from="1755263189062" duration="10463000" />
+      <workItem from="1755320636925" duration="1601000" />
+      <workItem from="1755329541437" duration="689000" />
+      <workItem from="1755330337132" duration="1671000" />
+      <workItem from="1755372549019" duration="8595000" />
+      <workItem from="1755784672076" duration="5332000" />
+      <workItem from="1756028048563" duration="2165000" />
+      <workItem from="1756220740757" duration="600000" />
+      <workItem from="1756222986424" duration="29441000" />
+      <workItem from="1756283655626" duration="666000" />
+      <workItem from="1756311677466" duration="1289000" />
+      <workItem from="1756549738705" duration="12143000" />
+      <workItem from="1756563119846" duration="1382000" />
+      <workItem from="1756564526117" duration="3675000" />
+      <workItem from="1756686060206" duration="655000" />
+      <workItem from="1756710075573" duration="714000" />
+      <workItem from="1756710943004" duration="595000" />
+      <workItem from="1756780065950" duration="1826000" />
+      <workItem from="1756914802154" duration="2446000" />
+      <workItem from="1757112308124" duration="1558000" />
+      <workItem from="1757859382354" duration="719000" />
+    </task>
+    <task id="LOCAL-00001" summary="Update widget and protocol">
+      <option name="closed" value="true" />
+      <created>1756918559680</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1756918559680</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Update widget and protocol" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update widget and protocol" />
+  </component>
+</project>

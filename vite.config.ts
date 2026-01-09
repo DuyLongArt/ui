@@ -13,7 +13,7 @@ export default defineConfig({
     host: true,
     proxy: {
       // String shorthand for simple cases
-      '/backend': {
+      '/backend_app': {
         target: 'https://backend.duylong.art:443', // Your Spring Boot URL
         changeOrigin: true,
         secure: false,
