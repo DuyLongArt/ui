@@ -14,14 +14,14 @@ export default defineConfig({
     proxy: {
       // String shorthand for simple cases
       '/backend_app': {
-        target: 'http://backend.duylong.art:8686', // Your Spring Boot URL
+        target: 'http://backend.duylong.art', // Your Spring Boot URL
         changeOrigin: true,
         secure: false,
         // Optional: Remove /backend from the URL before sending to Spring Boot
         // rewrite: (path) => path.replace(/^\/backend/, '') 
       },
       '/object': {
-        target: 'http://backend.duylong.art:9000', // Your Spring Boot URL
+        target: 'http://backend.duylong.art', // Your Spring Boot URL
         changeOrigin: true,
         secure: false,
         // Optional: Remove /backend from the URL before sending to Spring Boot
