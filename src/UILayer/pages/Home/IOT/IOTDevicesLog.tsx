@@ -11,7 +11,7 @@ interface IOTLogRecord {
 
 // 2. Improve Fetcher: Pass parameters to make it reusable
 const fetchIOTDeviceRecords = async (idHeader: number): Promise<IOTLogRecord[]> => {
-    const { data } = await axios.get<IOTLogRecord[]>('http://192.168.22.4:8686/backend/mock', {
+    const { data } = await axios.get<IOTLogRecord[]>('http://192.168.22.4:8686/backend_app/mock', {
         params: { idHeader }
     });
     return data;

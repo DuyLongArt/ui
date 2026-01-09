@@ -1,35 +1,35 @@
-import axios  from 'axios';
+import axios from 'axios';
 import { create } from 'zustand';
 
 
 
 interface UserArhive {
-    category:string;
-    content:string;
+    category: string;
+    content: string;
 }
 interface UserArhiveState {
-    archive:UserArhive[]
+    archive: UserArhive[]
 }
-const userArhiveStore=create<UserArhiveState>((set,get)=>({
+const userArhiveStore = create<UserArhiveState>((set, get) => ({
     archive:
 
-    [
-        {
-            category:"",
-            content:""
-        }
-    ],
+        [
+            {
+                category: "",
+                content: ""
+            }
+        ],
 
-    getArchive:()=>()=>{
+    getArchive: () => () => {
 
-        const listArchives=axios.get("/backend/person/archive").then((res)=>{
-            set((state)=>({
+        const listArchives = axios.get("/backend_app/person/archive").then((res) => {
+            set((state) => ({
                 ...state,
-                archive:res.data
+                archive: res.data
             }))
         })
     }
-    
+
 }))
 
-export {userArhiveStore};
+export { userArhiveStore };

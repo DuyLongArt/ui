@@ -2,7 +2,7 @@ import axios from 'axios';
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
 
-const API_BASE_URL = '/backend';
+const API_BASE_URL = '/backend_app';
 
 export interface UserDetails {
     information_id: number | null;

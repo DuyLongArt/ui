@@ -21,16 +21,16 @@ export const ApproveProcessMachine = setup({
             return {};
         }),
         sendApproveToServer: () => {
-            axios.post("/backend/approve");
+            axios.post("/backend_app/approve");
         },
         fetchStepFromServer: () => {
-            axios.get("/backend/step");
+            axios.get("/backend_app/step");
         }
     },
 
     actors: {
         fetchStepFromServer: fromPromise(async () => {
-            const response = await axios.get("/backend/step");
+            const response = await axios.get("/backend_app/step");
             return response.data;
         })
     },

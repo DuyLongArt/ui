@@ -54,7 +54,7 @@ const StoragePage = () => {
 
     const fetchFiles = async () => {
         try {
-            const response = await axios.get('/backend/object/all');
+            const response = await axios.get('/backend_app/object/all');
             const mappedFiles: FileUpload[] = response.data.map((file: any) => ({
                 id: file.id || Math.random().toString(36).substr(2, 9),
                 file: new File([], file.fileName),
@@ -122,7 +122,7 @@ const StoragePage = () => {
             formData.append('file', fileWrapper.file);
 
             try {
-                await axios.post('/backend/object/add', formData, {
+                await axios.post('/backend_app/object/add', formData, {
                     onUploadProgress: (progressEvent) => {
                         const percent = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 100));
                         setFiles(prev => prev.map(f => f.id === fileWrapper.id ? { ...f, progress: percent } : f));
