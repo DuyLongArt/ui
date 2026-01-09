@@ -31,7 +31,7 @@ const useMusicStore = create<MusicState>((set) => ({
         try {
             // Trying to fetch from /backend/music/all or similar. 
             // If it doesn't exist, we'll fall back to a mock list but keep the structure.
-            const response = await axios.get('/backend/music/all').catch(() => ({
+            const response = await axios.get('/media/music/all').catch(() => ({
                 data: [
                     {
                         id: '1',

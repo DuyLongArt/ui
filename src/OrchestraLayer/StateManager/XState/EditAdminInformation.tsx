@@ -13,7 +13,7 @@ const editAdminInformationMachine = setup({
             const token = Cookies.get("auth_jwt");
 
             const res = await axios.post(
-                `http://192.168.22.4:8686/backend/information/edit?location=${input.location}&university=${input.university}`,
+                `/backend_app/information/edit?location=${input.location}&university=${input.university}`,
 
                 {
                     headers: { Authorization: `Bearer ${token}` }
