@@ -178,11 +178,11 @@ const authenState = createMachine({
               assign({
                 jwt: ({ event }) => {
                   const output = event.output;
-                  return output?.jwt || output || "";
+                  return output?.token || output || "";
                 }
               }),
               ({ event }) => {
-                const jwt = event.output?.jwt;
+                const jwt = event.output?.token;
                 if (jwt) {
                   console.log("💾 Saving JWT to cookies...");
                   saveJWTToCookies(jwt);
