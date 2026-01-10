@@ -48,6 +48,7 @@ const checkCookies = (): string | null => {
   return null;
 };
 
+
 const clearCookies = () => {
   document.cookie = "auth_jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=Lax";
   console.log("🧹 JWT cookie cleared.");
@@ -61,11 +62,8 @@ const getJWT = fromPromise(async () => {
       await mockDelay(1000); // Simulate network latency
       return { jwt: MOCK_JWT_TOKEN };
     }
-
-    const response = await axios.post("/backend/auth/login", {
-
-    });
-    return response.data;
+    const token = checkCookies();
+    if (token) return { token }; // Return the cookie if we have it
   } catch (error) {
     console.error("❌ Error fetching JWT:", error);
     throw error;
