@@ -62,7 +62,9 @@ const getJWT = fromPromise(async () => {
       return { jwt: MOCK_JWT_TOKEN };
     }
 
-    const response = await axios.get("/backend/auth/login");
+    const response = await axios.post("/backend/auth/login", {
+
+    });
     return response.data;
   } catch (error) {
     console.error("❌ Error fetching JWT:", error);
