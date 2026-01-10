@@ -22,7 +22,7 @@ const userArhiveStore = create<UserArhiveState>((set, get) => ({
 
     getArchive: () => () => {
 
-        const listArchives = axios.get("/backend_app/person/archive").then((res) => {
+        const listArchives = axios.get("/backend/person/archive").then((res) => {
             set((state) => ({
                 ...state,
                 archive: res.data

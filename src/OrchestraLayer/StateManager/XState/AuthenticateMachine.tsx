@@ -62,7 +62,7 @@ const getJWT = fromPromise(async () => {
       return { jwt: MOCK_JWT_TOKEN };
     }
 
-    const response = await axios.get("/backend_app/auth/login");
+    const response = await axios.get("/backend/auth/login");
     return response.data;
   } catch (error) {
     console.error("❌ Error fetching JWT:", error);
@@ -82,7 +82,7 @@ const authenticateWithCredentials = fromPromise(
       //   throw new Error("Invalid mock credentials");
       // }
 
-      const response = await axios.post("/backend_app/auth/login", {
+      const response = await axios.post("/backend/auth/login", {
         userName: input.username,
         password: input.password,
         jwt: input.jwt || "", // Include JWT token if available
@@ -104,7 +104,7 @@ const registerWithCredentials = fromPromise(
         return { jwt: MOCK_JWT_TOKEN };
       }
 
-      const response = await axios.post("/backend_app/auth/signup", input.payload);
+      const response = await axios.post("/backend/auth/signup", input.payload);
       return response.data;
     } catch (error) {
       console.error("❌ Error registering:", error);

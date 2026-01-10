@@ -2,7 +2,7 @@ import axios from 'axios';
 import { create } from 'zustand';
 import Cookies from 'js-cookie';
 
-const API_BASE_URL = '/backend_app';
+const API_BASE_URL = '/backend';
 
 export interface UserDetails {
     information_id: number | null;
@@ -30,7 +30,7 @@ export interface UserProfile {
 }
 
 export interface UserAccount {
-    role: 'ADMIN' | 'USER' | 'VIEWER'| 'UNAUTHORIZED';
+    role: 'ADMIN' | 'USER' | 'VIEWER' | 'UNAUTHORIZED';
 }
 
 export interface UserInformation {
