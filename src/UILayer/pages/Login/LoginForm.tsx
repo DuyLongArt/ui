@@ -10,7 +10,7 @@ const setAuthCookie = (jwt: string) => {
   if (!jwt) return;
   const expiryDate = new Date();
   expiryDate.setDate(expiryDate.getDate() + 7);
-  document.cookie = `auth_jwt=${jwt}; expires=${expiryDate.toUTCString()}; path=/;  SameSite=Lax`;
+  document.cookie = `auth_jwt=${jwt}; expires=${expiryDate.toUTCString()}; path=/;Secure;  SameSite=Lax`;
 };
 
 const containerVariants = {

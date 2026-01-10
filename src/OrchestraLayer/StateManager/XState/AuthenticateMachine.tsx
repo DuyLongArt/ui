@@ -35,7 +35,7 @@ const saveJWTToCookies = (jwt: string) => {
     return;
   }
   const expiryDate = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000); // 2 days from now
-  document.cookie = `auth_jwt=${jwt}; expires=${expiryDate.toUTCString()}; path=/;  SameSite=Lax`;
+  document.cookie = `auth_jwt=${jwt}; expires=${expiryDate.toUTCString()}; path=/;  Secure;SameSite=Lax`;
   console.log("✅ JWT saved to cookies successfully");
 };
 
@@ -51,7 +51,7 @@ const checkCookies = (): string | null => {
 
 
 const clearCookies = () => {
-  document.cookie = "auth_jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;  SameSite=Lax";
+  document.cookie = "auth_jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; Secure; SameSite=Lax";
   console.log("🧹 JWT cookie cleared.");
 };
 

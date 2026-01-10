@@ -10,8 +10,8 @@ export default defineConfig({
   server: {
     port: 22222,
     strictPort: true,
-    // host: true,
-    host: '127.0.0.1', // Use the explicit IPv4 instead of 'true' or 'localhost'
+    host: true,
+    // host: '127.0.0.1', // Use the explicit IPv4 instead of 'true' or 'localhost'
     proxy: {
       // String shorthand for simple cases
       '/backend': {
