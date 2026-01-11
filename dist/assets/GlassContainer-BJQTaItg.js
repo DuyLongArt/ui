@@ -1,1 +1,0 @@
-import{j as a}from"./index-Cf-gkL86.js";const e=({children:r,className:o="",onClick:s})=>a.jsx("div",{onClick:s,className:`bg-white/40 backdrop-blur-md border border-white/60 shadow-sm rounded-2xl transition-all duration-300 hover:shadow-md hover:bg-white/60 ${o}`,children:r});export{e as G};
