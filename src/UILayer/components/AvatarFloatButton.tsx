@@ -222,7 +222,7 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
     const imageObjectStore = useObjectImageEtagStore();
     const userStore = useUserProfileStore();
     // const admisnUrl = "http://192.168.22.4:9000/duylongwebappobjectdatabase/admin.png";
-    const ADMIN_IMAGE_URL = `http://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
+    const ADMIN_IMAGE_URL = `https://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
     const [profileBlobUrl, setProfileBlobUrl] = useState<string>('');
     // const [coverBlobUrl, setCoverBlobUrl] = useState<string>('');
 

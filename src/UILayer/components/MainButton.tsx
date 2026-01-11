@@ -226,7 +226,7 @@ const MainButton: React.FC<AvatarFloatButtonProps> = ({
     const imageObjectStore = useObjectImageEtagStore();
     const userStore = useUserProfileStore();
     // const admisnUrl = "http://192.168.22.4:9000/duylongwebappobjectdatabase/admin.png";
-    const adminUrl = `http://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
+    const ADMIN_IMAGE_URL = `https://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
     return (
         <div
             className=" z-50 w-15 h-15 border-3 flex justify-center items-center border-indigo-500 rotate-45"
@@ -249,18 +249,20 @@ const MainButton: React.FC<AvatarFloatButtonProps> = ({
                 {/* Main Avatar Button */}
                 <motion.button
                     onClick={onClick}
-                    whileHover={{ scale: 1.1, y: -2, 
+                    whileHover={{
+                        scale: 1.1, y: -2,
 
                         rotate: "360deg infinite",
-                        
-                 
+
+
                         transition: {
                             duration: 0.3,
                             ease: "easeInOut"
                         }
 
                     }}
-                    whileTap={{ scale: 0.95, 
+                    whileTap={{
+                        scale: 0.95,
 
                         transition: {
                             duration: 0.3,
