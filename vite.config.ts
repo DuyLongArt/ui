@@ -16,18 +16,16 @@ export default defineConfig({
       // String shorthand for simple cases
       '/backend': {
 
-        target: 'http://backend.duylong.art', // Your Spring Boot URL
+        target: 'https://backend.duylong.art', // Your Spring Boot URL
         changeOrigin: true,
         secure: false,
-        // Optional: Remove /backend from the URL before sending to Spring Boot
-        // rewrite: (path) => path.replace(/^\/backend/, '') 
+
       },
       '/object': {
-        target: 'http://backend.duylong.art', // Your Spring Boot URL
+        target: 'https://backend.duylong.art', // Your Spring Boot URL
         changeOrigin: true,
         secure: false,
-        // Optional: Remove /backend from the URL before sending to Spring Boot
-        // rewrite: (path) => path.replace(/^\/object/, '')
+
       }
     }
   }
