@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Sample avatar image - replace with your AvatarImage component
 import { AvatarImage } from "../../DataLayer/LocalDataLayer/assets/AvatarImage";
 import { useObjectImageEtagStore } from "../../OrchestraLayer/StateManager/Zustand/objectImageStore";
 import { useUserProfileStore } from "../../OrchestraLayer/StateManager/Zustand/userProfileStore";
-import axios from "axios";
 interface AvatarFloatButtonProps {
     x: number;
     y: number;
@@ -223,39 +222,9 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
     const userStore = useUserProfileStore();
     // const admisnUrl = "http://192.168.22.4:9000/duylongwebappobjectdatabase/admin.png";
     const ADMIN_IMAGE_URL = `https://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
-    const [profileBlobUrl, setProfileBlobUrl] = useState<string>('');
-    // const [coverBlobUrl, setCoverBlobUrl] = useState<string>('');
+    // URL is stable (until version changes), so let the browser handle caching naturally.
+    // We don't need to manually fetch blob and create object URL, which causes "reloading" effect.
 
-    // Fetch Image via Axios
-    useEffect(() => {
-        let profileUrl = '';
-        let coverUrl = '';
-
-        const loadImage = async (url: string, setter: (val: string) => void) => {
-            // if (!user.profiles.alias) return;
-            try {
-                const response = await axios.get(url, { responseType: 'blob' });
-                const localUrl = URL.createObjectURL(response.data);
-                setter(localUrl);
-                return localUrl;
-            } catch (err) {
-                console.error("Lỗi tải ảnh qua Proxy:", err);
-                setter(url); // Fallback dùng link trực tiếp nếu axios lỗi
-            }
-        };
-
-        const loadAll = async () => {
-            profileUrl = await loadImage(ADMIN_IMAGE_URL, setProfileBlobUrl) || '';
-            // coverUrl = await loadImage(COVER_PHOTO_URL, setCoverBlobUrl) || '';
-        };
-
-        loadAll();
-
-        return () => {
-            if (profileUrl) URL.revokeObjectURL(profileUrl);
-            if (coverUrl) URL.revokeObjectURL(coverUrl);
-        };
-    }, []);
 
 
 
@@ -319,8 +288,7 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
 
 
                             <AvatarImage width={avatarSize} height={avatarSize}
-                                networkUrl={profileBlobUrl}
-
+                                networkUrl={ADMIN_IMAGE_URL}
                             />
                         </div>
                     </motion.div>
