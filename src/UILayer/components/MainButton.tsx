@@ -226,7 +226,7 @@ const MainButton: React.FC<AvatarFloatButtonProps> = ({
     const imageObjectStore = useObjectImageEtagStore();
     const userStore = useUserProfileStore();
     // const admisnUrl = "http://192.168.22.4:9000/duylongwebappobjectdatabase/admin.png";
-    const adminUrl = `http://192.168.22.4:9000/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
+    const adminUrl = `http://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
     return (
         <div
             className=" z-50 w-15 h-15 border-3 flex justify-center items-center border-indigo-500 rotate-45"

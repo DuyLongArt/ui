@@ -9,7 +9,7 @@ interface ImageUrlInterface {
 
 const MotionImageSpinner: React.FC<ImageUrlInterface> = ({
     imageUrl,
-    fallbackUrl = 'http://192.168.22.4:9000/duylongwebappobjectdatabase/admin.png'
+    fallbackUrl = 'http://backend.duylong.art/object/duylongwebappobjectdatabase/admin.png'
 }) => {
     // State to handle network load errors
     const [imgSrc, setImgSrc] = useState<string>(imageUrl);

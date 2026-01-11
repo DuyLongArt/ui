@@ -73,7 +73,7 @@ const useUserProfileStore = create<UserInformationState>((set, get) => ({
             lastName: '',
             friends: 208,
             mutual: 5,
-            profileImageUrl: 'http://192.168.22.4:9000/duylongwebappobjectdatabase/admin.png',
+            profileImageUrl: 'http://backend.duylong.art/object/duylongwebappobjectdatabase/admin.png',
             alias: '',
         },
     },

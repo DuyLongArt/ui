@@ -1,5 +1,5 @@
 const MINIO_CONFIG = {
-    endPoint: '192.168.22.4',
+    endPoint: 'backend.duylong.art/object',
     port: 9000,
     useSSL: false,
     accessKey: 'duylongadmin',
