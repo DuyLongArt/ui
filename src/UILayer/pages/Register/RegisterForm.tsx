@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { AuthenticateFactor } from "../../../OrchestraLayer/StateManager/XState/AuthenticateMachine";
 import { useSelector } from "@xstate/react";
@@ -38,9 +38,28 @@ const RegisterForm = () => {
 
     const [showPassword, setShowPassword] = useState(false);
     const [validationError, setValidationError] = useState<string | null>(null);
+    const [ipAddress, setIpAddress] = useState<string>('unknown');
 
     const actorRef = AuthenticateFactor.useActorRef();
     const navigate = useNavigate();
+
+    // Fetch IP Address
+    useEffect(() => {
+        const fetchIP = async () => {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                if (data.ip) {
+                    setIpAddress(data.ip);
+                }
+            } catch (error) {
+                console.error('Failed to fetch IP address:', error);
+                // Keep default 'unknown'
+            }
+        };
+
+        fetchIP();
+    }, []);
 
     // Derive State from XState Machine
     const isLoading = useSelector(actorRef, (snapshot) => snapshot.matches('registering'));
@@ -73,7 +92,7 @@ const RegisterForm = () => {
                 country: country,
                 role: 'USER' as const,
                 device: navigator.userAgent,
-                deviceIP: 'unknown'
+                deviceIP: ipAddress
             };
 
             actorRef.send({ type: "REGISTER", payload });

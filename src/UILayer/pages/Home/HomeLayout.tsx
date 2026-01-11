@@ -110,8 +110,8 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
       >
         <div
           ref={nodeRef}
-          className="absolute bottom-10 right-10 z-[1000] cursor-move touch-none"
-          style={{ position: 'absolute' }} // Explicitly needed for initial layout
+          className="absolute bottom-4 right-4 md:bottom-10 md:right-10 origin-bottom-right scale-75 md:scale-100 z-[1000] cursor-move touch-none"
+
         >
           <AvatarFloatButton
             x={0}
