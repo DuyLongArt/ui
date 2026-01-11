@@ -1,0 +1,1 @@
+import{D as o}from"./index-Cf-gkL86.js";const n=o(e=>({versions:{avatarVersion:0,coverVersion:0},incrementAvatarVersion:()=>e(r=>({versions:{...r.versions,avatarVersion:r.versions.avatarVersion+1}})),incrementCoverVersion:()=>e(r=>({versions:{...r.versions,coverVersion:r.versions.coverVersion+1}}))}));export{n as u};

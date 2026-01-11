@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import Cookies from 'js-cookie';
 
 const API_BASE_URL = '/backend';
@@ -51,136 +52,144 @@ interface UserInformationState {
     editProfile: (university: string, location: string) => void;
 }
 
-const useUserProfileStore = create<UserInformationState>((set, get) => ({
-    information: {
-        details: {
-            information_id: null,
-            identity_id: null,
-            github_url: '',
-            website_url: '',
-            company: '',
-            university: '',
-            location: '',
-            country: '',
-            bio: '',
-            occupation: '',
-            education_level: '',
-            linkedin_url: '',
-        },
-        profiles: {
-            id: null,
-            firstName: '',
-            lastName: '',
-            friends: 208,
-            mutual: 5,
-            profileImageUrl: 'https://backend.duylong.art/object/duylongwebappobjectdatabase/admin.png',
-            alias: '',
-        },
-    },
+const useUserProfileStore = create<UserInformationState>()(
+    persist(
+        (set, get) => ({
+            information: {
+                details: {
+                    information_id: null,
+                    identity_id: null,
+                    github_url: '',
+                    website_url: '',
+                    company: '',
+                    university: '',
+                    location: '',
+                    country: '',
+                    bio: '',
+                    occupation: '',
+                    education_level: '',
+                    linkedin_url: '',
+                },
+                profiles: {
+                    id: null,
+                    firstName: '',
+                    lastName: '',
+                    friends: 208,
+                    mutual: 5,
+                    profileImageUrl: 'https://backend.duylong.art/object/duylongwebappobjectdatabase/admin.png',
+                    alias: '',
+                },
+            },
 
-    fetchFromDatabase: async () => {
-        try {
-            const token = Cookies.get('auth_jwt');
-            if (!token) return;
+            fetchFromDatabase: async () => {
+                try {
+                    const token = Cookies.get('auth_jwt');
+                    if (!token) return;
 
-            // Fetch Person Information
-            const response = await axios.get(`${API_BASE_URL}/person/information`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+                    // Fetch Person Information
+                    const response = await axios.get(`${API_BASE_URL}/person/information`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
 
-            const data = response.data;
+                    const data = response.data;
 
-            set((state) => ({
+                    set((state) => ({
+                        information: {
+                            ...state.information,
+                            profiles: {
+                                ...state.information.profiles,
+                                id: data.id,
+                                firstName: data.firstName,
+                                lastName: data.lastName,
+                                profileImageUrl: data.profileImageUrl || state.information.profiles.profileImageUrl,
+                                alias: data.alias,
+                            },
+                        }
+                    }));
+
+                    // Fetch Details
+                    const responseDetails = await axios.get(`${API_BASE_URL}/information/details`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+
+                    const dataDetails = responseDetails.data;
+                    console.log("✅ Profile Sync Successful: ", dataDetails);
+
+                    set((state) => ({
+                        information: {
+                            ...state.information,
+                            details: {
+                                ...state.information.details,
+                                identity_id: dataDetails.id,
+                                github_url: dataDetails.github_url,
+                                website_url: dataDetails.website_url,
+                                company: dataDetails.company,
+                                university: dataDetails.university,
+                                location: dataDetails.location,
+                                country: dataDetails.country,
+                                bio: dataDetails.bio,
+                                occupation: dataDetails.occupation,
+                                education_level: dataDetails.education_level,
+                                linkedin_url: dataDetails.linkedin_url,
+                            }
+                        }
+                    }));
+
+                } catch (error) {
+                    console.error("❌ Failed to fetch user profile:", error);
+                }
+            },
+
+            updateProfileImageUrl: (url: string) => set((state) => ({
                 information: {
                     ...state.information,
                     profiles: {
                         ...state.information.profiles,
-                        id: data.id,
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        profileImageUrl: data.profileImageUrl || state.information.profiles.profileImageUrl,
-                        alias: data.alias,
-                    },
-                }
-            }));
-
-            // Fetch Details
-            const responseDetails = await axios.get(`${API_BASE_URL}/information/details`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-
-            const dataDetails = responseDetails.data;
-            console.log("✅ Profile Sync Successful: ", dataDetails);
-
-            set((state) => ({
-                information: {
-                    ...state.information,
-                    details: {
-                        ...state.information.details,
-                        identity_id: dataDetails.id,
-                        github_url: dataDetails.github_url,
-                        website_url: dataDetails.website_url,
-                        company: dataDetails.company,
-                        university: dataDetails.university,
-                        location: dataDetails.location,
-                        country: dataDetails.country,
-                        bio: dataDetails.bio,
-                        occupation: dataDetails.occupation,
-                        education_level: dataDetails.education_level,
-                        linkedin_url: dataDetails.linkedin_url,
+                        profileImageUrl: url
                     }
                 }
-            }));
+            })),
 
-        } catch (error) {
-            console.error("❌ Failed to fetch user profile:", error);
-        }
-    },
-
-    updateProfileImageUrl: (url: string) => set((state) => ({
-        information: {
-            ...state.information,
-            profiles: {
-                ...state.information.profiles,
-                profileImageUrl: url
-            }
-        }
-    })),
-
-    editProfile: (editUniversity: string, editLocation: string) => set((state) => ({
-        information: {
-            ...state.information,
-            profiles: {
-                ...state.information.profiles,
-                details: {
-                    ...state.information.details,
-                    university: editUniversity,
-                    location: editLocation,
+            editProfile: (editUniversity: string, editLocation: string) => set((state) => ({
+                information: {
+                    ...state.information,
+                    profiles: {
+                        ...state.information.profiles,
+                        details: {
+                            ...state.information.details,
+                            university: editUniversity,
+                            location: editLocation,
+                        }
+                    } as any // Temporary cast to bypass structure mismatch if 'details' is not directly under 'profiles' in intended schema, but keeping logically consistent with previous code
                 }
-            } as any // Temporary cast to bypass structure mismatch if 'details' is not directly under 'profiles' in intended schema, but keeping logically consistent with previous code
-        }
-    })),
+            })),
 
 
-    updateProfile: async () => {
-        try {
-            const token = Cookies.get('auth_jwt');
-            const { details } = get().information;
+            updateProfile: async () => {
+                try {
+                    const token = Cookies.get('auth_jwt');
+                    const { details } = get().information;
 
-            const response = await axios.post(
-                `${API_BASE_URL}/information/edit?university=${details.university}&location=${details.location}`,
-                {},
-                {
-                    headers: { Authorization: `Bearer ${token}` }
+                    const response = await axios.post(
+                        `${API_BASE_URL}/information/edit?university=${details.university}&location=${details.location}`,
+                        {},
+                        {
+                            headers: { Authorization: `Bearer ${token}` }
+                        }
+                    );
+
+                    console.log("✅ Database Update Successful:", response.data);
+                } catch (error) {
+                    console.error("❌ Failed to update profile in database:", error);
                 }
-            );
-
-            console.log("✅ Database Update Successful:", response.data);
-        } catch (error) {
-            console.error("❌ Failed to update profile in database:", error);
+            },
+        }),
+        {
+            name: 'user-profile-storage',
+            storage: createJSONStorage(() => localStorage),
         }
-    },
-}));
+    )
+);
 
 const useUserAccountStore = create<UserAccountState>((set) => ({
     account: {
@@ -218,25 +227,33 @@ interface UserSkillState {
     value: SkillType[];
     getUserSkill: () => Promise<void>;
 }
-const useUserSkillStore = create<UserSkillState>((set) => ({
-    value: [],
-    getUserSkill: async () => {
-        try {
-            const token = Cookies.get('auth_jwt');
-            const response = await axios.get<SkillType[]>(`${API_BASE_URL}/person/skills`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            console.log("✅ Database Skill Successful:", response.data);
-            set((state) => ({
+const useUserSkillStore = create<UserSkillState>()(
+    persist(
+        (set) => ({
+            value: [],
+            getUserSkill: async () => {
+                try {
+                    const token = Cookies.get('auth_jwt');
+                    const response = await axios.get<SkillType[]>(`${API_BASE_URL}/person/skills`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    console.log("✅ Database Skill Successful:", response.data);
+                    set((state) => ({
 
-                ...state,
-                value: response.data
-            }));
-        }
-        catch (error) {
-            console.error("❌ Failed to get user skill:", error);
-        }
-    }
+                        ...state,
+                        value: response.data
+                    }));
+                }
+                catch (error) {
+                    console.error("❌ Failed to get user skill:", error);
+                }
+            }
 
-}))
+        }),
+        {
+            name: 'user-skills-storage',
+            storage: createJSONStorage(() => localStorage),
+        }
+    )
+)
 export { useUserAccountStore, useUserProfileStore, useUserSkillStore };

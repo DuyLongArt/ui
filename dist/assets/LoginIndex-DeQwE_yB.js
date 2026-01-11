@@ -1,0 +1,1 @@
+import{j as o,B as t}from"./index-Cf-gkL86.js";import i from"./LoginForm-cbdBeFRM.js";import"./proxy-CT5DUpU2.js";import"./user-DmoZDOjL.js";import"./createLucideIcon-CcJUhs0g.js";import"./eye-7XizZDlg.js";const a=({children:r})=>o.jsxs(t,{children:[o.jsx(i,{}),r]});export{a as default};
