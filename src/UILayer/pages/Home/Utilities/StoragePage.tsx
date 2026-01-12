@@ -70,7 +70,8 @@ const StoragePage = () => {
     const fetchFiles = async () => {
         try {
             const response = await axios.get('/backend/object/all');
-            const mappedFiles: FileUpload[] = response.data.map((file: any) => ({
+            const data = Array.isArray(response.data) ? response.data : [];
+            const mappedFiles: FileUpload[] = data.map((file: any) => ({
                 id: file.id || Math.random().toString(36).substr(2, 9),
                 file: new File([], file.fileName),
                 preview: file.contentType?.startsWith('image/') ? `/object/duylongwebappobjectdatabase/${file.fileName}` : undefined,

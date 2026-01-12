@@ -56,8 +56,9 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
     setOpenMusicList(!openMusicList);
   }
   const navigationItems = useMemo(() => {
+    if (!Array.isArray(pageList)) return [];
     return pageList
-      .map((name, index) => ({ name, path: pathList[index] }))
+      .map((name, index) => ({ name, path: (pathList && pathList[index]) || '' }))
       .filter(item => item.name !== "Index");
   }, [pageList, pathList]);
 
@@ -73,14 +74,12 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
     setOpenNav(false);
   };
 
-  const musicListElement = playlist.map(element => {
+  const musicListElement = Array.isArray(playlist) ? playlist.map(element => {
     return {
       title: element.title,
       url: element.url
     }
-  })
-
-  console.log(JSON.stringify(musicListElement));
+  }) : [];
   const NavList = ({ mobile = false }: { mobile?: boolean }) => (
     <ul className={`flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ${mobile ? "mt-4 mb-4" : ""}`}>
       {navigationItems.map(({ name, path }) => (
@@ -190,7 +189,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
             {/* Mobile Mini Player */}
             {currentSong && (
               <div
-              
+
                 className="mt-4 flex items-center justify-between bg-black/20 backdrop-blur-md rounded-xl p-3 border border-white/10"
               >
                 <div className="flex items-center gap-3">
@@ -214,55 +213,55 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
             )}
           </div>
         </Collapse>
-           {openMusicList && (
-        <div className="absolute top-full right-0 z-200 w-full max-w-[320px] p-2 mt-2">
-          <ul className="bg-indigo-900/95 border border-white/20 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl max-h-[400px]">
-            <div className="p-3 border-b border-white/10">
-              <span className="text-xs font-bold text-indigo-200 uppercase tracking-wider">Playlist</span>
-            </div>
-            <div className="overflow-y-auto custom-scrollbar max-h-[350px]">
-              {playlist.length > 0 ? (
-                playlist.map((item, index) => (
-                  <li
-                    key={index}
-                    className={`h-12 px-4 flex items-center hover:bg-white/10 transition-colors border-b border-white/5 last:border-0 cursor-pointer ${currentSong?.id === item.id ? 'bg-indigo-500/30' : ''}`}
-                    onClick={() => {
-                      setCurrentSong(item);
-                      setOpenMusicList(false);
-                      // Optional: close after selection
-                      // setOpenMusicList(false);
-                    }}
-                  >
-                    <div className="flex flex-col min-w-0">
-                      <span className={`text-sm truncate ${currentSong?.id === item.id ? 'text-indigo-200 font-bold' : 'text-white'}`}>
-                        {item.title}
-                      </span>
-                      <span className="text-[10px] text-gray-400 truncate">{item.artist || 'Unknown Artist'}</span>
-                    </div>
-                    {currentSong?.id === item.id && isPlaying && (
-                      <div className="ml-auto w-4 h-4 flex items-center justify-center">
-                        <div className="flex gap-0.5 items-end h-3">
-                          <span className="w-0.5 bg-indigo-400 animate-music-bar-1"></span>
-                          <span className="w-0.5 bg-indigo-400 animate-music-bar-2"></span>
-                          <span className="w-0.5 bg-indigo-400 animate-music-bar-3"></span>
-                        </div>
+        {openMusicList && (
+          <div className="absolute top-full right-0 z-200 w-full max-w-[320px] p-2 mt-2">
+            <ul className="bg-indigo-900/95 border border-white/20 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl max-h-[400px]">
+              <div className="p-3 border-b border-white/10">
+                <span className="text-xs font-bold text-indigo-200 uppercase tracking-wider">Playlist</span>
+              </div>
+              <div className="overflow-y-auto custom-scrollbar max-h-[350px]">
+                {Array.isArray(playlist) && playlist.length > 0 ? (
+                  playlist.map((item, index) => (
+                    <li
+                      key={index}
+                      className={`h-12 px-4 flex items-center hover:bg-white/10 transition-colors border-b border-white/5 last:border-0 cursor-pointer ${currentSong?.id === item.id ? 'bg-indigo-500/30' : ''}`}
+                      onClick={() => {
+                        setCurrentSong(item);
+                        setOpenMusicList(false);
+                        // Optional: close after selection
+                        // setOpenMusicList(false);
+                      }}
+                    >
+                      <div className="flex flex-col min-w-0">
+                        <span className={`text-sm truncate ${currentSong?.id === item.id ? 'text-indigo-200 font-bold' : 'text-white'}`}>
+                          {item.title}
+                        </span>
+                        <span className="text-[10px] text-gray-400 truncate">{item.artist || 'Unknown Artist'}</span>
                       </div>
-                    )}
-                  </li>
-                ))
-              ) : (
-                <div className="p-8 text-center text-gray-400 text-sm italic">
-                  No songs in playlist
-                </div>
-              )}
-            </div>
-          </ul>
-        </div>
-      )}
+                      {currentSong?.id === item.id && isPlaying && (
+                        <div className="ml-auto w-4 h-4 flex items-center justify-center">
+                          <div className="flex gap-0.5 items-end h-3">
+                            <span className="w-0.5 bg-indigo-400 animate-music-bar-1"></span>
+                            <span className="w-0.5 bg-indigo-400 animate-music-bar-2"></span>
+                            <span className="w-0.5 bg-indigo-400 animate-music-bar-3"></span>
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                  ))
+                ) : (
+                  <div className="p-8 text-center text-gray-400 text-sm italic">
+                    No songs in playlist
+                  </div>
+                )}
+              </div>
+            </ul>
+          </div>
+        )}
       </Navbar>
 
       {/* Music Dropdown - Moved here for better visibility and higher Z-index */}
-   
+
 
       {/* Global Audio Element */}
       <audio

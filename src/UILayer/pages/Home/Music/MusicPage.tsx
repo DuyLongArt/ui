@@ -57,7 +57,7 @@ const MusicPage = () => {
                             </div>
                         ) : (
                             <div className="space-y-2">
-                                {playlist.map((song, index) => (
+                                {Array.isArray(playlist) && playlist.map((song, index) => (
                                     <motion.div
                                         key={song.id}
                                         initial={{ opacity: 0, y: 10 }}
@@ -67,8 +67,8 @@ const MusicPage = () => {
                                             setCurrentSong(song);
                                         }}
                                         className={`group flex items-center p-3 rounded-2xl cursor-pointer transition-all duration-200 ${currentSong?.id === song.id
-                                                ? 'bg-white/20 shadow-lg border border-white/20'
-                                                : 'hover:bg-white/10 border border-transparent'
+                                            ? 'bg-white/20 shadow-lg border border-white/20'
+                                            : 'hover:bg-white/10 border border-transparent'
                                             }`}
                                     >
                                         <div className="relative w-12 h-12 rounded-xl overflow-hidden mr-4 shadow-md">
