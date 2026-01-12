@@ -38,7 +38,7 @@ const useMusicStore = create<MusicState>()(
                 set({ isLoading: true, error: null });
                 try {
                     console.log("🎵 Fetching music from API...");
-                    const response = await axios.get('http://0.0.0.0:8022/api/music');
+                    const response = await axios.get('http://100.64.22.2:8022/api/music');
                     console.log("✅ Music fetched successfully:", response.data);
 
                     if (response.data && Array.isArray(response.data.files)) {
@@ -47,7 +47,7 @@ const useMusicStore = create<MusicState>()(
                             title: file.name.replace(/\.(mp3|wav|flac)$/i, ''), // Remove extension
                             artist: 'Unknown Artist', // Parsing from filename is brittle without regex, keeping it simple for now
                             album: 'Unknown Album',
-                            url: `http://0.0.0.0:8022${file.url}`,
+                            url: `http://100.64.22.2:8022${file.url}`,
                             coverUrl: undefined, // API doesn't seem to provide cover yet
                             duration: 0
                         }));
