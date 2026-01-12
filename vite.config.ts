@@ -25,6 +25,7 @@ export default defineConfig({
         target: 'https://backend.duylong.art', // Your Spring Boot URL
         changeOrigin: true,
         secure: false,
+        
 
       }
     }
