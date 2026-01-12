@@ -19,21 +19,6 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
   const userStore = useUserAccountStore();
   const nodeRef = useRef<HTMLDivElement>(null);
 
-  var pathList = appRoutes.filter(r => r.type === "domain" && !r.path.includes("login")
-
-    && !r.path.includes("register")
-    // && !r.children?.filter(r=>r.path.includes("index"))
-    && !r.path.includes("entry")
-    && !r.path.includes("admin")
-  ).map(r => r.path);
-
-
-  var pageList = appRoutes.filter(r => r.type === "domain" && !r.path.includes("login")
-    && !r.path.includes("register")
-    && !r.path.includes("entry")
-    && !r.path.includes("admin")
-    // && !r.children?.filter(r=>r.path.includes("index"))
-  ).map(r => r.title);
 
 
   // Dynamically filter navigation items based on user role and route permissions
@@ -55,11 +40,7 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
   const filterPageList = filterRoutes.map(r => r.title || r.path);
   const filterPathList = filterRoutes.map(r => r.path);
 
-  // 2. Position State (Start at bottom-right roughly)
-  // You can adjust these or use CSS for initial placement
-  console.log("Page List: " + pageList);
-  console.log("Path List: " + pathList);
-
+  
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handleDrag = (_e: DraggableEvent, ui: DraggableData) => {
