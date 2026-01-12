@@ -3,20 +3,29 @@ import {
     Card,
     CardBody,
     Typography,
-    Button,
     Progress,
-    IconButton
+    IconButton,
+    Input,
+    Button
 } from "@material-tailwind/react";
 import {
-    CloudArrowUpIcon,
-    DocumentIcon,
-    PhotoIcon,
-    XMarkIcon,
-    TrashIcon,
-    ArrowLeftIcon
-} from "@heroicons/react/24/solid";
+    Search,
+    Cloud,
+    Folder,
+    MoreVertical,
+    FileText,
+    Image as ImageIcon,
+    Briefcase,
+    Plus,
+    X,
+    CheckCircle,
+    AlertCircle,
+    ArrowLeft
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import PersonProfileIcon from "../../../components/PersonProfileIcon";
 
 interface FileUpload {
     id: string;
@@ -25,6 +34,9 @@ interface FileUpload {
     progress: number;
     status: 'pending' | 'uploading' | 'completed' | 'error';
     url?: string;
+    type?: string;
+    date?: string;
+    size?: string;
 }
 
 const commonProps = {
@@ -38,10 +50,8 @@ const commonProps = {
 const StoragePageIcon = () => {
     const navigator = useNavigate();
     return (
-        <div>
-            <button
-                onClick={() => navigator("/utilities/index/storage")}
-            >Storage</button>
+        <div onClick={() => navigator("/utilities/index/storage")} className="cursor-pointer">
+            <Typography {...commonProps}>Storage</Typography>
         </div>
     );
 };
@@ -49,8 +59,13 @@ const StoragePageIcon = () => {
 const StoragePage = () => {
     const navigate = useNavigate();
     const [files, setFiles] = useState<FileUpload[]>([]);
-    const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    // Statistics state
+    const totalStorage = 100; // GB
+    const [usedStorage, setUsedStorage] = useState(75.0);
+    const [counts, setCounts] = useState({ images: 0, documents: 0, work: 0 });
 
     const fetchFiles = async () => {
         try {
@@ -61,12 +76,30 @@ const StoragePage = () => {
                 preview: file.contentType?.startsWith('image/') ? `/object/duylongwebappobjectdatabase/${file.fileName}` : undefined,
                 progress: 100,
                 status: 'completed',
-                url: `/object/duylongwebappobjectdatabase/${file.fileName}`
+                url: `/object/duylongwebappobjectdatabase/${file.fileName}`,
+                type: file.contentType,
+                date: "2 hours ago", // Placeholder
+                size: "2.4 MB" // Placeholder
             }));
             setFiles(mappedFiles);
+            calculateStats(mappedFiles);
         } catch (error) {
             console.error("❌ Failed to fetch files:", error);
         }
+    };
+
+    const calculateStats = (fileList: FileUpload[]) => {
+        let img = 0;
+        let doc = 0;
+        let other = 0;
+        fileList.forEach(f => {
+            if (f.type?.startsWith('image/')) img++;
+            else if (f.type?.startsWith('text/') || f.type?.includes('pdf')) doc++;
+            else other++;
+        });
+        setCounts({ images: img, documents: doc, work: other });
+        // Mock storage usage update
+        setUsedStorage(75.0 + (fileList.length * 0.01));
     };
 
     useEffect(() => {
@@ -79,43 +112,25 @@ const StoragePage = () => {
             file,
             preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined,
             progress: 0,
-            status: 'pending'
+            status: 'pending',
+            type: file.type,
+            date: "Just now",
+            size: (file.size / (1024 * 1024)).toFixed(1) + " MB"
         }));
         setFiles(prev => [...fileWrappers, ...prev]);
+        handleUpload(fileWrappers);
     };
 
     const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             processFiles(Array.from(event.target.files));
         }
+        // Reset input
+        if (fileInputRef.current) fileInputRef.current.value = '';
     };
 
-    const onDragOver = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    const onDragLeave = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-    };
-
-    const onDrop = (e: React.DragEvent) => {
-        e.preventDefault();
-        setIsDragging(false);
-        if (e.dataTransfer.files) {
-            processFiles(Array.from(e.dataTransfer.files));
-        }
-    };
-
-    const removeFile = (id: string) => {
-        setFiles(prev => prev.filter(f => f.id !== id));
-    };
-
-    const handleUploadAll = async () => {
-        const pendingFiles = files.filter(f => f.status === 'pending' || f.status === 'error');
-
-        for (const fileWrapper of pendingFiles) {
+    const handleUpload = async (uploadFiles: FileUpload[]) => {
+        for (const fileWrapper of uploadFiles) {
             setFiles(prev => prev.map(f => f.id === fileWrapper.id ? { ...f, status: 'uploading' } : f));
 
             const formData = new FormData();
@@ -129,191 +144,205 @@ const StoragePage = () => {
                     }
                 });
 
-                setFiles(prev => prev.map(f =>
-                    f.id === fileWrapper.id ? { ...f, status: 'completed', progress: 100 } : f
-                ));
+                setFiles(prev => {
+                    const updated = prev.map(f =>
+                        f.id === fileWrapper.id ? { ...f, status: 'completed' as const, progress: 100 } : f
+                    );
+                    calculateStats(updated);
+                    return updated;
+                });
             } catch (error) {
                 console.error("❌ Upload failed:", error);
                 setFiles(prev => prev.map(f =>
-                    f.id === fileWrapper.id ? { ...f, status: 'error', progress: 0 } : f
+                    f.id === fileWrapper.id ? { ...f, status: 'error' as const, progress: 0 } : f
                 ));
             }
         }
     };
 
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'completed': return 'text-green-500 font-bold';
-            case 'error': return 'text-red-500 font-bold';
-            case 'uploading': return 'text-blue-500 font-bold';
-            default: return 'text-gray-500';
-        }
-    };
+    const filteredFiles = files.filter(f =>
+        f.file.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
-        <div className="p-6 md:p-10 w-full border-2 border-b-blue-400 max-w-6xl mx-auto">
-            <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <div className="font-bold text-3xl text-slate-800 tracking-tight">
-                        Storage & Assets
+        <div className="min-h-screen bg-gray-50/50 p-4 pb-20 md:p-8 font-sans">
+            <div className="max-w-4xl mx-auto space-y-8">
+
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                    <div>
+                        <Typography variant="h3" className="font-bold text-slate-800" {...commonProps}>
+                            Storage & Assets
+                        </Typography>
                     </div>
-                    <div className="text-slate-500 font-medium">
-                        Manage your cloud files and upload new assets.
+
+                    <div className="hover:opacity-80 transition-opacity cursor-pointer p-1 rounded-full hover:bg-black/5">
+                        <PersonProfileIcon onClick={() => navigate("/admin/person-profile")} />
                     </div>
                 </div>
-                <Button
-                    variant="text"
-                    color="blue-gray"
-                    onClick={() => navigate('/utilities/index/dashboard')}
-                    className="flex items-center gap-2 font-bold"
-                    {...commonProps}
-                >
-                    <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Back to Utilities
-                </Button>
-            </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <Card className="lg:col-span-2 h-fit shadow-lg" {...commonProps}>
-                    <CardBody {...commonProps}>
-                        <div
-                            onDragOver={onDragOver}
-                            onDragLeave={onDragLeave}
-                            onDrop={onDrop}
-                            onClick={() => fileInputRef.current?.click()}
-                            className={`
-                                border-2 border-dashed rounded-xl p-10 flex flex-col items-center justify-center cursor-pointer transition-all duration-300
-                                ${isDragging ? 'border-blue-500 bg-blue-50 scale-[1.02]' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'}
-                            `}
-                        >
-                            <input
-                                type="file"
-                                multiple
-                                className="hidden"
-                                ref={fileInputRef}
-                                onChange={handleFileSelect}
-                            />
-                            <div className={`p-4 rounded-full mb-4 ${isDragging ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>
-                                <CloudArrowUpIcon className="h-10 w-10" />
+                {/* Search Bar */}
+                <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Search className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                        type="text"
+                        className="block w-full pl-10 pr-3 py-3 border-none rounded-2xl bg-white shadow-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        placeholder="Search your files..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+
+                {/* Storage Usage Card */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="rounded-3xl p-6 text-white shadow-lg bg-linear-to-r from-blue-600 to-indigo-600 relative overflow-hidden"
+                >
+                    {/* Background decoration */}
+                    <div className="absolute top-0 right-0 p-4 opacity-10">
+                        <Cloud size={100} />
+                    </div>
+
+                    <div className="relative z-10">
+                        <div className="flex justify-between items-start mb-6">
+                            <div>
+                                <Typography variant="small" className="opacity-80 font-medium mb-1" {...commonProps}>STORAGE USAGE</Typography>
+                                <Typography variant="h3" className="font-bold" {...commonProps}>{usedStorage.toFixed(1)} GB used</Typography>
                             </div>
-                            <Typography variant="h5" color="blue-gray" className="font-bold" {...commonProps}>
-                                Click or Drop files here
-                            </Typography>
-                            <Typography color="gray" className="text-sm mt-2 text-center" {...commonProps}>
-                                Support for JPG, PNG, PDF (Max 10MB)
-                            </Typography>
+                            <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
+                                <Cloud className="text-white h-6 w-6" />
+                            </div>
                         </div>
 
-                        {files.length > 0 && (
-                            <div className="mt-8 flex flex-col gap-4">
-                                <div className="flex justify-between items-center">
-                                    <Typography variant="h6" color="blue-gray" {...commonProps}>
-                                        Files ({files.length})
-                                    </Typography>
-                                    <Button size="sm" color="red" variant="text" onClick={() => setFiles([])} {...commonProps}>
-                                        Clear All
-                                    </Button>
-                                </div>
+                        <div className="w-full bg-black/20 rounded-full h-2 mb-2 overflow-hidden">
+                            <div
+                                className="bg-white h-2 rounded-full transition-all duration-1000 ease-out"
+                                style={{ width: `${(usedStorage / totalStorage) * 100}%` }}
+                            />
+                        </div>
+                        <Typography variant="small" className="opacity-80" {...commonProps}>
+                            {Math.round((usedStorage / totalStorage) * 100)}% of {totalStorage}GB total storage used
+                        </Typography>
+                    </div>
+                </motion.div>
 
-                                <div className="flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2">
-                                    {files.map((item) => (
-                                        <div key={item.id} className="flex items-center gap-4 p-3 border border-gray-100 rounded-lg hover:shadow-sm transition-shadow bg-white">
-                                            <div className="h-12 w-12 rounded-lg bg-gray-100 overflow-hidden flex items-center justify-center flex-shrink-0">
-                                                {item.preview ? (
-                                                    <img src={item.preview} alt="preview" className="h-full w-full object-cover" />
-                                                ) : (
-                                                    <DocumentIcon className="h-6 w-6 text-gray-500" />
-                                                )}
-                                            </div>
+                {/* Folders Section */}
+                <div>
+                    <div className="flex justify-between items-center mb-4">
+                        <Typography variant="h5" className="font-bold text-slate-800" {...commonProps}>Folders</Typography>
+                        <Button variant="text" color="blue" className="normal-case font-medium" {...commonProps}>View All</Button>
+                    </div>
 
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex justify-between mb-1">
-                                                    <Typography variant="small" className="font-medium truncate text-gray-900" {...commonProps}>
-                                                        {item.file.name}
-                                                    </Typography>
-                                                    <Typography variant="small" className={getStatusColor(item.status)} {...commonProps}>
-                                                        {item.status === 'uploading' ? `${item.progress}%` : item.status}
-                                                    </Typography>
-                                                </div>
-                                                <Progress
-                                                    value={item.progress}
-                                                    size="sm"
-                                                    color={item.status === 'error' ? "red" : item.status === 'completed' ? "green" : "blue"}
-                                                    {...commonProps}
-                                                />
-                                            </div>
-
-                                            <IconButton variant="text" color="blue-gray" onClick={() => removeFile(item.id)} {...commonProps}>
-                                                <XMarkIcon className="h-5 w-5" />
-                                            </IconButton>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="mt-4 flex justify-end">
-                                    <Button onClick={handleUploadAll} color="blue" disabled={files.every(f => f.status === 'completed')} {...commonProps}>
-                                        Upload {files.filter(f => f.status === 'pending').length} Files
-                                    </Button>
-                                </div>
-                            </div>
-                        )}
-                    </CardBody>
-                </Card>
-
-                <div className="flex flex-col gap-6">
-                    <StorageStatsCard />
-                    <RecentFilesCard />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <FolderCard
+                            icon={<ImageIcon className="text-amber-500" size={24} />}
+                            title="Images"
+                            count={`${counts.images} files`}
+                            color="bg-amber-100"
+                        />
+                        <FolderCard
+                            icon={<FileText className="text-blue-500" size={24} />}
+                            title="Documents"
+                            count={`${counts.documents} files`}
+                            color="bg-blue-100"
+                        />
+                        <FolderCard
+                            icon={<Briefcase className="text-purple-500" size={24} />}
+                            title="Work"
+                            count={`${counts.work} files`}
+                            color="bg-purple-100"
+                        />
+                    </div>
                 </div>
+
+                {/* Recent Files Section */}
+                <div>
+                    <div className="flex justify-between items-center mb-4">
+                        <Typography variant="h5" className="font-bold text-slate-800" {...commonProps}>Recent Files</Typography>
+                        <IconButton variant="text" color="gray" size="sm" {...commonProps}>
+                            <MoreVertical size={20} />
+                        </IconButton>
+                    </div>
+
+                    <div className="space-y-3">
+                        {filteredFiles.length === 0 ? (
+                            <div className="text-center py-10 text-gray-400">No files found</div>
+                        ) : (
+                            filteredFiles.map((file, index) => (
+                                <motion.div
+                                    key={file.id}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.05 }}
+                                    className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4 hover:shadow-md transition-shadow cursor-pointer group"
+                                >
+                                    <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center shrink-0 overflow-hidden">
+                                        {file.preview ? (
+                                            <img src={file.preview} alt="preview" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <FileText className="text-indigo-500" size={24} />
+                                        )}
+                                    </div>
+
+                                    <div className="flex-1 min-w-0">
+                                        <Typography variant="h6" className="text-sm font-bold text-slate-800 truncate" {...commonProps}>
+                                            {file.file.name}
+                                        </Typography>
+                                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                                            <span>{file.size}</span>
+                                            <span>•</span>
+                                            <span>{file.date}</span>
+                                            {file.status === 'uploading' && <span className="text-blue-500 font-bold ml-2">Uploading {file.progress}%</span>}
+                                            {file.status === 'error' && <span className="text-red-500 font-bold ml-2">Error</span>}
+                                        </div>
+                                    </div>
+
+                                    <IconButton variant="text" color="blue-gray" className="opacity-0 group-hover:opacity-100 transition-opacity" {...commonProps}>
+                                        <MoreVertical size={20} />
+                                    </IconButton>
+                                </motion.div>
+                            ))
+                        )}
+                    </div>
+                </div>
+
+            </div>
+
+            {/* Floating Action Button */}
+            <div className="fixed bottom-8 right-8 z-50">
+                <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="w-16 h-16 bg-blue-600 rounded-full shadow-lg shadow-blue-600/30 flex items-center justify-center text-white"
+                >
+                    <Plus size={32} />
+                </motion.button>
+                <input
+                    type="file"
+                    multiple
+                    className="hidden"
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                />
             </div>
         </div>
     );
 };
 
-const StorageStatsCard = () => (
-    <Card className="shadow-lg bg-gradient-to-br from-blue-900 to-blue-800 text-white" {...commonProps}>
-        <CardBody {...commonProps}>
-            <div className="flex items-start justify-between mb-4">
-                <div>
-                    <Typography variant="h5" className="mb-1" {...commonProps}>Storage Usage</Typography>
-                    <Typography className="text-blue-200 text-sm" {...commonProps}>75% of 100GB Used</Typography>
-                </div>
-                <div className="p-2 bg-blue-700 rounded-lg">
-                    <CloudArrowUpIcon className="h-6 w-6 text-white" />
-                </div>
-            </div>
-            <Progress value={75} color="white" className="bg-blue-900/50 mb-4" {...commonProps} />
-            <div className="grid grid-cols-2 gap-4 text-center">
-                <div className="p-3 bg-blue-700/30 rounded-lg">
-                    <Typography variant="h4" {...commonProps}>1200</Typography>
-                    <Typography className="text-xs text-blue-200" {...commonProps}>Images</Typography>
-                </div>
-                <div className="p-3 bg-blue-700/30 rounded-lg">
-                    <Typography variant="h4" {...commonProps}>350</Typography>
-                    <Typography className="text-xs text-blue-200" {...commonProps}>Documents</Typography>
-                </div>
-            </div>
-        </CardBody>
-    </Card>
-);
-
-const RecentFilesCard = () => (
-    <Card className="shadow-lg border border-gray-100" {...commonProps}>
-        <CardBody {...commonProps}>
-            <Typography variant="h6" color="blue-gray" className="mb-4" {...commonProps}>Recent Uploads</Typography>
-            <ul className="flex flex-col gap-3">
-                {[1, 2, 3].map((_, i) => (
-                    <li key={i} className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-md transition-colors cursor-pointer">
-                        <div className="p-2 bg-purple-50 rounded-md text-purple-500">
-                            <PhotoIcon className="h-5 w-5" />
-                        </div>
-                        <div className="flex-1">
-                            <Typography variant="small" className="font-medium text-gray-900" {...commonProps}>file_{i}.jpg</Typography>
-                            <Typography variant="small" className="text-xs text-gray-500" {...commonProps}>2.4 MB • 2 hours ago</Typography>
-                        </div>
-                    </li>
-                ))}
-            </ul>
-        </CardBody>
-    </Card>
+const FolderCard = ({ icon, title, count, color }: { icon: React.ReactNode, title: string, count: string, color: string }) => (
+    <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-start gap-4 hover:shadow-md transition-shadow cursor-pointer">
+        <div className={`p-3 rounded-xl ${color}`}>
+            {icon}
+        </div>
+        <div>
+            <Typography variant="h6" className="font-bold text-slate-800" {...commonProps}>{title}</Typography>
+            <Typography className="text-xs text-gray-500 font-medium" {...commonProps}>{count}</Typography>
+        </div>
+    </div>
 );
 
 export { StoragePage, StoragePageIcon };

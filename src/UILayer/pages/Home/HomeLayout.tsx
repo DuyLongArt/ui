@@ -75,10 +75,9 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
     <div className="flex flex-col h-full  w-full overflow-visible relative">
 
       {/* Header Section (Fixed height / shrinking) */}
-      <div className="flex w-full border-2  flex-row items-center justify-start  gap-2 shadow-sm z-10 bg-white/50 backdrop-blur-sm">
-        <div >
+      <div className="flex w-full border-2 flex-row items-center justify-start gap-2 shadow-sm z-100 bg-white/50 backdrop-blur-sm">
+        <div>
           <OrchestraButton onClick={() => send({ type: 'CLICK' })} />
-          {/* <MainButton  onClick={() => send({ type: 'CLICK' })} /> */}
         </div>
         <div className="flex-1">
           <ResponsiveAppBar pageList={filterPageList} pathList={filterPathList} />
@@ -110,7 +109,7 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
       >
         <div
           ref={nodeRef}
-          className="absolute bottom-4 right-4 md:bottom-10 md:right-10 origin-bottom-right scale-75 md:scale-100 z-[1000] cursor-move touch-none"
+          className="absolute bottom-4 right-4 md:bottom-10 md:right-10 origin-bottom-right scale-75 md:scale-100 z-1000 cursor-move touch-none"
 
         >
           <AvatarFloatButton

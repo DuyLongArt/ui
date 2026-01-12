@@ -22,6 +22,7 @@ const UtilitiesPage = lazy(() => import("../UILayer/pages/Home/Utilities/Utiliti
 const UtilitiesDashboardPage = lazy(() => import("../UILayer/pages/Home/Utilities/UtilitiesDashboardPage.tsx"));
 const PersonalPage = lazy(() => import("../UILayer/pages/Home/Person/PersonalPage.tsx"));
 const AdminOverviewPage = lazy(() => import("../UILayer/pages/Admin/AdminOverviewPage.tsx"));
+const MusicPage = lazy(() => import("../UILayer/pages/Home/Music/MusicPage.tsx"));
 
 // Placeholder for BlankPage if it's not exported elsewhere
 const BlankPage = () => (
@@ -207,6 +208,12 @@ export const appRoutes: Route[] = [
                         children: [
                             
                         ]
+                    },
+                    {
+                        type:"component",
+                        path: "music",
+                        component: <MusicPage />,
+                        title: "Music",
                     }
                 ]
             },
