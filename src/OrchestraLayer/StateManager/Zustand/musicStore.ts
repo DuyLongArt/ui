@@ -47,7 +47,7 @@ const useMusicStore = create<MusicState>()(
                             title: file.name.replace(/\.(mp3|wav|flac)$/i, ''), // Remove extension
                             artist: 'Unknown Artist', // Parsing from filename is brittle without regex, keeping it simple for now
                             album: 'Unknown Album',
-                            url: `https://backend.duylong.art/gomedia${file.url}`,
+                            url: `https://backend.duylong.art${file.url}`,
                             coverUrl: undefined, // API doesn't seem to provide cover yet
                             duration: 0
                         }));
