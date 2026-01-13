@@ -38,7 +38,7 @@ const useMusicStore = create<MusicState>()(
                 set({ isLoading: true, error: null });
                 try {
                     console.log("🎵 Fetching music from API...");
-                    const response = await axios.get('http://100.64.22.2:8022/api/music');
+                    const response = await axios.get('http://backend.duylong.art/gomedia/api/music');
                     console.log("✅ Music fetched successfully:", response.data);
 
                     if (response.data && Array.isArray(response.data.files)) {
