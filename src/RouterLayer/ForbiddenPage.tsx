@@ -59,19 +59,7 @@ const ForbiddenPage = () => {
                     </p>
                 </motion.div>
 
-                {/* Warning Detail */}
-                <motion.div
-                    variants={itemVariants}
-                    className="mt-8 p-4 bg-black/20 border border-white/5 rounded-2xl"
-                >
-                    <div className="flex items-center gap-3 text-red-300 text-sm font-semibold justify-center">
-                        <div className="w-2 h-2 bg-red-500 rounded-full animate-ping" />
-                        CODE 403: FORBIDDEN_ACCESS
-                    </div>
-                    <p className="text-xs text-white/50 mt-2 uppercase tracking-widest font-bold">
-                        Unauthorized Personnel Protocol Active
-                    </p>
-                </motion.div>
+
 
                 {/* Actions */}
                 <motion.div
@@ -94,13 +82,6 @@ const ForbiddenPage = () => {
                     </button>
                 </motion.div>
 
-                {/* Footer Tip */}
-                <motion.p
-                    variants={itemVariants}
-                    className="mt-8 text-sm text-white/40"
-                >
-                    Think this is a mistake? <button className="text-indigo-400 hover:underline font-bold">Contact Support</button>
-                </motion.p>
             </motion.div>
         </div>
     );

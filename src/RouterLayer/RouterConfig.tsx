@@ -229,12 +229,14 @@ export const appRoutes: Route[] = [
                     {
                         type:"component",
                         path: "tailscale",
+                        allowedRoles: ["ADMIN"],
                         component: <TailscaleDashboard />,
                         title: "Tailscale",
                     },
                     {
                         type:"component",
                         path: "cloudflare",
+                        allowedRoles: ["ADMIN"],
                         component: <CloudflareDnsDashboard />,
                         title: "Cloudflare",
                     }
