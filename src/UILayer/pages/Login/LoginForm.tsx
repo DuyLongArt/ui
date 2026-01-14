@@ -81,22 +81,22 @@ const LoginForm = () => {
       >
         <div className="bg-white/95 backdrop-blur-xl p-8 sm:p-12 rounded-[2.5rem] shadow-2xl border border-white/40 text-center">
           <motion.div variants={itemVariants}>
-            <h1 className="text-4xl font-black text-white mb-2 tracking-tight">
+            <h1 className="text-4xl font-black text-black mb-2 tracking-tight">
               Welcome Back
             </h1>
-            <p className="text-white mb-10 text-lg">
+            <p className="text-black mb-10 text-lg">
               Sign in to manage your account
             </p>
           </motion.div>
 
           <form onSubmit={submitEvent} className="space-y-6">
             <motion.div variants={itemVariants} className="relative group">
-              <label className="block text-left text-sm font-bold text-white mb-2 ml-1">
+              <label className="block text-left text-sm font-bold text-black mb-2 ml-1">
                 Email or Username
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-white group-focus-within:text-indigo-500 transition-colors" />
+                  <User className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
                 </div>
                 <input
                   type="text"
@@ -104,18 +104,18 @@ const LoginForm = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   placeholder="Enter email or username"
-                  className="block w-full pl-11 pr-4 py-4 bg-white border-2 border-gray-100 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base"
+                  className="block w-full pl-11 pr-4 py-4 bg-white border-2 border-gray-100 rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base"
                 />
               </div>
             </motion.div>
 
             <motion.div variants={itemVariants} className="relative group">
-              <label className="block text-left text-sm font-bold text-white mb-2 ml-1">
+              <label className="block text-left text-sm font-bold text-black mb-2 ml-1">
                 Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-white group-focus-within:text-indigo-500 transition-colors" />
+                  <Lock className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
                 </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -123,7 +123,7 @@ const LoginForm = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="block w-full pl-11 pr-12 py-4 bg-white border-2 border-gray-100 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base"
+                  className="block w-full pl-11 pr-12 py-4 bg-white border-2 border-gray-100 rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base"
                 />
                 <button
                   type="button"
@@ -164,7 +164,7 @@ const LoginForm = () => {
           </form>
 
           <motion.div variants={itemVariants} className="mt-8 pt-6 border-t border-gray-100/80 text-center">
-            <span className="text-white text-sm font-medium">
+            <span className="text-indigo-700 text-sm font-medium">
               Don't have an account?{' '}
             </span>
             <button
@@ -173,7 +173,7 @@ const LoginForm = () => {
                 e.preventDefault();
                 handleRegisterClick();
               }}
-              className="text-sm font-black text-indigo-600 hover:text-indigo-700 hover:underline transition-colors"
+              className="text-sm font-black text-white hover:text-indigo-700 hover:underline transition-colors"
             >
               Sign Up
             </button>

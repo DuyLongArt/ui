@@ -203,12 +203,14 @@ export const appRoutes: Route[] = [
                     {
                         type:"entry",
                         path: "",
+                        allowedRoles: ["ADMIN"],
                         component: <UtilitiesDashboardPage />,
                         title: "Overview",
                     },
                     {
                         type:"component",
                         path: "storage",
+                        allowedRoles: ["ADMIN"],
                         // layout: <HomeLayout />,
                         component: <StoragePage />,
                         title: "Storage",
