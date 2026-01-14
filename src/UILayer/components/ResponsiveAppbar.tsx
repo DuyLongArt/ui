@@ -138,15 +138,13 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
         <div className="flex items-center justify-between w-full">
 
           {/* Logo with slight text shadow for better contrast against glass */}
-          <Typography
-            as="div"
+          <p
             onClick={() => navigate("/home/index")}
-            className="cursor-pointer py-1.5 font-bold text-xl text-shadow-great lg:text-2xl hover:text-indigo-200 transition-colors drop-shadow-sm"
+            className="cursor-pointer py-1.5 font-bold text-shadow-great text-2xl text-indigo-900 text-shadow-current mask-linear-from-neutral-950 lg:text-3xl hover:text-indigo-200 transition-colors drop-shadow-sm"
             style={{ fontFamily: 'serif' }}
-            {...commonProps}
           >
             ICE SITE
-          </Typography>
+          </p>
 
           <div className="hidden lg:block">
             <NavList />

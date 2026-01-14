@@ -67,7 +67,7 @@ const PersonProfilePage: React.FC = () => {
 
     useEffect(() => {
         useUserProfileStore.getState().fetchFromDatabase();
-        userAccountStore.getUserRole();
+      
         if (state.matches('success')) {
             if (mode === 'admin') {
                 imageObjectStore.incrementAvatarVersion();

@@ -129,11 +129,12 @@ export const appRoutes: Route[] = [
                 path: "personal",
                 component: <HomeLayout />,
                 title: "Personal",
-                allowedRoles: ["ADMIN","USER"],
+              
                 children: [
                     {
                 type: "entry",
                 path: "index",
+                  allowedRoles: ["ADMIN","USER"],
                 component: <PersonalPage />,
                 title: "Personal",
                 children: [
@@ -147,11 +148,12 @@ export const appRoutes: Route[] = [
                 path: "superuser",
                 component: <HomeLayout />,
                 title: "Superuser",
-                allowedRoles: ["ADMIN","USER"],
+              
                 children: [
                     {
                         type: "entry",
                         path: "index",
+                        allowedRoles: ["ADMIN"],
                         component: <AdminOverviewPage />,
                         title: "Superuser Overview",
                     }

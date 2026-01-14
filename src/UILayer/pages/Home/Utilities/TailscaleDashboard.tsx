@@ -240,8 +240,8 @@ const TailscaleDashboard = () => {
                     <div className="absolute -top-10 -right-10 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
                         <Globe size={200} />
                     </div>
-                    <Typography variant="h5" className="text-white font-black mb-4" {...commonProps}>Subnet Routers</Typography>
-                    <div className="space-y-4">
+                    <Typography variant="h5" className="text-black font-black mb-4" {...commonProps}>Subnet Routers</Typography>
+                    {/* <div className="space-y-4">
                         <div className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
                             <div className="flex items-center gap-3">
                                 <Server size={18} className="text-indigo-500" />
@@ -255,8 +255,8 @@ const TailscaleDashboard = () => {
                                 <span className="text-sm font-bold text-white">gatewaynas</span>
                             </div>
                             <Chip value="10.0.0.0/16" className="bg-indigo-50 text-indigo-600 text-[10px] font-black rounded" />
-                        </div>
-                    </div>
+                        </div> */}
+                    {/* </div> */}
                     <button className="w-full mt-6 py-2 text-xs font-black text-white uppercase tracking-widest hover:text-indigo-600 transition-colors">
                         View Exit Nodes →
                     </button>

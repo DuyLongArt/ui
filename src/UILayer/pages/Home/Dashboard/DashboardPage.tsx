@@ -113,7 +113,7 @@ const DashboardPage = () => {
                     </Typography>
                 </div>
                 <div className="flex gap-4 items-center">
-                    <span className="px-4 py-2 bg-white/50 backdrop-blur-md rounded-full text-sm font-semibold text-white border border-white/60 shadow-sm">
+                    <span className="px-4 py-2 bg-white/50 backdrop-blur-md rounded-full text-md font-semibold text-black border border-white/60 shadow-sm">
                         {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                     </span>
                 </div>
