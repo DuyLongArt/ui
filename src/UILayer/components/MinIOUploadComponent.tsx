@@ -114,8 +114,8 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
     return (
         <div className="w-full max-w-md mx-auto p-6 bg-white rounded-xl shadow-sm border border-gray-100">
             <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">Upload File</h3>
-                <p className="text-sm text-gray-500">Attach your documents or images here</p>
+                <h3 className="text-lg font-semibold text-white">Upload File</h3>
+                <p className="text-sm text-white">Attach your documents or images here</p>
             </div>
 
             <div
@@ -151,8 +151,8 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                             </div>
-                            <p className="text-sm font-medium text-gray-900 truncate max-w-[90%]">{selectedFile.name}</p>
-                            <p className="text-xs text-gray-500">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                            <p className="text-sm font-medium text-white truncate max-w-[90%]">{selectedFile.name}</p>
+                            <p className="text-xs text-white">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
                         </motion.div>
                     ) : (
                         <motion.div
@@ -162,11 +162,11 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
                             exit={{ opacity: 0, scale: 0.9 }}
                             className="flex flex-col items-center justify-center p-4 text-center"
                         >
-                            <svg className={`w-10 h-10 mb-3 ${dragActive ? 'text-indigo-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <svg className={`w-10 h-10 mb-3 ${dragActive ? 'text-indigo-500' : 'text-white'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                             </svg>
-                            <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p className="text-xs text-gray-500">SVG, PNG, JPG or PDF (MAX. {maxSizeInMB}MB)</p>
+                            <p className="mb-2 text-sm text-white"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                            <p className="text-xs text-white">SVG, PNG, JPG or PDF (MAX. {maxSizeInMB}MB)</p>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -205,7 +205,7 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
                 <button
                     onClick={handleClear}
                     disabled={isUploading || !selectedFile}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-2 text-sm font-medium text-white bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                     Cancel
                 </button>

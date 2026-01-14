@@ -47,7 +47,7 @@ const IOTMap: React.FC = () => {
     return (
         <div className="w-full h-full flex flex-col bg-gray-100">
             <div className="p-4 bg-white shadow-sm z-10 border-b border-gray-200">
-                <h2 className="text-xl font-bold text-gray-800">IOT Device Map (Vietnam)</h2>
+                <h2 className="text-xl font-bold text-white">IOT Device Map (Vietnam)</h2>
             </div>
 
             <div className="flex-1 relative z-0">

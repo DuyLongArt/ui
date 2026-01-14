@@ -19,13 +19,14 @@ interface GlassCardProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  color?: string;
 }
 
-const GlassCard: React.FC<GlassCardProps> = ({ children, className = "", onClick }) => {
+const GlassCard: React.FC<GlassCardProps> = ({ children, color = " from-indigo-500/80 via-indigo-500 to-indigo-500/80 ", className = "", onClick }) => {
   return (
     <div
       onClick={onClick}
-      className={`bg-white/40 backdrop-blur-md border border-white/60 shadow-sm rounded-2xl transition-all duration-300 hover:shadow-md hover:bg-white/60 ${className}`}
+      className={` backdrop-blur-md border text-white! border-white opacity-90 rounded-2xl shadow-2xl  transition-all duration-300 hover:shadow-2xs hover:bg-white/60 bg-linear-to-br ${color} ${className}  `}
     >
       {children}
     </div>

@@ -124,10 +124,10 @@ const PersonalPage = () => {
         <div className="shrink-0 p-8 md:p-8 border-b border-white/30 bg-white/10 rounded-t-3xl">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
-              <Typography variant="h3" className="text-slate-800 font-semibold tracking-tight" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}>
+              <Typography variant="h3" className="text-black font-semibold tracking-tight" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}>
                 {user.profiles.firstName}
               </Typography>
-              <Typography className="text-slate-600 font-medium flex items-center gap-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}>
+              <Typography className="text-black font-medium flex items-center gap-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}>
                 {user.details.occupation} <span className="w-1 h-1 bg-slate-400 rounded-full"></span> {user.details.location}
               </Typography>
             </div>
@@ -142,7 +142,7 @@ const PersonalPage = () => {
 
           <TabNavigation
             tabs={[
-              { label: 'Overview', shortKey: 'overview', role: 'ADMIN' },
+              { label: 'Overview', shortKey: 'overview', role: 'VIEWER' },
 
               { label: 'Skills', shortKey: 'skills', role: 'VIEWER' },
               { label: 'Project', shortKey: 'projects', role: 'VIEWER' },

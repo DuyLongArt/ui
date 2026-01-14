@@ -12,7 +12,7 @@ const AdminLayout: React.FC = () => {
   return (
     <div>
       <nav className="flex justify-between items-center p-4 bg-gray-100 border-b border-gray-200">
-        <span className="font-bold text-gray-700">Admin Console</span>
+        <span className="font-bold text-white">Admin Console</span>
         <button
           onClick={handleLogout}
           className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded shadow-sm transition-colors"

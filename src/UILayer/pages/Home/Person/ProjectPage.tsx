@@ -25,7 +25,7 @@ const ProjectPage = () => {
 
 
             <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6 md:p-12">
-                <Typography variant="h3" className="mb-8 text-slate-900 font-extrabold text-center" {...commonProps}>
+                <Typography variant="h3" className="mb-8 text-white font-extrabold text-center" {...commonProps}>
                     Recent Projects
                 </Typography>
 
@@ -44,7 +44,7 @@ const ProjectPage = () => {
 
                             <CardBody className="p-6" {...commonProps}>
                                 <div className="flex justify-between items-center mb-3">
-                                    <Typography variant="h5" className="text-slate-800 font-bold" {...commonProps}>
+                                    <Typography variant="h5" className="text-white font-bold" {...commonProps}>
                                         {project.title}
                                     </Typography>
                                     <span className="text-indigo-600">
@@ -52,7 +52,7 @@ const ProjectPage = () => {
                                     </span>
                                 </div>
 
-                                <Typography className="text-slate-700 text-sm leading-relaxed mb-4" {...commonProps}>
+                                <Typography className="text-white text-sm leading-relaxed mb-4" {...commonProps}>
                                     {project.description}
                                 </Typography>
 

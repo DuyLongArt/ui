@@ -167,10 +167,10 @@ const PersonProfilePage: React.FC = () => {
 
                         {/* Info */}
                         <div className="mt-4 md:mt-0 md:ml-6 flex-1 text-center md:text-left">
-                            <Typography variant="h2" className="text-3xl font-extrabold text-slate-800" {...commonProps}>
+                            <Typography variant="h2" className="text-3xl font-extrabold text-white" {...commonProps}>
                                 {user.profiles.firstName} {user.profiles.lastName}
                             </Typography>
-                            <Typography className="text-slate-500 font-medium mb-3" {...commonProps}>
+                            <Typography className="text-white font-medium mb-3" {...commonProps}>
                                 {user.profiles.friends.toLocaleString()} friends • {user.profiles.mutual} mutual
                             </Typography>
                             <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-4 md:mb-0">
@@ -193,7 +193,7 @@ const PersonProfilePage: React.FC = () => {
                                     if (editAdminInformationState.value === "onEdit") editAdminInformationSend({ type: "TYPE" });
                                     if (editAdminInformationState.value === "onType") editAdminInformationSend({ type: "SAVE", location, university });
                                 }}
-                                className="flex-1 md:flex-none flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm text-sm"
+                                className="flex-1 md:flex-none flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm text-sm"
                             >
                                 <PencilIcon className="h-4 w-4 mr-2" /> Edit
                             </button>
@@ -202,7 +202,7 @@ const PersonProfilePage: React.FC = () => {
 
                     {/* Bio */}
                     {user.details.bio && (
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-slate-600 text-center md:text-left text-sm italic">
+                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-white text-center md:text-left text-sm italic">
                             "{user.details.bio}"
                         </div>
                     )}
@@ -216,7 +216,7 @@ const PersonProfilePage: React.FC = () => {
                             onClick={() => setActiveTab(tab as any)}
                             className={`px-6 py-4 font-bold text-sm transition-all border-b-2 ${activeTab === tab
                                 ? 'text-indigo-600 border-indigo-600 bg-indigo-50/50'
-                                : 'text-slate-500 border-transparent hover:bg-slate-50 hover:text-slate-700'
+                                : 'text-white border-transparent hover:bg-slate-50 hover:text-white'
                                 }`}
                         >
                             {tab}
@@ -231,26 +231,26 @@ const PersonProfilePage: React.FC = () => {
                 <div className="w-full md:w-[350px] space-y-6">
                     {/* Intro Card */}
                     <GlassCard className="p-6">
-                        <Typography variant="h5" className="font-bold text-slate-800 mb-4" {...commonProps}>Intro</Typography>
+                        <Typography variant="h5" className="font-bold text-white mb-4" {...commonProps}>Intro</Typography>
                         <div className="space-y-4">
-                            <div className="flex items-center text-slate-600">
-                                <AcademicCapIcon className="h-5 w-5 text-slate-400 mr-3" />
+                            <div className="flex items-center text-white">
+                                <AcademicCapIcon className="h-5 w-5 text-white mr-3" />
                                 {(editAdminInformationState.value !== "onEdit" && editAdminInformationState.value !== "onType")
-                                    ? <span>Studied at <strong className="text-slate-800">{user.details.university}</strong></span>
+                                    ? <span>Studied at <strong className="text-white">{user.details.university}</strong></span>
                                     : <input type="text" className="border rounded p-1 w-full text-sm" value={university} onChange={(e) => setUniversity(e.target.value)} />}
                             </div>
-                            <div className="flex items-center text-slate-600">
-                                <MapPinIcon className="h-5 w-5 text-slate-400 mr-3" />
+                            <div className="flex items-center text-white">
+                                <MapPinIcon className="h-5 w-5 text-white mr-3" />
                                 {(editAdminInformationState.value !== "onEdit" && editAdminInformationState.value !== "onType")
-                                    ? <span>Lives in <strong className="text-slate-800">{user.details.country}</strong></span>
+                                    ? <span>Lives in <strong className="text-white">{user.details.country}</strong></span>
                                     : <input type="text" className="border rounded p-1 w-full text-sm" value={location} onChange={(e) => setLocation(e.target.value)} />}
                             </div>
-                            <div className="flex items-center text-slate-600">
-                                <ComputerDesktopIcon className="h-5 w-5 text-slate-400 mr-3" />
+                            <div className="flex items-center text-white">
+                                <ComputerDesktopIcon className="h-5 w-5 text-white mr-3" />
                                 <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded">Reg IP: 192.168.22.4</span>
                             </div>
                         </div>
-                        <button className="w-full mt-6 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 rounded-xl transition-colors text-sm">
+                        <button className="w-full mt-6 bg-slate-100 hover:bg-slate-200 text-white font-bold py-2 rounded-xl transition-colors text-sm">
                             Edit Public Details
                         </button>
                     </GlassCard>
@@ -282,9 +282,9 @@ const PersonProfilePage: React.FC = () => {
                                     {stat.icon}
                                 </div>
                                 <div>
-                                    <Typography className="text-slate-500 text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.label}</Typography>
+                                    <Typography className="text-white text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.label}</Typography>
                                     <div className="flex items-end gap-1">
-                                        <Typography variant="h5" className="text-slate-800 font-bold leading-none" {...commonProps}>{stat.value}</Typography>
+                                        <Typography variant="h5" className="text-white font-bold leading-none" {...commonProps}>{stat.value}</Typography>
                                         <span className="text-green-500 text-[10px] font-bold bg-green-50 px-1 rounded">{stat.trend}</span>
                                     </div>
                                 </div>
@@ -300,29 +300,29 @@ const PersonProfilePage: React.FC = () => {
                                     <ShieldCheckIcon className="h-6 w-6 text-indigo-600" />
                                 </div>
                                 <div>
-                                    <Typography variant="h5" className="font-bold text-slate-800" {...commonProps}>Security Center</Typography>
-                                    <Typography className="text-slate-500 text-sm" {...commonProps}>Manage your account security and authentication methods.</Typography>
+                                    <Typography variant="h5" className="font-bold text-white" {...commonProps}>Security Center</Typography>
+                                    <Typography className="text-white text-sm" {...commonProps}>Manage your account security and authentication methods.</Typography>
                                 </div>
                             </div>
 
                             <div className="space-y-4">
                                 <div className="p-4 border border-slate-200 rounded-xl bg-slate-50/50">
                                     <div className="flex justify-between items-center mb-2">
-                                        <span className="font-semibold text-slate-700">Two-Factor Authentication</span>
+                                        <span className="font-semibold text-white">Two-Factor Authentication</span>
                                         <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">ENABLED</span>
                                     </div>
-                                    <p className="text-sm text-slate-500">Your account is protected with 2FA.</p>
+                                    <p className="text-sm text-white">Your account is protected with 2FA.</p>
                                 </div>
                             </div>
                         </GlassCard>
                     )}
 
                     {activeTab === 'Posts' && (
-                        <GlassCard className="p-12 flex flex-col items-center justify-center text-slate-400 min-h-[300px]">
+                        <GlassCard className="p-12 flex flex-col items-center justify-center text-white min-h-[300px]">
                             <div className="p-4 bg-slate-100 rounded-full mb-4">
-                                <ChatIcon className="h-8 w-8 text-slate-300" />
+                                <ChatIcon className="h-8 w-8 text-white" />
                             </div>
-                            <Typography variant="h6" className="font-bold text-slate-600" {...commonProps}>No posts yet</Typography>
+                            <Typography variant="h6" className="font-bold text-white" {...commonProps}>No posts yet</Typography>
                             <Typography className="text-sm" {...commonProps}>Check back later for updates from the admin team.</Typography>
                         </GlassCard>
                     )}
@@ -330,12 +330,12 @@ const PersonProfilePage: React.FC = () => {
                     {activeTab === 'Contact' && (
                         <div className="space-y-6">
                             <GlassCard className="p-8">
-                                <Typography variant="h4" className="text-2xl font-bold text-slate-800 mb-2" {...commonProps}>Contact Us</Typography>
-                                <Typography className="text-slate-600 mb-6" {...commonProps}>We'd love to hear from you! Please fill out the form below.</Typography>
+                                <Typography variant="h4" className="text-2xl font-bold text-white mb-2" {...commonProps}>Contact Us</Typography>
+                                <Typography className="text-white mb-6" {...commonProps}>We'd love to hear from you! Please fill out the form below.</Typography>
 
                                 <form onSubmit={handleContactSubmit} className="flex flex-col gap-6">
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="name">Full Name</label>
+                                        <label className="block text-sm font-medium text-white mb-1" htmlFor="name">Full Name</label>
                                         <input
                                             type="text"
                                             id="name"
@@ -349,7 +349,7 @@ const PersonProfilePage: React.FC = () => {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="email">Email Address</label>
+                                        <label className="block text-sm font-medium text-white mb-1" htmlFor="email">Email Address</label>
                                         <input
                                             type="email"
                                             id="email"
@@ -363,7 +363,7 @@ const PersonProfilePage: React.FC = () => {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-1" htmlFor="message">Your Message</label>
+                                        <label className="block text-sm font-medium text-white mb-1" htmlFor="message">Your Message</label>
                                         <textarea
                                             id="message"
                                             name="message"
@@ -429,9 +429,9 @@ const PersonProfilePage: React.FC = () => {
             {/* Mobile Footer Nav */}
             <footer className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-slate-200 flex justify-around p-3 z-40 lg:hidden safe-area-bottom">
                 <HomeIcon className="h-6 w-6 text-indigo-600" />
-                <PhotographIcon className="h-6 w-6 text-slate-400" />
-                <UsersIcon className="h-6 w-6 text-slate-400" />
-                <BellIcon className="h-6 w-6 text-slate-400" />
+                <PhotographIcon className="h-6 w-6 text-white" />
+                <UsersIcon className="h-6 w-6 text-white" />
+                <BellIcon className="h-6 w-6 text-white" />
             </footer>
 
             {/* Edit Modal */}
@@ -446,15 +446,15 @@ const PersonProfilePage: React.FC = () => {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex justify-between items-center p-5 border-b border-slate-100">
-                                <h2 className="text-xl font-bold text-slate-800">Change {mode === 'cover' ? 'Cover' : 'Profile'} Photo</h2>
-                                <button onClick={handleCloseModal} className="p-2 rounded-full hover:bg-slate-100 text-slate-500 transition-all">
+                                <h2 className="text-xl font-bold text-white">Change {mode === 'cover' ? 'Cover' : 'Profile'} Photo</h2>
+                                <button onClick={handleCloseModal} className="p-2 rounded-full hover:bg-slate-100 text-white transition-all">
                                     <XMarkIcon className="w-5 h-5" />
                                 </button>
                             </div>
 
                             <div className="p-6">
                                 <input
-                                    className="w-full p-3 border border-slate-300 rounded-xl mb-6 text-slate-800 focus:ring-2 focus:ring-indigo-500 outline-none"
+                                    className="w-full p-3 border border-slate-300 rounded-xl mb-6 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
                                     placeholder="Enter file name (optional)"
                                     type="text" value={nameFromInput} onChange={(e) => setNameFromInput(e.target.value)}
                                 />

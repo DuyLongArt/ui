@@ -25,12 +25,12 @@ const ContactPage = () => {
 
                     {/* Form Section */}
                     <div className="w-full md:w-1/2 p-8 md:p-12">
-                        <h2 className="text-3xl font-bold text-gray-800 mb-2">Contact Us</h2>
-                        <p className="text-gray-600 mb-8">We'd love to hear from you! Please fill out the form below.</p>
+                        <h2 className="text-3xl font-bold text-white mb-2">Contact Us</h2>
+                        <p className="text-white mb-8">We'd love to hear from you! Please fill out the form below.</p>
 
                         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="name">Full Name</label>
+                                <label className="block text-sm font-medium text-white mb-1" htmlFor="name">Full Name</label>
                                 <input
                                     type="text"
                                     id="name"
@@ -44,7 +44,7 @@ const ContactPage = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">Email Address</label>
+                                <label className="block text-sm font-medium text-white mb-1" htmlFor="email">Email Address</label>
                                 <input
                                     type="email"
                                     id="email"
@@ -58,7 +58,7 @@ const ContactPage = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="message">Your Message</label>
+                                <label className="block text-sm font-medium text-white mb-1" htmlFor="message">Your Message</label>
                                 <textarea
                                     id="message"
                                     name="message"

@@ -61,10 +61,10 @@ const CustomDrawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                                 <Inbox size={18} className="text-white" />
                             </div>
                             <div>
-                                <h2 id="drawer-title" className="text-lg font-bold text-gray-900 tracking-tight">
+                                <h2 id="drawer-title" className="text-lg font-bold text-white tracking-tight">
                                     Navigation
                                 </h2>
-                                <p className="text-xs text-gray-500 font-medium">Main Menu</p>
+                                <p className="text-xs text-white font-medium">Main Menu</p>
                             </div>
                         </div>
                         <button
@@ -72,7 +72,7 @@ const CustomDrawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                             className="p-2 rounded-xl hover:bg-gray-100 transition-all duration-200 group"
                             aria-label="Close drawer"
                         >
-                            <X size={20} className="text-gray-400 group-hover:text-gray-600 group-hover:rotate-90 transition-transform duration-300" />
+                            <X size={20} className="text-white group-hover:text-white group-hover:rotate-90 transition-transform duration-300" />
                         </button>
                     </div>
 
@@ -84,7 +84,7 @@ const CustomDrawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                                         onClick={goHome}
                                         className={`w-full flex items-center p-3 text-left rounded-xl transition-all duration-200 group relative overflow-hidden ${location.pathname === "/home/index"
                                             ? "bg-indigo-50 text-indigo-600 shadow-sm shadow-indigo-100"
-                                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                            : "text-white hover:bg-gray-50 hover:text-white"
                                             }`}
                                     >
                                         {location.pathname === "/home/index" && (
@@ -92,7 +92,7 @@ const CustomDrawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                                         )}
                                         <div className={`flex items-center justify-center w-10 h-10 mr-3 rounded-lg transition-colors ${location.pathname === "/home/index" ? "bg-indigo-100" : "bg-gray-100 group-hover:bg-gray-200"
                                             }`}>
-                                            <Inbox size={20} className={location.pathname === "/home/index" ? "text-indigo-600" : "text-gray-500 group-hover:text-gray-700"} />
+                                            <Inbox size={20} className={location.pathname === "/home/index" ? "text-indigo-600" : "text-white group-hover:text-white"} />
                                         </div>
                                         <span className="font-semibold text-sm tracking-wide">Home</span>
                                     </button>
@@ -103,7 +103,7 @@ const CustomDrawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                                         onClick={() => go("login/register")}
                                         className={`w-full flex items-center p-3 text-left rounded-xl transition-all duration-200 group relative overflow-hidden ${location.pathname.includes("login/register")
                                             ? "bg-indigo-50 text-indigo-600 shadow-sm shadow-indigo-100"
-                                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                            : "text-white hover:bg-gray-50 hover:text-white"
                                             }`}
                                     >
                                         {location.pathname.includes("login/register") && (
@@ -111,7 +111,7 @@ const CustomDrawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                                         )}
                                         <div className={`flex items-center justify-center w-10 h-10 mr-3 rounded-lg transition-colors ${location.pathname.includes("login/register") ? "bg-indigo-100" : "bg-gray-100 group-hover:bg-gray-200"
                                             }`}>
-                                            <Inbox size={20} className={location.pathname.includes("login/register") ? "text-indigo-600" : "text-gray-500 group-hover:text-gray-700"} />
+                                            <Inbox size={20} className={location.pathname.includes("login/register") ? "text-indigo-600" : "text-white group-hover:text-white"} />
                                         </div>
                                         <span className="font-semibold text-sm tracking-wide">Register</span>
                                     </button>
@@ -122,7 +122,7 @@ const CustomDrawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                                         onClick={() => go("entry/index")}
                                         className={`w-full flex items-center p-3 text-left rounded-xl transition-all duration-200 group relative overflow-hidden ${location.pathname.includes("entry/index")
                                             ? "bg-indigo-50 text-indigo-600 shadow-sm shadow-indigo-100"
-                                            : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                                            : "text-white hover:bg-gray-50 hover:text-white"
                                             }`}
                                     >
                                         {location.pathname.includes("entry/index") && (
@@ -130,7 +130,7 @@ const CustomDrawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                                         )}
                                         <div className={`flex items-center justify-center w-10 h-10 mr-3 rounded-lg transition-colors ${location.pathname.includes("entry/index") ? "bg-indigo-100" : "bg-gray-100 group-hover:bg-gray-200"
                                             }`}>
-                                            <Mail size={20} className={location.pathname.includes("entry/index") ? "text-indigo-600" : "text-gray-500 group-hover:text-gray-700"} />
+                                            <Mail size={20} className={location.pathname.includes("entry/index") ? "text-indigo-600" : "text-white group-hover:text-white"} />
                                         </div>
                                         <span className="font-semibold text-sm tracking-wide">Entry</span>
                                     </button>

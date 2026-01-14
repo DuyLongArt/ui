@@ -25,8 +25,18 @@ export default defineConfig({
         target: 'https://backend.duylong.art', // Your Spring Boot URL
         changeOrigin: true,
         secure: false,
-        
-
+      },
+      '/tailscale-api': {
+        target: 'https://api.tailscale.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/tailscale-api/, '/api/v2'),
+        secure: true,
+      },
+      '/cloudflare-graphql': {
+        target: 'https://api.cloudflare.com/client/v4/graphql',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/cloudflare-graphql/, ''),
+        secure: true,
       }
     }
   }

@@ -53,10 +53,10 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
 
   return (
     // 3. LAYOUT FIX: 'flex-col' ensures the header stays top and content fills the rest
-    <div className="flex flex-col h-full  w-full overflow-visible relative">
+    <div className="flex flex-col h-full  bg-indigo-200 w-full overflow-visible relative">
 
       {/* Header Section (Fixed height / shrinking) */}
-      <div className="flex w-full border-2 flex-row items-center justify-start gap-2 shadow-sm z-100 bg-white/50 backdrop-blur-sm">
+      <div className="flex w-full border-2 flex-row items-center justify-start gap-2 shadow-sm z-100 backdrop-blur-sm">
         <div>
           <OrchestraButton onClick={() => send({ type: 'CLICK' })} />
         </div>
@@ -72,7 +72,7 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
       />
 
       {/* Main Content Area (Grows to fill space, scrolls internally) */}
-      <div className="flex-1  z-20">
+      <div className="flex-1 bg-indigo-200! z-20">
         {children}
         <Outlet />
 

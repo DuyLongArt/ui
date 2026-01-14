@@ -23,6 +23,8 @@ const UtilitiesDashboardPage = lazy(() => import("../UILayer/pages/Home/Utilitie
 const PersonalPage = lazy(() => import("../UILayer/pages/Home/Person/PersonalPage.tsx"));
 const AdminOverviewPage = lazy(() => import("../UILayer/pages/Admin/AdminOverviewPage.tsx"));
 const MusicPage = lazy(() => import("../UILayer/pages/Home/Music/MusicPage.tsx"));
+const TailscaleDashboard = lazy(() => import("../UILayer/pages/Home/Utilities/TailscaleDashboard.tsx"));
+const CloudflareDnsDashboard = lazy(() => import("../UILayer/pages/Home/Utilities/CloudflareDnsDashboard.tsx"));
 
 // Placeholder for BlankPage if it's not exported elsewhere
 const BlankPage = () => (
@@ -198,7 +200,12 @@ export const appRoutes: Route[] = [
                 component: <UtilitiesPage />,
                 title: "Storage",
                 children: [
-              
+                    {
+                        type:"entry",
+                        path: "",
+                        component: <UtilitiesDashboardPage />,
+                        title: "Overview",
+                    },
                     {
                         type:"component",
                         path: "storage",
@@ -214,6 +221,18 @@ export const appRoutes: Route[] = [
                         path: "music",
                         component: <MusicPage />,
                         title: "Music",
+                    },
+                    {
+                        type:"component",
+                        path: "tailscale",
+                        component: <TailscaleDashboard />,
+                        title: "Tailscale",
+                    },
+                    {
+                        type:"component",
+                        path: "cloudflare",
+                        component: <CloudflareDnsDashboard />,
+                        title: "Cloudflare",
                     }
                 ]
             },

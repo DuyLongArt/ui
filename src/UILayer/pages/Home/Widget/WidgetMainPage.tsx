@@ -15,7 +15,7 @@ function App() {
   return (
     <div className='bg-white min-h-screen p-8'>
       {/* <div className="mb-12">
-        <Typography variant="h4" className="text-center font-black text-slate-800 mb-8 tracking-tighter italic">
+        <Typography variant="h4" className="text-center font-black text-white mb-8 tracking-tighter italic">
           NOSTALGIC AUDIO CORNER
         </Typography>
         <div className="flex flex-col lg:flex-row items-center justify-center gap-12">

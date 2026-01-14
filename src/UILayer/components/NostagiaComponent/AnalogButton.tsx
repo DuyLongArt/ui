@@ -17,7 +17,7 @@ export const AnalogButton: React.FC<AnalogButtonProps> = ({
     const baseStyles = "relative inline-flex items-center justify-center font-bold tracking-wider uppercase transition-all duration-100 ease-out active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed";
 
     const variants = {
-        chrome: "bg-linear-to-b from-gray-200 to-gray-400 text-gray-700 border-b-4 border-gray-500 hover:brightness-110 active:border-b-0 active:translate-y-1 shadow-md",
+        chrome: "bg-linear-to-b from-gray-200 to-gray-400 text-white border-b-4 border-gray-500 hover:brightness-110 active:border-b-0 active:translate-y-1 shadow-md",
         amber: "bg-linear-to-b from-amber-400 to-amber-600 text-amber-900 border-b-4 border-amber-700 hover:brightness-110 active:border-b-0 active:translate-y-1 shadow-md",
         vintage: "bg-stone-300 text-stone-600 border-b-4 border-stone-500 hover:bg-stone-200 active:border-b-0 active:translate-y-1 shadow-sm font-mono",
         sepia: "bg-linear-to-b from-amber-200 to-amber-400 text-amber-800 border-b-4 border-amber-600 hover:brightness-110 active:border-b-0 active:translate-y-1 shadow-md"

@@ -37,7 +37,7 @@ const MusicPage = () => {
                     <div className="flex items-center justify-between">
                         <div>
                             <h1 className="text-4xl font-black tracking-tight mb-1">Library</h1>
-                            <p className="text-gray-400 text-sm font-medium">Your personal collection</p>
+                            <p className="text-white text-sm font-medium">Your personal collection</p>
                         </div>
                         <div className="bg-white/10 p-3 rounded-full backdrop-blur-md">
                             <Search size={20} className="text-white/70" />
@@ -92,13 +92,13 @@ const MusicPage = () => {
                                         </div>
 
                                         <div className="flex-1 min-w-0">
-                                            <h3 className={`font-bold text-base truncate ${currentSong?.id === song.id ? 'text-white' : 'text-gray-200'}`}>
+                                            <h3 className={`font-bold text-base truncate ${currentSong?.id === song.id ? 'text-white' : 'text-white'}`}>
                                                 {song.title}
                                             </h3>
-                                            <p className="text-xs text-gray-400 truncate">{song.artist}</p>
+                                            <p className="text-xs text-white truncate">{song.artist}</p>
                                         </div>
 
-                                        <div className="text-xs text-gray-500 font-mono pl-4">
+                                        <div className="text-xs text-white font-mono pl-4">
                                             3:45
                                         </div>
 
@@ -119,7 +119,7 @@ const MusicPage = () => {
                         {/* Default State */}
                         {!currentSong && (
                             <div className="flex-1 flex flex-col items-center justify-center text-center opacity-50">
-                                <Disc size={64} className="mb-4 text-gray-400" />
+                                <Disc size={64} className="mb-4 text-white" />
                                 <p>Select a song to play</p>
                             </div>
                         )}
@@ -155,7 +155,7 @@ const MusicPage = () => {
                                             <Heart size={24} className="text-white" />
                                         </button>
                                     </div>
-                                    <p className="text-lg text-gray-400 font-medium">{currentSong.artist}</p>
+                                    <p className="text-lg text-white font-medium">{currentSong.artist}</p>
                                 </div>
 
                                 {/* Progress Bar */}
@@ -168,7 +168,7 @@ const MusicPage = () => {
                                             <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity" />
                                         </motion.div>
                                     </div>
-                                    <div className="flex justify-between text-xs text-gray-500 mt-2 font-mono">
+                                    <div className="flex justify-between text-xs text-white mt-2 font-mono">
                                         <span>0:00</span>
                                         <span>3:45</span>
                                     </div>
@@ -176,7 +176,7 @@ const MusicPage = () => {
 
                                 {/* Controls */}
                                 <div className="flex items-center justify-between px-4">
-                                    <button className="p-3 text-gray-400 hover:text-white transition-colors">
+                                    <button className="p-3 text-white hover:text-white transition-colors">
                                         <Share2 size={20} />
                                     </button>
 
@@ -188,7 +188,7 @@ const MusicPage = () => {
                                         <motion.button
                                             onClick={togglePlay}
                                             whileTap={{ scale: 0.9 }}
-                                            className="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+                                            className="w-20 h-20 rounded-full bg-white text-white flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
                                         >
                                             {isPlaying ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" />}
                                         </motion.button>
@@ -198,7 +198,7 @@ const MusicPage = () => {
                                         </button>
                                     </div>
 
-                                    <button className="p-3 text-gray-400 hover:text-white transition-colors">
+                                    <button className="p-3 text-white hover:text-white transition-colors">
                                         <Volume2 size={20} />
                                     </button>
                                 </div>

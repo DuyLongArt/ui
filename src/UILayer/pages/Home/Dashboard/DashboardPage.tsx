@@ -1,19 +1,93 @@
-import { Typography } from "@material-tailwind/react";
+import React, { useMemo, useEffect } from 'react';
+import { Typography, Progress, Button } from "@material-tailwind/react";
 import { GlassCard } from '../Person/GlassContainer';
 import { useUserProfileStore } from '../../../../OrchestraLayer/StateManager/Zustand/userProfileStore';
 import { CassettePlayer } from "../../../components/NostagiaComponent/CassettePlayer";
 import { VinylRecord } from "../../../components/NostagiaComponent/VinylRecord";
-import { Activity, Users, Eye, Music, TrendingUp } from 'lucide-react';
+import {
+    Activity,
+    Users,
+    Eye,
+    Music,
+    TrendingUp,
+    Cloud,
+    Globe,
+    Network,
+    ChevronRight,
+    Shield,
+    HardDrive
+} from 'lucide-react';
+import { useCloudflareStore } from '../../../../OrchestraLayer/StateManager/Zustand/cloudFlareStore';
+import { useTailScaleStore } from '../../../../OrchestraLayer/StateManager/Zustand/tailscaleStore';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardPage = () => {
+    const navigate = useNavigate();
     const userStore = useUserProfileStore();
+    const { dnsData, fetchDnsData } = useCloudflareStore();
+    const { devices, fetchDevices } = useTailScaleStore();
     const userFirstName = userStore.information.profiles.firstName || "Guest";
 
+    useEffect(() => {
+        fetchDevices();
+        fetchDnsData();
+    }, [fetchDevices, fetchDnsData]);
+
+    // Analytics Calculation for the chart
+    const analytics = useMemo(() => {
+        const dateMap: Record<string, number> = {};
+        const nameMap: Record<string, number> = {};
+        let totalRequests = 0;
+
+        dnsData.forEach(item => {
+            totalRequests += item.count;
+            dateMap[item.dimensions.date] = (dateMap[item.dimensions.date] || 0) + item.count;
+            nameMap[item.dimensions.queryName] = (nameMap[item.dimensions.queryName] || 0) + item.count;
+        });
+
+        const timeline = Object.entries(dateMap).sort((a, b) => a[0].localeCompare(b[0])).slice(-7);
+        const topNames = Object.entries(nameMap).sort((a, b) => b[1] - a[1]).slice(0, 4);
+
+        return { totalRequests, timeline, topNames };
+    }, [dnsData]);
+
+    const onlineNodes = useMemo(() => devices.filter(d => d.connectedToControl).length, [devices]);
+    const maxCount = Math.max(...analytics.timeline.map(t => t[1]), 1);
+
     const stats = [
-        { label: "Profile Views", value: "2.4k", icon: <Eye size={20} />, color: "bg-blue-500", trend: "+12%" },
-        { label: "Projects", value: "42", icon: <Activity size={20} />, color: "bg-purple-500", trend: "+5%" },
-        { label: "Followers", value: "847", icon: <Users size={20} />, color: "bg-pink-500", trend: "+18%" },
-        { label: "Engagement", value: "95%", icon: <TrendingUp size={20} />, color: "bg-green-500", trend: "+2%" },
+        {
+            label: "DNS Queries",
+            value: analytics.totalRequests.toLocaleString(),
+            icon: <Cloud size={20} />,
+            color: "text-orange-600",
+            bg: "bg-orange-50",
+            trend: "+12%"
+        },
+        {
+            label: "Mesh Nodes",
+            value: `${onlineNodes}/${devices.length}`,
+            icon: <Network size={20} />,
+            color: "text-indigo-600",
+            bg: "bg-indigo-50",
+            trend: "Active"
+        },
+        {
+            label: "Storage Health",
+            value: "Optimal",
+            icon: <HardDrive size={20} />,
+            color: "text-green-600",
+            bg: "bg-green-50",
+            trend: "95%"
+        },
+        {
+            label: "Threats Blocked",
+            value: "NaN",
+            icon: <Shield size={20} />,
+            color: "text-blue-600",
+            bg: "bg-blue-50",
+            trend: "Global"
+        },
     ];
 
     // Common props to fix TS errors with Material Tailwind
@@ -26,121 +100,162 @@ const DashboardPage = () => {
     } as any;
 
     return (
-        <div className="min-h-screen w-full p-4 md:p-8 space-y-8 bg-amber-50 animate-fade-in-up pb-24">
+        <div className="min-h-screen w-full p-4 md:p-8 space-y-8 bg-gradient-to-br! from-indigo-50! to-indigo-300! backdrop-blur-sm animate-fade-in-up pb-24">
 
             {/* Header Greeting */}
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <Typography variant="h2" className="text-slate-800 font-bold tracking-tight" {...commonProps}>
+                    <Typography variant="h2" className="text-black font-bold tracking-tight" {...commonProps}>
                         Welcome back, {userFirstName}! 👋
                     </Typography>
-                    <Typography className="text-slate-500 font-medium" {...commonProps}>
-                        Here's what's happening with your profile today.
+                    <Typography className="text-black font-medium" {...commonProps}>
+                        System status: <span className="text-green-600 font-bold">All services operational</span>
                     </Typography>
                 </div>
-                <div className="flex gap-2">
-                    <span className="px-4 py-2 bg-white/50 backdrop-blur-md rounded-full text-sm font-semibold text-slate-600 border border-white/60 shadow-sm">
+                <div className="flex gap-4 items-center">
+                    <span className="px-4 py-2 bg-white/50 backdrop-blur-md rounded-full text-sm font-semibold text-white border border-white/60 shadow-sm">
                         {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
                     </span>
                 </div>
             </header>
 
             {/* Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {stats.map((stat, i) => (
+                    <GlassCard key={i} className="p-6 transition-transform hover:-translate-y-1">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className={`p-2 rounded-xl ${stat.bg} ${stat.color}`}>
+                                {stat.icon}
+                            </div>
+                            <span className="text-[10px] font-black text-white uppercase tracking-widest">{stat.trend}</span>
+                        </div>
+                        <Typography variant="h3" className="text-white font-black" {...commonProps}>{stat.value}</Typography>
+                        <Typography className="text-white text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.label}</Typography>
+                    </GlassCard>
+                ))}
+            </div>
 
 
             {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-6 gap-8">
 
                 {/* Activity / Main Section */}
                 <div className="lg:col-span-2 space-y-8">
-                    <GlassCard className="p-8 min-h-[400px]">
+                    <GlassCard className="p-6 min-h-[400px]">
                         <div className="flex justify-between items-center mb-8">
-                            <Typography variant="h5" className="text-slate-800 font-bold" {...commonProps}>Activity Overview</Typography>
-                            <select className="bg-white/50 border-none text-slate-600 text-sm rounded-lg cursor-pointer outline-none focus:ring-0">
-                                <option>Last 7 Days</option>
-                                <option>Last Month</option>
-                            </select>
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-orange-500 text-white rounded-lg shadow-lg shadow-orange-100">
+                                    <Cloud size={20} />
+                                </div>
+                                <div>
+                                    <Typography variant="h5" className="text-white font-bold" {...commonProps}>DNS Traffic Analytics</Typography>
+                                    <Typography className="text-white text-xs font-bold" {...commonProps}>Zone: duylong.art</Typography>
+                                </div>
+                            </div>
+                            <button
+                                className="text-orange-500  text-xs! tracking-widest uppercase hover:bg-orange-50"
+                                onClick={() => navigate('/utilities/index/cloudflare')}
+                                {...commonProps}
+                            >
+                                View Detailed Report →
+                            </button>
                         </div>
 
-                        {/* Mock Chart Area */}
-                        <div className="h-64 flex items-end justify-between gap-2 px-4">
-                            {[40, 70, 45, 90, 60, 80, 50, 65, 85, 45, 95, 75].map((h, i) => (
-                                <div key={i} className="w-full bg-blue-100/50 rounded-t-lg relative group h-full flex items-end">
-                                    <div
-                                        className="w-full bg-linear-to-t from-blue-500 to-blue-400 rounded-t-lg transition-all duration-1000 group-hover:bg-blue-600"
-                                        style={{ height: `${h}%` }}
-                                    ></div>
-                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-                                        {h}%
+                        {/* Real DNS Traffic Chart */}
+                        <div className="h-64 flex items-end justify-between gap-8 px-4">
+                            {analytics.timeline.map(([date, count], i) => {
+                                const height = (count / maxCount) * 100;
+                                return (
+                                    <div key={date} className="flex-1 bg-slate-50/50 rounded-t-xl relative group h-full flex items-end">
+                                        <motion.div
+                                            initial={{ height: 0 }}
+                                            animate={{ height: `${height}%` }}
+                                            transition={{ duration: 1, delay: i * 0.1 }}
+                                            className="w-full bg-linear-to-t from-orange-500 to-orange-400 rounded-t-xl transition-all duration-300 group-hover:from-orange-600 relative overflow-hidden"
+                                        >
+                                            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                        </motion.div>
+                                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity font-bold whitespace-nowrap z-10">
+                                            {count} Queries
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
-                        <div className="flex justify-between mt-4 text-xs text-slate-400 font-medium px-2">
-                            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
-                            <span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+                        <div className="flex justify-between mt-4 text-[10px] text-white font-black uppercase tracking-widest px-2">
+                            {analytics.timeline.map(([date]) => (
+                                <span key={date}>{date.split('-').slice(1).join('/')}</span>
+                            ))}
                         </div>
                     </GlassCard>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <GlassCard className="p-6">
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 bg-orange-100 text-orange-600 rounded-lg">
-                                    <Music size={20} />
-                                </div>
-                                <Typography variant="h6" className="text-slate-800 font-bold" {...commonProps}>Now Playing</Typography>
-                            </div>
-                            <div className="flex justify-center py-4 scale-90 origin-top">
-                                <CassettePlayer />
-                            </div>
-                        </GlassCard>
-
-                        <GlassCard className="p-6 flex flex-col items-center justify-center relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-6 opacity-10">
-                                <Music size={100} />
-                            </div>
-                            <Typography variant="h6" className="text-slate-800 font-bold mb-6 self-start z-10" {...commonProps}>Vinyl Collection</Typography>
-                            <div className="scale-75 z-10">
-                                <VinylRecord />
+                        <GlassCard className="p-6 bg-slate-800 col-span-3 text-white">
+                            <Typography variant="h6" className="font-bold mb-6" {...commonProps}>Top Subdomains</Typography>
+                            <div className="space-y-5">
+                                {analytics.topNames.map(([name, count]) => (
+                                    <div key={name} className="flex justify-between items-center">
+                                        <div className="flex items-center gap-2">
+                                            <Globe size={14} className="text-orange-400" />
+                                            <span className="text-xs font-mono text-white/80 truncate max-w-[140px]">{name}</span>
+                                        </div>
+                                        <span className="text-[10px] font-black text-white/40">{count} REQS</span>
+                                    </div>
+                                ))}
                             </div>
                         </GlassCard>
                     </div>
                 </div>
 
-                {/* Sidebar / Recent Activity */}
-                <div className="space-y-8">
-                    <GlassCard className="p-6 h-full">
-                        <Typography variant="h6" className="text-slate-800 font-bold mb-6" {...commonProps}>Recent Activity</Typography>
-                        <div className="space-y-6">
-                            {[
-                                { action: "Updated profile picture", time: "2 mins ago", color: "bg-blue-500" },
-                                { action: "Completed 'E-commerce App'", time: "4 hours ago", color: "bg-green-500" },
-                                { action: "Added new skill: 'React Native'", time: "Yesterday", color: "bg-purple-500" },
-                                { action: "Reached 1k followers", time: "2 days ago", color: "bg-pink-500" },
-                            ].map((item, i) => (
-                                <div key={i} className="flex gap-4 relative">
-                                    {i !== 3 && <div className="absolute left-[9px] top-8 bottom-[-24px] w-0.5 bg-slate-200"></div>}
-                                    <div className={`w-5 h-5 rounded-full ${item.color} shrink-0 mt-1 ring-4 ring-white`}></div>
-                                    <div>
-                                        <Typography className="text-slate-700 text-sm font-semibold" {...commonProps}>{item.action}</Typography>
-                                        <Typography className="text-slate-400 text-xs" {...commonProps}>{item.time}</Typography>
+                {/* Sidebar / Extended Detail */}
+                <div className="space-y-8 col-span-1">
+                    {/* Mesh Network Snapshot */}
+                    <GlassCard className="p-6 text-white shadow-bold " color='from-[#6F56D2FF] to-[#6F56D2]'>
+                        <div className="flex justify-between items-center mb-6">
+                            <Typography variant="h6" className="text-white font-bold" {...commonProps}>Mesh Network</Typography>
+                            <span className="px-2 py-1 bg-green-50 text-green-600 text-[9px] font-black rounded border border-green-100">STABLE</span>
+                        </div>
+                        <div className="space-y-4">
+                            {devices.slice(0, 5).map(device => (
+                                <div key={device.id} className="flex items-center justify-between group">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-2 h-2 rounded-full ${device.connectedToControl ? 'bg-green-500 animate-pulse' : 'bg-slate-200'}`} />
+                                        <span className="text-xs font-bold text-white group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{device.hostname}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
+                        <button
+                            variant="text"
+                            fullWidth
+                            className="mt-6 text-indigo-500 font-black text-xs! tracking-widest uppercase"
+                            onClick={() => navigate('/utilities/index/tailscale')}
+                            {...commonProps}
+                        >
+                            Mesh Details →
+                        </button>
+                    </GlassCard>
 
-                        <div className="mt-8 pt-6 border-t border-slate-100">
-                            <Typography variant="h6" className="text-slate-800 font-bold mb-4" {...commonProps}>Quick Actions</Typography>
-                            <div className="space-y-3">
-                                <button className="w-full py-2.5 px-4 bg-slate-50 hover:bg-white hover:shadow-md text-slate-600 rounded-xl text-sm font-semibold text-left transition-all border border-slate-200 flex items-center justify-between group">
-                                    Edit Profile
-                                    <span className="text-slate-400 group-hover:text-blue-500">→</span>
-                                </button>
-                                <button className="w-full py-2.5 px-4 bg-slate-50 hover:bg-white hover:shadow-md text-slate-600 rounded-xl text-sm font-semibold text-left transition-all border border-slate-200 flex items-center justify-between group">
-                                    Upload Resume
-                                    <span className="text-slate-400 group-hover:text-blue-500">→</span>
-                                </button>
-                            </div>
+                    {/* Top DNS Targets */}
+
+
+                    <GlassCard className="p-6">
+                        <Typography variant="h6" className="text-white font-bold mb-6" {...commonProps}>Recent Activity</Typography>
+                        <div className="space-y-6">
+                            {[
+                                { action: "DNS Policy Updated", time: "2 mins ago", color: "bg-blue-500" },
+                                { action: "NAS Snapshot Complete", time: "4 hours ago", color: "bg-green-500" },
+                                { action: "New Node: MacDuyLong", time: "Yesterday", color: "bg-purple-500" },
+                            ].map((item, i) => (
+                                <div key={i} className="flex gap-4 relative">
+                                    {i !== 2 && <div className="absolute left-[9px] top-8 bottom-[-24px] w-0.5 bg-slate-100"></div>}
+                                    <div className={`w-5 h-5 rounded-full ${item.color} shrink-0 mt-1 ring-4 ring-white`}></div>
+                                    <div>
+                                        <Typography className="text-white text-xs font-semibold" {...commonProps}>{item.action}</Typography>
+                                        <Typography className="text-white text-[10px]" {...commonProps}>{item.time}</Typography>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </GlassCard>
                 </div>

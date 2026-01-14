@@ -48,7 +48,7 @@ const IOTDevicesLog: React.FC = () => {
                 {data?.map((item) => (
                     <li key={item.id} className="p-3 border rounded shadow-sm hover:bg-gray-50">
                         <span className="font-semibold">{item.name}</span>
-                        <p className="text-sm text-gray-600">{item.description}</p>
+                        <p className="text-sm text-white">{item.description}</p>
                     </li>
                 ))}
             </ul>

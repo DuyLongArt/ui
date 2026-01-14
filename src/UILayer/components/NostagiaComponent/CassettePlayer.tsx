@@ -72,7 +72,7 @@ export const CassettePlayer = () => {
 
                 {/* Tape label - Japanese Aesthetic */}
                 <div className={`bg-white rounded p-2 mb-4 text-center border-l-[12px] ${tapeDeck === 'A' ? 'border-pink-500' : 'border-cyan-500'} shadow-sm transition-all duration-700`}>
-                    <div className="text-black font-black text-sm tracking-widest uppercase truncate">{currentSong?.artist || "TAKEUCHI MARIYA"}</div>
+                    <div className="text-white font-black text-sm tracking-widest uppercase truncate">{currentSong?.artist || "TAKEUCHI MARIYA"}</div>
                     <div className="text-zinc-600 text-[10px] font-bold truncate">{currentSong?.title || "プラスティック・ラヴ"}</div>
                     <div className="flex justify-between px-4 mt-1 text-[8px] font-mono text-pink-600">
                         <span>NR [ON]</span>

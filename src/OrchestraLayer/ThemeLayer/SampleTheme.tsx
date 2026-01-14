@@ -85,7 +85,7 @@ const customTheme = {
           filled: {
             white: {
               background: "bg-white dark:bg-gray-800",
-              color: "text-gray-700 dark:text-gray-200",
+              color: "text-white dark:text-white",
               shadow: "shadow-none",
             },
           },
@@ -141,12 +141,12 @@ export default function App() {
       <ThemeProvider value={customTheme}>
         <div className={`min-h-screen transition-colors duration-300 ${mode === 'dark'
           ? 'bg-gray-900 text-white'
-          : 'bg-gray-50 text-gray-900'
+          : 'bg-gray-50 text-white'
           }`}>
           <div className="flex flex-col items-center justify-center min-h-screen p-4">
             <Typography
               variant="h1"
-              className="mb-8 text-center font-bold text-4xl md:text-5xl text-gray-900 dark:text-white"
+              className="mb-8 text-center font-bold text-4xl md:text-5xl text-white dark:text-white"
               {...commonProps}
             >
               Material Tailwind Theme Manager
@@ -197,7 +197,7 @@ const ContentSection = () => {
       <CardBody className="text-center p-8" {...commonProps}>
         <Typography
           variant="h3"
-          className={`mb-4 font-semibold ${mode === 'dark' ? 'text-white' : 'text-gray-900'
+          className={`mb-4 font-semibold ${mode === 'dark' ? 'text-white' : 'text-white'
             }`}
           {...commonProps}
         >
@@ -212,7 +212,7 @@ const ContentSection = () => {
 
         <Typography
           variant="paragraph"
-          className={`mb-6 leading-relaxed ${mode === 'dark' ? 'text-gray-300' : 'text-gray-600'
+          className={`mb-6 leading-relaxed ${mode === 'dark' ? 'text-white' : 'text-white'
             }`}
           {...commonProps}
         >
@@ -221,8 +221,8 @@ const ContentSection = () => {
         </Typography>
 
         <div className={`mt-4 p-4 rounded-lg border-l-4 ${mode === 'dark'
-          ? 'bg-gray-700 border-purple-500 text-gray-200'
-          : 'bg-blue-50 border-blue-500 text-gray-700'
+          ? 'bg-gray-700 border-purple-500 text-white'
+          : 'bg-blue-50 border-blue-500 text-white'
           }`}>
           <Typography variant="small" className="font-medium" {...commonProps}>
             💡 Pro Tip: You can extend this theming system to any component in your app using Tailwind CSS classes and the dark: modifier!

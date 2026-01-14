@@ -31,13 +31,13 @@ const IOTPage = () => {
                     <div className="bg-blue-600 p-2 rounded-xl shadow-lg shadow-blue-900/40 mb-3 text-white">
                         <IOTMapIcon />
                     </div>
-                    <div className="hidden w-fit lg:block tracking-wider uppercase text-slate-400 text-xs font-bold">
+                    <div className="hidden w-fit lg:block tracking-wider uppercase text-white text-xs font-bold">
                         Smart Home
                     </div>
                 </div>
 
                 <div className="flex-1 flex flex-col gap-2 p-4">
-                    <p className="hidden lg:block text-slate-500 font-bold uppercase ml-3 mb-2 text-[11px]">
+                    <p className="hidden lg:block text-white font-bold uppercase ml-3 mb-2 text-[11px]">
                         Zones
                     </p>
 
@@ -66,10 +66,10 @@ const IOTPage = () => {
             <main className='flex-1 p-6 lg:p-10 overflow-y-auto'>
                 <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-800">
+                        <h2 className="text-3xl font-bold tracking-tight text-white">
                             Dashboard
                         </h2>
-                        <p className="text-slate-500 font-medium mt-1">
+                        <p className="text-white font-medium mt-1">
                             Overview of your connected devices
                         </p>
                     </div>
@@ -78,7 +78,7 @@ const IOTPage = () => {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                         </div>
-                        <span className="text-sm font-bold text-slate-600">System Online</span>
+                        <span className="text-sm font-bold text-white">System Online</span>
                     </div>
                 </header>
 
@@ -101,7 +101,7 @@ function NavButton({ title, active, onClick, icon }: any) {
             className={`flex items-center justify-center lg:justify-start gap-4 p-3 rounded-xl transition-all duration-200 group relative overflow-hidden w-full
             ${active
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/30'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                    : 'text-white hover:bg-slate-800 hover:text-white'
                 }`}
         >
             <span className="z-10">{icon}</span>
@@ -114,7 +114,7 @@ function MyRoom() {
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
-                <h4 className="text-xl font-bold text-slate-800">
+                <h4 className="text-xl font-bold text-white">
                     My Room
                 </h4>
             </div>
@@ -132,7 +132,7 @@ function SubRoom() {
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
-                <h4 className="text-xl font-bold text-slate-800">
+                <h4 className="text-xl font-bold text-white">
                     Sub Room
                 </h4>
             </div>
@@ -151,7 +151,7 @@ function DeviceCard({ name, status, type }: { name: string, status: string, type
     let Icon = CpuChipIcon;
     let colorClass = "text-blue-500 bg-blue-50";
 
-    if (type === 'light') { Icon = LightBulbIcon; colorClass = isActive ? "text-amber-500 bg-amber-50" : "text-slate-400 bg-slate-100"; }
+    if (type === 'light') { Icon = LightBulbIcon; colorClass = isActive ? "text-amber-500 bg-amber-50" : "text-white bg-slate-100"; }
     if (type === 'temp') { Icon = FireIcon; colorClass = "text-orange-500 bg-orange-50"; }
     if (type === 'security') { Icon = LockClosedIcon; colorClass = status === 'Locked' ? "text-green-500 bg-green-50" : "text-red-500 bg-red-50"; }
 
@@ -163,16 +163,16 @@ function DeviceCard({ name, status, type }: { name: string, status: string, type
                         <Icon className="h-6 w-6" />
                     </div>
                     <span
-                        className={`px-2 py-1 text-xs font-bold uppercase rounded-full ${isActive ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-500"}`}
+                        className={`px-2 py-1 text-xs font-bold uppercase rounded-full ${isActive ? "bg-green-100 text-green-700" : "bg-slate-100 text-white"}`}
                     >
                         {status}
                     </span>
                 </div>
 
-                <h6 className="text-lg font-bold text-slate-800 mb-1">
+                <h6 className="text-lg font-bold text-white mb-1">
                     {name}
                 </h6>
-                <p className="text-sm text-slate-500 font-medium mb-6">
+                <p className="text-sm text-white font-medium mb-6">
                     {type ? type.charAt(0).toUpperCase() + type.slice(1) : 'Device'}
                 </p>
 
@@ -180,12 +180,12 @@ function DeviceCard({ name, status, type }: { name: string, status: string, type
                     <button
                         className={`flex-1 px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:shadow-md transition-all ${isActive
                             ? "bg-linear-to-tr from-blue-600 to-blue-400 text-white"
-                            : "border border-slate-300 text-slate-700 hover:bg-slate-50"
+                            : "border border-slate-300 text-white hover:bg-slate-50"
                             }`}
                     >
                         {isActive ? 'Active' : 'Enable'}
                     </button>
-                    <button className="p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors">
+                    <button className="p-2 text-white hover:bg-slate-100 rounded-lg transition-colors">
                         <span className="text-xl">⚙</span>
                     </button>
                 </div>

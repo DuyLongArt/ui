@@ -39,7 +39,7 @@ const SkillPage = () => {
                 <GlassCard className="p-8 mb-8 text-center bg-white/30">
                     <Typography
                         variant="h2"
-                        className="text-3xl md:text-4xl font-extrabold text-slate-800 mb-2"
+                        className="text-3xl md:text-4xl font-extrabold text-white mb-2"
                         placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}
                     >
                         Professional Skills
@@ -51,7 +51,7 @@ const SkillPage = () => {
                     {skills.map((skill, index) => (
                         <GlassCard
                             key={index}
-                            className={` text-black transition-all  duration-300 hover:-translate-y-1 hover:shadow-lg group`}
+                            className={` text-white transition-all  duration-300 hover:-translate-y-1 hover:shadow-lg group`}
                         >
                             <div className={`mb-4 border-2 border-${categoryColor[skill.category]} shadow-sm  rounded-xl w-full  p-6 h-full`}>
 
@@ -61,13 +61,13 @@ const SkillPage = () => {
                             </div>
                             <Typography
                                 variant="h5"
-                                className="font-bold text-slate-800 mb-2"
+                                className="font-bold text-white mb-2"
                                 placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}
                             >
                                 {skill.name}
                             </Typography>
                             <Typography
-                                className="text-slate-600 leading-relaxed text-sm"
+                                className="text-white leading-relaxed text-sm"
                                 placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}
                             >
                                 {skill.description}

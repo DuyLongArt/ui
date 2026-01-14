@@ -24,10 +24,10 @@ const HomeAssistant: React.FC = () => {
         <div className="flex flex-col h-full animate-fade-in-up">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex flex-col">
-                    <p className="font-bold text-black text-lg">
+                    <p className="font-bold text-white text-lg">
                         Network Dashboard
                     </p>
-                    <p className="text-gray-500 font-normal text-sm">
+                    <p className="text-white font-normal text-sm">
                         Monitoring local network activity
                     </p>
                 </div>
@@ -40,20 +40,20 @@ const HomeAssistant: React.FC = () => {
             {/* Controls Section */}
             <div className="mb-6 bg-white p-4 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm">
                 <div className="flex items-center gap-3">
-                    <div className={`p-3 rounded-lg ${isOn ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-slate-500'}`}>
+                    <div className={`p-3 rounded-lg ${isOn ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 text-white'}`}>
                         <LightBulbIcon className="h-6 w-6" />
                     </div>
                     <div>
-                        <h6 className="font-bold text-slate-800 text-base">
+                        <h6 className="font-bold text-white text-base">
                             Main Device
                         </h6>
-                        <p className="text-slate-500 text-sm">
+                        <p className="text-white text-sm">
                             ESP32 Controller
                         </p>
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <span className={`font-bold text-sm ${isOn ? 'text-green-500' : 'text-slate-400'}`}>
+                    <span className={`font-bold text-sm ${isOn ? 'text-green-500' : 'text-white'}`}>
                         {isOn ? 'ON' : 'OFF'}
                     </span>
 
@@ -74,8 +74,8 @@ const HomeAssistant: React.FC = () => {
             <div className="flex-1 bg-white rounded-xl border border-slate-200 overflow-hidden relative min-h-[800px] shadow-sm">
                 <div className="absolute inset-0 flex items-center justify-center bg-slate-50 -z-10">
                     <div className="flex flex-col items-center gap-2">
-                        <GlobeAltIcon className="h-16 w-16 text-slate-300 animate-pulse" />
-                        <p className="text-slate-400 font-medium text-sm">Loading Network Interface...</p>
+                        <GlobeAltIcon className="h-16 w-16 text-white animate-pulse" />
+                        <p className="text-white font-medium text-sm">Loading Network Interface...</p>
                     </div>
                 </div>
                 <iframe

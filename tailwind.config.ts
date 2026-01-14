@@ -11,6 +11,19 @@ const config: Config = {
     extend: {
       colors: {
         // Custom colors
+        textShadow: {
+          'sm': '1px 1px 2px rgba(0, 0, 0, 0.5)',
+          'default': '2px 2px 4px rgba(0, 0, 0, 0.3)',
+          'lg': '4px 4px 8px rgba(0, 0, 0, 0.4)',
+          'great': '8px 8px 8px rgba(0,0,0,1)'
+        },
+        boxShadow: {
+          'glass-edge': '0 0 10px rgba(0, 0, 0, 0.1), 0 0 20px rgba(0, 0, 0, 0.05), 0 0 30px rgba(0, 0, 0, 0.02)',
+          // Add this inside your boxShadow object for a "shimmer" effect
+          'glass': '0 0 10px rgba(255, 255, 255, 0.7), 0 0 30px rgba(0, 0, 0, 1)',
+
+          
+        },
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',
@@ -101,6 +114,7 @@ const config: Config = {
     require('@tailwindcss/typography'),
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/container-queries'),
+    require('tailwindcss-text-shadow')
   ],
   // Enable dark mode
   darkMode: 'class', // or 'media' for system preference

@@ -46,12 +46,12 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
             {/* Left Column: CV (Main Content) */}
             <div className="md:col-span-2 space-y-8">
 
-                <GlassCard className="p-0 overflow-hidden flex flex-col h-full">
+                <GlassCard className="p-0 overflow-hidden shadow-bold flex flex-col h-full " color='from-indigo-400 via-indigo-400 to-indigo-400'>
                     {/* Header with Title and Open Button */}
                     <div className="p-4 md:p-6 border-b border-white/20 flex justify-between items-center bg-white/10 backdrop-blur-md">
                         <Typography
                             variant="h5"
-                            color="blue-gray"
+                            color="white"
                             className="font-bold tracking-tight"
                             placeholder=""
                             onPointerEnterCapture={() => { }}
@@ -89,7 +89,7 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                             />
 
                             {/* Fallback for browsers that don't support iframes/pdf embedding */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center -z-10 text-slate-400 gap-2">
+                            <div className="absolute inset-0 flex flex-col items-center justify-center -z-10 text-white gap-2">
                                 <Typography
                                     placeholder=""
                                     onPointerEnterCapture={() => { }}
@@ -113,7 +113,7 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                 <GlassCard className="p-6 md:p-8">
                     <Typography
                         variant="small"
-                        className="text-slate-500 uppercase tracking-widest mb-4 font-bold text-xs"
+                        className="text-white uppercase tracking-widest mb-4 font-bold text-2xl"
                         placeholder=""
                         onPointerEnterCapture={() => { }}
                         onPointerLeaveCapture={() => { }}
@@ -123,14 +123,14 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                         About Me
                     </Typography>
                     <Typography
-                        className="text-slate-700 leading-relaxed text-lg font-light"
+                        className="text-white  italic leading-relaxed text-2xl font-light"
                         placeholder=""
                         onPointerEnterCapture={() => { }}
                         onPointerLeaveCapture={() => { }}
                         onResize={() => { }}
                         onResizeCapture={() => { }}
                     >
-                        {userStore.information.details.bio || "No bio available."}
+                        "{userStore.information.details.bio || "No bio available."}"
                     </Typography>
                 </GlassCard>
 
@@ -139,7 +139,7 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                     <GlassCard className="p-6 md:p-8">
                         <Typography
                             variant="small"
-                            className="text-slate-500 uppercase tracking-widest mb-4 font-bold text-xs"
+                            className="text-white uppercase tracking-widest mb-4 font-bold text-xs"
                             placeholder=""
                             onPointerEnterCapture={() => { }}
                             onPointerLeaveCapture={() => { }}
@@ -154,7 +154,7 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                                     <div className="w-2 h-2 mt-2 rounded-full bg-blue-500 shrink-0 group-hover:scale-125 transition-transform duration-300"></div>
                                     <div>
                                         <Typography
-                                            className="text-sm font-bold text-slate-800"
+                                            className="text-sm font-bold text-white"
                                             placeholder=""
                                             onPointerEnterCapture={() => { }}
                                             onPointerLeaveCapture={() => { }}
@@ -164,7 +164,7 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                                             {item.category}
                                         </Typography>
                                         <Typography
-                                            className="text-sm text-slate-600 mt-1"
+                                            className="text-sm text-white mt-1"
                                             placeholder=""
                                             onPointerEnterCapture={() => { }}
                                             onPointerLeaveCapture={() => { }}

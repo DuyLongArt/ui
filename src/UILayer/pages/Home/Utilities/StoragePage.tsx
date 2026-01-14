@@ -172,7 +172,7 @@ const StoragePage = () => {
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <Typography variant="h3" className="font-bold text-slate-800" {...commonProps}>
+                        <Typography variant="h3" className="font-bold text-white" {...commonProps}>
                             Storage & Assets
                         </Typography>
                     </div>
@@ -185,11 +185,11 @@ const StoragePage = () => {
                 {/* Search Bar */}
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search className="h-5 w-5 text-gray-400" />
+                        <Search className="h-5 w-5 text-white" />
                     </div>
                     <input
                         type="text"
-                        className="block w-full pl-10 pr-3 py-3 border-none rounded-2xl bg-white shadow-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        className="block w-full pl-10 pr-3 py-3 border-none rounded-2xl bg-white shadow-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                         placeholder="Search your files..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -233,7 +233,7 @@ const StoragePage = () => {
                 {/* Folders Section */}
                 <div>
                     <div className="flex justify-between items-center mb-4">
-                        <Typography variant="h5" className="font-bold text-slate-800" {...commonProps}>Folders</Typography>
+                        <Typography variant="h5" className="font-bold text-white" {...commonProps}>Folders</Typography>
                         <Button variant="text" color="blue" className="normal-case font-medium" {...commonProps}>View All</Button>
                     </div>
 
@@ -262,7 +262,7 @@ const StoragePage = () => {
                 {/* Recent Files Section */}
                 <div>
                     <div className="flex justify-between items-center mb-4">
-                        <Typography variant="h5" className="font-bold text-slate-800" {...commonProps}>Recent Files</Typography>
+                        <Typography variant="h5" className="font-bold text-white" {...commonProps}>Recent Files</Typography>
                         <IconButton variant="text" color="gray" size="sm" {...commonProps}>
                             <MoreVertical size={20} />
                         </IconButton>
@@ -270,7 +270,7 @@ const StoragePage = () => {
 
                     <div className="space-y-3">
                         {filteredFiles.length === 0 ? (
-                            <div className="text-center py-10 text-gray-400">No files found</div>
+                            <div className="text-center py-10 text-white">No files found</div>
                         ) : (
                             filteredFiles.map((file, index) => (
                                 <motion.div
@@ -289,10 +289,10 @@ const StoragePage = () => {
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                        <Typography variant="h6" className="text-sm font-bold text-slate-800 truncate" {...commonProps}>
+                                        <Typography variant="h6" className="text-sm font-bold text-white truncate" {...commonProps}>
                                             {file.file.name}
                                         </Typography>
-                                        <div className="flex items-center gap-2 text-xs text-gray-500">
+                                        <div className="flex items-center gap-2 text-xs text-white">
                                             <span>{file.size}</span>
                                             <span>•</span>
                                             <span>{file.date}</span>
@@ -301,7 +301,7 @@ const StoragePage = () => {
                                         </div>
                                     </div>
 
-                                    <IconButton variant="text" color="blue-gray" className="opacity-0 group-hover:opacity-100 transition-opacity" {...commonProps}>
+                                    <IconButton variant="text" color="white" className="opacity-0 group-hover:opacity-100 transition-opacity" {...commonProps}>
                                         <MoreVertical size={20} />
                                     </IconButton>
                                 </motion.div>
@@ -340,8 +340,8 @@ const FolderCard = ({ icon, title, count, color }: { icon: React.ReactNode, titl
             {icon}
         </div>
         <div>
-            <Typography variant="h6" className="font-bold text-slate-800" {...commonProps}>{title}</Typography>
-            <Typography className="text-xs text-gray-500 font-medium" {...commonProps}>{count}</Typography>
+            <Typography variant="h6" className="font-bold text-white" {...commonProps}>{title}</Typography>
+            <Typography className="text-xs text-white font-medium" {...commonProps}>{count}</Typography>
         </div>
     </div>
 );

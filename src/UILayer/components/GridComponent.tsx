@@ -86,10 +86,10 @@ const AddShortcutCard: React.FC<{ onClick: () => void }> = ({ onClick }) => {
             whileHover={{ scale: 1.02, backgroundColor: "rgba(243, 244, 246, 0.8)" }}
             whileTap={{ scale: 0.98 }}
             onClick={onClick}
-            className="aspect-square rounded-2xl border-3 border-dashed border-slate-300 flex flex-col items-center justify-center bg-slate-50 text-slate-400 hover:text-indigo-500 hover:border-indigo-400 hover:bg-slate-100 transition-all cursor-pointer group"
+            className="aspect-square rounded-2xl border-3 border-dashed border-slate-300 flex flex-col items-center justify-center bg-slate-50 text-white hover:text-indigo-500 hover:border-indigo-400 hover:bg-slate-100 transition-all cursor-pointer group"
         >
             <div className="w-16 h-16 rounded-full bg-slate-200 group-hover:bg-indigo-100 flex items-center justify-center mb-3 transition-colors">
-                <PlusIcon className="w-8 h-8 text-slate-400 group-hover:text-indigo-600 transition-colors" />
+                <PlusIcon className="w-8 h-8 text-white group-hover:text-indigo-600 transition-colors" />
             </div>
             <span className="font-semibold transition-colors">Add Shortcut</span>
         </motion.button>
@@ -188,49 +188,49 @@ function GridComponent() {
                             className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden z-10"
                         >
                             <div className="flex justify-between items-center p-5 border-b border-slate-100 bg-slate-50/50">
-                                <h3 className="text-xl font-bold text-slate-800">{editingId ? 'Edit Shortcut' : 'Add New Shortcut'}</h3>
-                                <button onClick={closeModal} className="p-2 rounded-full hover:bg-slate-200 text-slate-500 transition-colors">
+                                <h3 className="text-xl font-bold text-white">{editingId ? 'Edit Shortcut' : 'Add New Shortcut'}</h3>
+                                <button onClick={closeModal} className="p-2 rounded-full hover:bg-slate-200 text-white transition-colors">
                                     <XMarkIcon className="w-5 h-5" />
                                 </button>
                             </div>
 
                             <form onSubmit={handleSubmit} className="p-6 space-y-5">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-slate-700 ml-1">Title</label>
+                                    <label className="text-sm font-bold text-white ml-1">Title</label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <TagIcon className="h-5 w-5 text-slate-400" />
+                                            <TagIcon className="h-5 w-5 text-white" />
                                         </div>
                                         <input
                                             type="text"
                                             value={title}
                                             onChange={(e) => setTitle(e.target.value)}
                                             placeholder="e.g. Google Drive"
-                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-slate-800"
+                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-white"
                                             required
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-slate-700 ml-1">URL</label>
+                                    <label className="text-sm font-bold text-white ml-1">URL</label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <LinkIcon className="h-5 w-5 text-slate-400" />
+                                            <LinkIcon className="h-5 w-5 text-white" />
                                         </div>
                                         <input
                                             type="url"
                                             value={url}
                                             onChange={(e) => setUrl(e.target.value)}
                                             placeholder="https://..."
-                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-slate-800"
+                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-white"
                                             required
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-slate-700 ml-1">Card Color</label>
+                                    <label className="text-sm font-bold text-white ml-1">Card Color</label>
                                     <div className="grid grid-cols-4 gap-3">
                                         {colorOptions.map((opt) => (
                                             <button
@@ -248,7 +248,7 @@ function GridComponent() {
                                     <button
                                         type="button"
                                         onClick={closeModal}
-                                        className="flex-1 px-4 py-3 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
+                                        className="flex-1 px-4 py-3 font-bold text-white bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
                                     >
                                         Cancel
                                     </button>

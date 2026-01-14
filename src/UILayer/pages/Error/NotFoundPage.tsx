@@ -61,7 +61,7 @@ const NotFoundPage: React.FC<ErrorPageProps> = ({
             <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
               {errorMessage}
             </h2>
-            <p className="text-lg text-gray-400 mb-8 max-w-md">
+            <p className="text-lg text-white mb-8 max-w-md">
               {errorDescription}
             </p>
             <a

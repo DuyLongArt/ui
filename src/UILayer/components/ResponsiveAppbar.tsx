@@ -80,10 +80,26 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
       url: element.url
     }
   }) : [];
+
+  const [navName, setNavName] = useState<string>('');
+  // const [match, setMatch] = useState<boolean>(false);
+  // useEffect(() => {
+  //   // const formattedPath = window.location.pathname.toLowerCase().replace(/\s+/g, '-');
+  //   // const matchedItem = navigationItems.find(item => item.path === formattedPath);
+  //   console.log("NavName:", navName);
+  //   console.log("Path:", window.location.pathname);
+  //   if (window.location.pathname.includes(navName.toLowerCase())) {
+  //     console.log("Matched!");
+  //     setMatch(true);
+  //   }
+
+  // }, [window.location.pathname, navigationItems]);
+
   const NavList = ({ mobile = false }: { mobile?: boolean }) => (
+
     <ul className={`flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ${mobile ? "mt-4 mb-4" : ""}`}>
       {navigationItems.map(({ name, path }) => (
-        <Typography
+        <div
           key={name}
           as="li"
           variant="small"
@@ -91,15 +107,23 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
           {...commonProps}
         >
           <div
-            onClick={() => handleNavigation(path)}
-            className={`cursor-pointer rounded-lg px-4 py-2 transition-all duration-300
+            onClick={() => {
+              handleNavigation(path);
+              setNavName(path);
+              // console.log("NavName:", navName);
+              // console.log("Name:", name); 
+              console.log("Navigation to:", path);
+
+            }
+            }
+            className={`cursor-pointer rounded-lg px-4 py-2 transition-all duration-300 ${window.location.pathname.includes(path) ? "text-white! bg-indigo-400!" : ""} 
               ${mobile
-                ? "text-white hover:bg-white/10 hover:shadow-lg border border-transparent hover:border-white/10"
-                : "text-white/90 hover:text-white hover:bg-white/10 hover:shadow-[0_4px_30px_rgba(0,0,0,0.1)] hover:backdrop-blur-sm border border-transparent hover:border-white/20"}`}
+                ? " hover:bg-white/10 hover:shadow-lg border border-transparent hover:border-white/10"
+                : " hover:bg-white/10 hover:shadow-[0_4px_30px_rgba(0,0,0,0.1)] hover:backdrop-blur-sm border border-transparent hover:border-white/20"}`}
           >
             {name}
           </div>
-        </Typography>
+        </div>
       ))}
     </ul>
   );
@@ -108,7 +132,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
     <div className="w-full relative">
       <Navbar
         fullWidth
-        className="sticky top-0 h-max max-w-full px-2 py-2 lg:px-8 border-b border-white/40 rounded-2xl bg-indigo-500/70 backdrop-blur-md shadow-lg"
+        className="sticky top-0 h-max max-w-full px-2 py-2 lg:px-8 border border-white/40 rounded-2xl bg-gradient-to-r from-indigo-500/90 via-indigo-500/90 to-indigo-600/80 backdrop-blur-md shadow-lg"
         {...commonProps}
       >
         <div className="flex items-center justify-between w-full">
@@ -117,7 +141,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
           <Typography
             as="div"
             onClick={() => navigate("/home/index")}
-            className="cursor-pointer py-1.5 font-bold text-xl lg:text-2xl text-white hover:text-indigo-200 transition-colors drop-shadow-sm"
+            className="cursor-pointer py-1.5 font-bold text-xl text-shadow-great lg:text-2xl hover:text-indigo-200 transition-colors drop-shadow-sm"
             style={{ fontFamily: 'serif' }}
             {...commonProps}
           >
@@ -145,7 +169,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
                 </div>
                 <div className="flex flex-col max-w-[100px] lg:max-w-[150px]">
                   <span className="text-xs text-white font-bold truncate">{currentSong.title}</span>
-                  <span className="text-[10px] text-gray-300 truncate">{currentSong.artist || 'Unknown'}</span>
+                  <span className="text-[10px] text-white truncate">{currentSong.artist || 'Unknown'}</span>
                 </div>
                 <div className="flex items-center gap-2 ml-2">
                   <button onClick={togglePlay} className="p-1 rounded-full hover:bg-white/20 text-white transition-colors">
@@ -198,7 +222,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
                   </div>
                   <div className="flex flex-col">
                     <span className="text-sm text-white font-bold">{currentSong.title}</span>
-                    <span className="text-xs text-gray-300">{currentSong.artist || 'Unknown'}</span>
+                    <span className="text-xs text-white">{currentSong.artist || 'Unknown'}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -236,7 +260,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
                         <span className={`text-sm truncate ${currentSong?.id === item.id ? 'text-indigo-200 font-bold' : 'text-white'}`}>
                           {item.title}
                         </span>
-                        <span className="text-[10px] text-gray-400 truncate">{item.artist || 'Unknown Artist'}</span>
+                        <span className="text-[10px] text-white truncate">{item.artist || 'Unknown Artist'}</span>
                       </div>
                       {currentSong?.id === item.id && isPlaying && (
                         <div className="ml-auto w-4 h-4 flex items-center justify-center">
@@ -250,7 +274,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
                     </li>
                   ))
                 ) : (
-                  <div className="p-8 text-center text-gray-400 text-sm italic">
+                  <div className="p-8 text-center text-white text-sm italic">
                     No songs in playlist
                   </div>
                 )}
