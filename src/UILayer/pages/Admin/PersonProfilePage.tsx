@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { CameraIcon, PencilIcon, PlusIcon, ShieldCheckIcon, XMarkIcon, CheckCircleIcon, ArrowLeftOnRectangleIcon, EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/solid';
 import { MapPinIcon, AcademicCapIcon, ComputerDesktopIcon, HomeIcon, PhotoIcon as PhotographIcon, UsersIcon, ChatBubbleOvalLeftIcon as ChatIcon, BellIcon } from '@heroicons/react/24/outline';
-import { useUserProfileStore } from '../../../OrchestraLayer/StateManager/Zustand/userProfileStore';
+import { useUserAccountStore, useUserProfileStore } from '../../../OrchestraLayer/StateManager/Zustand/userProfileStore';
 import { Activity, Eye, TrendingUp, Users } from 'lucide-react';
 import { AuthenticateFactor } from '../../../OrchestraLayer/StateManager/XState/AuthenticateMachine';
 import MinIOUploadComponent from '../../components/MinIOUploadComponent';
@@ -14,6 +14,7 @@ import editAdminInformationMachine from '../../../OrchestraLayer/StateManager/XS
 import { GlassCard } from '../Home/Person/GlassContainer';
 import { Typography } from "@material-tailwind/react";
 
+// useUserAccountStore
 import axios from 'axios';
 
 
@@ -45,7 +46,7 @@ const PersonProfilePage: React.FC = () => {
 
     const [location, setLocation] = useState('');
     const [university, setUniversity] = useState('');
-
+    const userAccountStore = useUserAccountStore();
     const [editAdminInformationState, editAdminInformationSend] = useActor(editAdminInformationMachine);
 
     // Common props to fix TS errors with Material Tailwind
@@ -66,6 +67,7 @@ const PersonProfilePage: React.FC = () => {
 
     useEffect(() => {
         useUserProfileStore.getState().fetchFromDatabase();
+        userAccountStore.getUserRole();
         if (state.matches('success')) {
             if (mode === 'admin') {
                 imageObjectStore.incrementAvatarVersion();
@@ -173,9 +175,10 @@ const PersonProfilePage: React.FC = () => {
                             <Typography className="text-white font-medium mb-3" {...commonProps}>
                                 {user.profiles.friends.toLocaleString()} friends • {user.profiles.mutual} mutual
                             </Typography>
+                            {/* {}USER ROLE */}
                             <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-4 md:mb-0">
-                                <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-bold rounded-full border border-indigo-200 shadow-sm">SUPER ADMIN</span>
-                                <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200 shadow-sm">ACTIVE</span>
+                                <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-md font-bold rounded-full border border-indigo-200 shadow-sm">{userAccountStore.account.role}</span>
+                                {/* <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200 shadow-sm">ACTIVE</span> */}
                             </div>
                         </div>
 
@@ -202,7 +205,7 @@ const PersonProfilePage: React.FC = () => {
 
                     {/* Bio */}
                     {user.details.bio && (
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-white text-center md:text-left text-sm italic">
+                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-black italic text-center md:text-left text-xl">
                             "{user.details.bio}"
                         </div>
                     )}
@@ -446,15 +449,15 @@ const PersonProfilePage: React.FC = () => {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex justify-between items-center p-5 border-b border-slate-100">
-                                <h2 className="text-xl font-bold text-white">Change {mode === 'cover' ? 'Cover' : 'Profile'} Photo</h2>
+                                <h2 className="text-xl font-bold text-black">Change {mode === 'cover' ? 'Cover' : 'Profile'} Photo</h2>
                                 <button onClick={handleCloseModal} className="p-2 rounded-full hover:bg-slate-100 text-white transition-all">
                                     <XMarkIcon className="w-5 h-5" />
                                 </button>
                             </div>
 
-                            <div className="p-6">
+                            <div className="p-6 border-b border-slate-100 shadow-2xl">
                                 <input
-                                    className="w-full p-3 border border-slate-300 rounded-xl mb-6 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                                    className="w-full p-2 m-2 border border-slate-300 rounded-xl mb-6 text-black focus:ring-2 focus:ring-indigo-500 outline-none"
                                     placeholder="Enter file name (optional)"
                                     type="text" value={nameFromInput} onChange={(e) => setNameFromInput(e.target.value)}
                                 />
