@@ -11,7 +11,11 @@ const containerVariants = {
     visible: {
         opacity: 1,
         scale: 1,
-        transition: { duration: 0.4, staggerChildren: 0.05, when: "beforeChildren" }
+        transition: {
+            duration: 0.4,
+            staggerChildren: 0.05,
+            when: "beforeChildren"
+        }
     }
 };
 
@@ -29,6 +33,7 @@ const RegisterForm = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [bio, setBio] = useState('');
+    const [location, setLocation] = useState('VietName');
     const [country, setCountry] = useState<CountryType>('VietName');
 
     const [showPassword, setShowPassword] = useState(false);
@@ -38,24 +43,30 @@ const RegisterForm = () => {
     const actorRef = AuthenticateFactor.useActorRef();
     const navigate = useNavigate();
 
+    // Fetch IP Address
     useEffect(() => {
         const fetchIP = async () => {
             try {
                 const response = await fetch('https://api.ipify.org?format=json');
                 const data = await response.json();
-                if (data.ip) setIpAddress(data.ip);
+                if (data.ip) {
+                    setIpAddress(data.ip);
+                }
             } catch (error) {
                 console.error('Failed to fetch IP address:', error);
+                // Keep default 'unknown'
             }
         };
+
         fetchIP();
     }, []);
 
+    // Derive State from XState Machine
     const isLoading = useSelector(actorRef, (snapshot) => snapshot.matches('registering'));
     const errorFromMachine = useSelector(actorRef, (snapshot) => snapshot.context.error);
+    const isFailed = !!errorFromMachine;
 
-    const handleRegistration = (event: React.FormEvent) => {
-        // IMPROVEMENT: Prevent default at the very start of the logic
+    const submitEvent = (event: React.FormEvent) => {
         event.preventDefault();
         setValidationError(null);
 
@@ -71,108 +82,208 @@ const RegisterForm = () => {
 
         if (!isLoading) {
             const payload: RegistrationPayload = {
-                firstName,
-                lastName,
+                firstName: firstName,
+                lastName: lastName,
                 userName: userName || email.split('@')[0],
-                email,
-                password,
-                bio,
-                location: country, // Syncing location with country selection
-                country,
+                email: email,
+                password: password,
+                bio: bio,
+                location: location,
+                country: country,
                 role: 'USER' as const,
                 device: navigator.userAgent,
                 deviceIP: ipAddress
             };
+
             actorRef.send({ type: "REGISTER", payload });
         }
     };
 
-    // Styling constants - FIXED TEXT COLORS TO BLACK/GRAY
-    const inputClasses = "block w-full pl-11 pr-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base";
-    const labelClasses = "block text-left text-sm font-bold text-gray-700 mb-2 ml-1";
+    const handleLoginClick = () => {
+        navigate('/login/index');
+    };
+
+    const inputClasses = "block w-full pl-11 pr-4 py-4 bg-white border-2 border-gray-100 rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base";
+    const labelClasses = "block text-left text-sm font-bold text-black mb-2 ml-1";
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700 p-4 sm:p-8 relative overflow-hidden">
+            {/* Abstract Background Glow */}
             <div className="absolute inset-0 w-[140%] h-[140%] -top-[20%] -left-[20%] bg-[radial-gradient(circle,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0)_70%)] pointer-events-none" />
 
-            <motion.div variants={containerVariants} initial="hidden" animate="visible" className="relative z-10 w-full max-w-2xl">
-                <div className="bg-white/95 backdrop-blur-xl p-8 sm:p-12 rounded-[2.5rem] shadow-2xl border border-white/40">
-                    <motion.div variants={itemVariants} className="text-center">
-                        <h1 className="text-4xl font-black text-gray-900 mb-2 tracking-tight">Create Account</h1>
-                        <p className="text-gray-500 mb-10 text-lg">Join our community and start your journey today</p>
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="relative z-10 w-full max-w-2xl"
+            >
+                <div className="bg-white/95 backdrop-blur-xl p-8 sm:p-12 rounded-[2.5rem] shadow-2xl border border-white/40 text-center">
+                    <motion.div variants={itemVariants}>
+                        <h1 className="text-4xl font-black text-black mb-2 tracking-tight">
+                            Create Account
+                        </h1>
+                        <p className="text-black mb-10 text-lg">
+                            Join our community and start your journey today
+                        </p>
                     </motion.div>
 
-                    <form onSubmit={handleRegistration}>
+                    <form onSubmit={submitEvent}>
                         <div className="space-y-6">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <motion.div variants={itemVariants}>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+                                <motion.div variants={itemVariants} className="group relative">
                                     <label className={labelClasses}>First Name</label>
                                     <div className="relative">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                        <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required placeholder="John" className={inputClasses} />
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <User className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={firstName}
+                                            onChange={(e) => setFirstName(e.target.value)}
+                                            required
+                                            placeholder="John"
+                                            className={inputClasses}
+                                        />
                                     </div>
                                 </motion.div>
-                                <motion.div variants={itemVariants}>
+                                <motion.div variants={itemVariants} className="group relative">
                                     <label className={labelClasses}>Last Name</label>
                                     <div className="relative">
-                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                        <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required placeholder="Doe" className={inputClasses} />
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <User className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                        </div>
+                                        <input
+                                            type="text"
+                                            value={lastName}
+                                            onChange={(e) => setLastName(e.target.value)}
+                                            required
+                                            placeholder="Doe"
+                                            className={inputClasses}
+                                        />
                                     </div>
                                 </motion.div>
                             </div>
 
-                            <motion.div variants={itemVariants}>
-                                <label className={labelClasses}>Email Address</label>
+                            <motion.div variants={itemVariants} className="group relative text-left">
+                                <label className={labelClasses}>Username</label>
                                 <div className="relative">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="name@example.com" className={inputClasses} />
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <User className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={userName}
+                                        onChange={(e) => setUserName(e.target.value)}
+                                        required
+                                        placeholder="johndoe"
+                                        className={inputClasses}
+                                    />
                                 </div>
                             </motion.div>
 
-                            <motion.div variants={itemVariants}>
+                            <motion.div variants={itemVariants} className="group relative text-left">
+                                <label className={labelClasses}>Email Address</label>
+                                <div className="relative">
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <Mail className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                    </div>
+                                    <input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        placeholder="name@example.com"
+                                        className={inputClasses}
+                                    />
+                                </div>
+                            </motion.div>
+
+                            <motion.div variants={itemVariants} className="group relative text-left">
+                                <label className={labelClasses}>Bio</label>
+                                <div className="relative">
+                                    <textarea
+                                        value={bio}
+                                        onChange={(e) => setBio(e.target.value)}
+                                        rows={3}
+                                        placeholder="Tell us a bit about yourself..."
+                                        className="block w-full px-4 py-4 bg-white border-2 border-gray-100 rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base resize-none"
+                                    />
+                                </div>
+                            </motion.div>
+
+                            <motion.div variants={itemVariants} className="group relative text-left">
                                 <label className={labelClasses}>Location</label>
                                 <div className="relative">
-                                    <Globe className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                        <Globe className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                    </div>
                                     <select
                                         value={country}
                                         onChange={(e) => setCountry(e.target.value as CountryType)}
-                                        className={`${inputClasses} appearance-none cursor-pointer`}
+                                        className="block w-full pl-11 pr-10 py-4 bg-white border-2 border-gray-100 rounded-2xl text-black focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base appearance-none cursor-pointer"
                                     >
                                         <option value="VietName">🇻🇳 Vietnam</option>
                                         <option value="UnitedStates">🇺🇸 United States</option>
                                         <option value="Japan">🇯🇵 Japan</option>
                                         <option value="United Kingdom">🇬🇧 United Kingdom</option>
+                                        <option value="Canada">🇨🇦 Canada</option>
+                                        <option value="Australia">🇦🇺 Australia</option>
+                                        <option value="Singapore">🇸🇬 Singapore</option>
                                         <option value="OTHER">🌍 Other</option>
                                     </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+                                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                        <ChevronDown className="h-5 w-5 text-black" />
+                                    </div>
                                 </div>
                             </motion.div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <motion.div variants={itemVariants}>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left">
+                                <motion.div variants={itemVariants} className="group relative">
                                     <label className={labelClasses}>Password</label>
                                     <div className="relative">
-                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                        <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="••••••••" className={inputClasses} />
-                                        <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-indigo-600">
-                                            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <Lock className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                        </div>
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            required
+                                            placeholder="••••••••"
+                                            className={inputClasses}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-black hover:text-black transition-colors"
+                                        >
+                                            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                         </button>
                                     </div>
                                 </motion.div>
-                                <motion.div variants={itemVariants}>
+                                <motion.div variants={itemVariants} className="group relative">
                                     <label className={labelClasses}>Confirm Password</label>
                                     <div className="relative">
-                                        <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                                        <input type={showPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required placeholder="••••••••" className={inputClasses} />
+                                        <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                            <Lock className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                        </div>
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
+                                            required
+                                            placeholder="••••••••"
+                                            className={inputClasses}
+                                        />
                                     </div>
                                 </motion.div>
                             </div>
                         </div>
 
-                        {(validationError || errorFromMachine) && (
-                            <motion.div variants={itemVariants} className="mt-6 p-3 bg-red-50 rounded-xl border border-red-100">
-                                <p className="text-red-600 text-sm font-semibold text-center">
-                                    {validationError || errorFromMachine}
+                        {(validationError || isFailed) && (
+                            <motion.div variants={itemVariants} className="mt-6">
+                                <p className="text-red-500 text-sm font-semibold">
+                                    {validationError || errorFromMachine || "Registration failed. Please try again."}
                                 </p>
                             </motion.div>
                         )}
@@ -181,18 +292,31 @@ const RegisterForm = () => {
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full mt-10 py-5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white text-lg font-black rounded-2xl shadow-lg transition-all"
+                                className="w-full mt-10 py-5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-black text-lg font-black rounded-2xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/40 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
                             >
-                                {isLoading ? "Creating Account..." : 'Sign Up'}
+                                {isLoading ? (
+                                    <span className="flex items-center justify-center">
+                                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Creating Account...
+                                    </span>
+                                ) : 'Sign Up'}
                             </button>
                         </motion.div>
 
-                        <motion.div variants={itemVariants} className="mt-8 pt-6 border-t border-gray-100 text-center">
-                            <span className="text-gray-500 text-sm font-medium">Already have an account? </span>
+                        <motion.div variants={itemVariants} className="mt-8 pt-6 border-t border-gray-100/80 text-center">
+                            <span className="text-black text-sm font-medium">
+                                Already have an account?{' '}
+                            </span>
                             <button
                                 type="button"
-                                onClick={() => navigate('/login/index')}
-                                className="text-sm font-black text-indigo-600 hover:text-indigo-700 transition-colors"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleLoginClick();
+                                }}
+                                className="text-sm font-black text-indigo-600 hover:text-indigo-700 hover:underline transition-colors"
                             >
                                 Sign In
                             </button>
