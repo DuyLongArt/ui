@@ -138,7 +138,7 @@ const PersonProfilePage: React.FC = () => {
 
     return (
         <div className="bg-white min-h-screen pb-20 animate-fade-in-up">
-            <GlassCard className="max-w-5xl mx-auto shadow-xl overflow-hidden mb-6">
+            <GlassCard className="max-w-5xl mx-auto shadow-xl overflow-hidden mb-6 " color='from-white via-white to-white'>
                 {/* Cover Image */}
                 <div className="relative h-[250px] md:h-[350px] bg-gray-200">
                     <img src={coverBlobUrl} alt="Cover" className="w-full h-full object-cover" />
@@ -212,7 +212,7 @@ const PersonProfilePage: React.FC = () => {
                 </div>
 
                 {/* Navigation Tabs */}
-                <div className="flex px-8 border-t border-slate-100">
+                <div className="flex px-8 border-t gap-2 p-4 border-slate-100">
                     {['Posts', 'About', 'Photos', 'Security', 'Contact'].map((tab) => (
                         <button
                             key={tab}
@@ -233,24 +233,24 @@ const PersonProfilePage: React.FC = () => {
                 {/* Left Column */}
                 <div className="w-full md:w-[350px] space-y-6">
                     {/* Intro Card */}
-                    <GlassCard className="p-6">
-                        <Typography variant="h5" className="font-bold text-white mb-4" {...commonProps}>Intro</Typography>
+                    <GlassCard className="p-6" color='from-white to-white'>
+                        <Typography variant="h5" className="font-bold text-black mb-4" {...commonProps}>Intro</Typography>
                         <div className="space-y-4">
-                            <div className="flex items-center text-white">
-                                <AcademicCapIcon className="h-5 w-5 text-white mr-3" />
+                            <div className="flex items-center text-black">
+                                <AcademicCapIcon className="h-5 w-5 text-black mr-3" />
                                 {(editAdminInformationState.value !== "onEdit" && editAdminInformationState.value !== "onType")
-                                    ? <span>Studied at <strong className="text-white">{user.details.university}</strong></span>
+                                    ? <span>Studied at <strong className="text-black">{user.details.university}</strong></span>
                                     : <input type="text" className="border rounded p-1 w-full text-sm" value={university} onChange={(e) => setUniversity(e.target.value)} />}
                             </div>
-                            <div className="flex items-center text-white">
-                                <MapPinIcon className="h-5 w-5 text-white mr-3" />
+                            <div className="flex items-center text-black">
+                                <MapPinIcon className="h-5 w-5 text-black mr-3" />
                                 {(editAdminInformationState.value !== "onEdit" && editAdminInformationState.value !== "onType")
-                                    ? <span>Lives in <strong className="text-white">{user.details.country}</strong></span>
+                                    ? <span>Lives in <strong className="text-black">{user.details.country}</strong></span>
                                     : <input type="text" className="border rounded p-1 w-full text-sm" value={location} onChange={(e) => setLocation(e.target.value)} />}
                             </div>
-                            <div className="flex items-center text-white">
-                                <ComputerDesktopIcon className="h-5 w-5 text-white mr-3" />
-                                <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded">Reg IP: 192.168.22.4</span>
+                            <div className="flex items-center text-black">
+                                <ComputerDesktopIcon className="h-5 w-5 text-black mr-3" />
+                                <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded">Reg IP: {userAccountStore.account.ip}</span>
                             </div>
                         </div>
                         <button className="w-full mt-6 bg-slate-100 hover:bg-slate-200 text-white font-bold py-2 rounded-xl transition-colors text-sm">

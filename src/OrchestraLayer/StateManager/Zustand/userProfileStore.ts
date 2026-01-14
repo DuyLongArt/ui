@@ -32,6 +32,7 @@ export interface UserProfile {
 
 export interface UserAccount {
     role: 'ADMIN' | 'USER' | 'VIEWER' | 'UNAUTHORIZED';
+    ip: string;
 }
 
 export interface UserInformation {
@@ -41,6 +42,7 @@ export interface UserInformation {
 
 interface UserAccountState {
     account: UserAccount;
+
     getUserRole: () => Promise<void>;
 }
 
@@ -194,6 +196,7 @@ const useUserProfileStore = create<UserInformationState>()(
 const useUserAccountStore = create<UserAccountState>((set) => ({
     account: {
         role: 'USER',
+        ip: ''
     },
 
     getUserRole: async () => {
@@ -207,6 +210,7 @@ const useUserAccountStore = create<UserAccountState>((set) => ({
                 account: {
                     ...state.account,
                     role: response.data.role,
+                    ip: response.data.deviceIP,
                 },
             }));
         }
