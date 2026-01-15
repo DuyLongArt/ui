@@ -44,7 +44,7 @@ export const useTailScaleStore = create<tailScaleStoreType>(
                 axios.get("/tailscale-api/tailnet/-/devices",
                     {
                         auth: {
-                            username: "tskey-api-kJf687m2ML11CNTRL-ocXiKZWWzA8p1AjSqWwwA8n6FJduex62",
+                            username: process.env.TAILSCALE_USERNAME,
                             password: ""
                         }
                     }
