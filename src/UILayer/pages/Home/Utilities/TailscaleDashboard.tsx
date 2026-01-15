@@ -138,9 +138,7 @@ const TailscaleDashboard = () => {
                             <Shield size={24} />
                         </div>
                     </div>
-                    <Typography className="mt-4 text-[10px] font-bold text-white truncate" {...commonProps}>
-                        Auth: tskey-api-kJf687...
-                    </Typography>
+
                 </GlassCard>
             </div>
 
