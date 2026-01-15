@@ -153,7 +153,7 @@ export const useCloudflareStore = create<CloudflareStore>((set) => ({
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer 8e2s1yxE0-gEWIbUK89PXZeAoeUVBP0MsLnlq3Fj'
+                        'Authorization': 'Bearer ' + process.env.CLOUDFLARE_API_BEAR
                     }
                 }
             );
