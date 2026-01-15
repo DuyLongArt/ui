@@ -4,6 +4,7 @@ import { AuthenticateFactor } from "../../../OrchestraLayer/StateManager/XState/
 import { useSelector } from "@xstate/react";
 import { useNavigate } from 'react-router-dom';
 import { User, Lock, Eye, EyeOff } from 'lucide-react';
+import LiquidGlassCard from '@/UILayer/components/LiquidGlassCard';
 
 // Utility function to set a cookie for the JWT
 const setAuthCookie = (jwt: string) => {
@@ -69,17 +70,20 @@ const LoginForm = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700 p-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center  relative overflow-hidden">
       {/* Abstract Background Glow */}
-      <div className="absolute inset-0 w-[140%] h-[140%] -top-[20%] -left-[20%] bg-[radial-gradient(circle,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0)_70%)] pointer-events-none" />
+      <LiquidGlassCard className='backdrop-blur-[200px] opacity-80'>
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="relative z-10 w-full max-w-md"
-      >
-        <div className="bg-white/95 backdrop-blur-xl p-8 sm:p-12 rounded-[2.5rem] shadow-2xl border border-white/40 text-center">
+
+        <div className="absolute inset-0 w-[140%] h-[140%] -top-[20%] -left-[20%] bg-[radial-gradient(circle,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0)_70%)] pointer-events-none" />
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="relative z-10 w-full max-w-md"
+        >
+
           <motion.div variants={itemVariants}>
             <h1 className="text-4xl font-black text-black mb-2 tracking-tight">
               Welcome Back
@@ -104,18 +108,18 @@ const LoginForm = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   placeholder="Enter email or username"
-                  className="block w-full pl-11 pr-4 py-4 bg-white border-2 border-gray-100 rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base"
+                  className="block w-full pl-11 pr-4 py-4 border-2 border-gray-100 rounded-2xl text-white placeholder-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base"
                 />
               </div>
             </motion.div>
 
             <motion.div variants={itemVariants} className="relative group">
-              <label className="block text-left text-sm font-bold text-black mb-2 ml-1">
+              <label className="block text-left text-sm font-bold text-white mb-2 ml-1">
                 Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                  <Lock className="h-5 w-5 text-white group-focus-within:text-indigo-500 transition-colors" />
                 </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -123,7 +127,7 @@ const LoginForm = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="block w-full pl-11 pr-12 py-4 bg-white border-2 border-gray-100 rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base"
+                  className="block w-full pl-11 pr-12 py-4 border-2 border-gray-100 rounded-2xl text-white placeholder-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base"
                 />
                 <button
                   type="button"
@@ -178,8 +182,9 @@ const LoginForm = () => {
               Sign Up
             </button>
           </motion.div>
-        </div>
-      </motion.div>
+
+        </motion.div>
+      </LiquidGlassCard>
     </div>
   );
 };

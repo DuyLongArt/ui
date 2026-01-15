@@ -8,21 +8,13 @@ interface RegisterPageProps {
 
 const RegisterPage: React.FC<RegisterPageProps> = ({ children }) => {
     return (
-        <Box
-            sx={{
-                minHeight: '100vh',
-                minWidth: '100vw',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                overflow: 'hidden',
-                background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-            }}
+        <div
+            className="min-h-screen flex items-center justify-center p-4 sm:p-8 relative overflow-hidden"
+           
         >
             <RegisterForm />
             {children}
-        </Box>
+        </div>
     );
 };
 

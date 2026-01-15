@@ -5,12 +5,19 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@assets': path.resolve(__dirname, './src/DataLayer/LocalDataLayer/assets'),
+    },
+  },
 
 
   server: {
     port: 22222,
     strictPort: true,
     host: true,
+
     // host: '127.0.0.1', // Use the explicit IPv4 instead of 'true' or 'localhost'
     proxy: {
       // String shorthand for simple cases

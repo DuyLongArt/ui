@@ -5,6 +5,7 @@ import { useSelector } from "@xstate/react";
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, Globe, Eye, EyeOff, ChevronDown } from 'lucide-react';
 import type { RegistrationPayload, CountryType } from '../../../DataLayer/Protocol/RegistrationProtocol';
+import LiquidGlassCard from '@/UILayer/components/LiquidGlassCard';
 
 const containerVariants = {
     hidden: { opacity: 0, scale: 0.98 },
@@ -103,26 +104,26 @@ const RegisterForm = () => {
         navigate('/login/index');
     };
 
-    const inputClasses = "block w-full pl-11 pr-4 py-4 bg-white border-2 border-gray-100 rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base";
-    const labelClasses = "block text-left text-sm font-bold text-black mb-2 ml-1";
+    const inputClasses = "block w-full pl-11 pr-4 py-4 bg-white/10 border-2 border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all text-base backdrop-blur-sm";
+    const labelClasses = "block text-left text-sm font-bold text-white mb-2 ml-1";
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 to-purple-700 p-4 sm:p-8 relative overflow-hidden">
+        <div className="min-h-screen flex items-center justify-center p-4 sm:p-8 relative overflow-hidden">
             {/* Abstract Background Glow */}
             <div className="absolute inset-0 w-[140%] h-[140%] -top-[20%] -left-[20%] bg-[radial-gradient(circle,rgba(255,255,255,0.15)_0%,rgba(255,255,255,0)_70%)] pointer-events-none" />
 
-            <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-                className="relative z-10 w-full max-w-2xl"
-            >
-                <div className="bg-white/95 backdrop-blur-xl p-8 sm:p-12 rounded-[2.5rem] shadow-2xl border border-white/40 text-center">
+            <LiquidGlassCard className="backdrop-blur-[100px] shadow-3xl bg-black/10">
+                <motion.div
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="relative z-10 w-full max-w-2xl p-8 sm:p-12 text-center"
+                >
                     <motion.div variants={itemVariants}>
-                        <h1 className="text-4xl font-black text-black mb-2 tracking-tight">
+                        <h1 className="text-4xl font-black text-white mb-2 tracking-tight">
                             Create Account
                         </h1>
-                        <p className="text-black mb-10 text-lg">
+                        <p className="text-white/80 mb-10 text-lg">
                             Join our community and start your journey today
                         </p>
                     </motion.div>
@@ -134,7 +135,7 @@ const RegisterForm = () => {
                                     <label className={labelClasses}>First Name</label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <User className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                            <User className="h-5 w-5 text-white/70 group-focus-within:text-indigo-400 transition-colors" />
                                         </div>
                                         <input
                                             type="text"
@@ -150,7 +151,7 @@ const RegisterForm = () => {
                                     <label className={labelClasses}>Last Name</label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <User className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                            <User className="h-5 w-5 text-white/70 group-focus-within:text-indigo-400 transition-colors" />
                                         </div>
                                         <input
                                             type="text"
@@ -168,7 +169,7 @@ const RegisterForm = () => {
                                 <label className={labelClasses}>Username</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                        <User className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                        <User className="h-5 w-5 text-white/70 group-focus-within:text-indigo-400 transition-colors" />
                                     </div>
                                     <input
                                         type="text"
@@ -185,7 +186,7 @@ const RegisterForm = () => {
                                 <label className={labelClasses}>Email Address</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                        <Mail className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                        <Mail className="h-5 w-5 text-white/70 group-focus-within:text-indigo-400 transition-colors" />
                                     </div>
                                     <input
                                         type="email"
@@ -206,7 +207,7 @@ const RegisterForm = () => {
                                         onChange={(e) => setBio(e.target.value)}
                                         rows={3}
                                         placeholder="Tell us a bit about yourself..."
-                                        className="block w-full px-4 py-4 bg-white border-2 border-gray-100 rounded-2xl text-black placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base resize-none"
+                                        className="block w-full px-4 py-4 bg-white/10 border-2 border-white/20 rounded-2xl text-white placeholder-white/50 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all text-base resize-none backdrop-blur-sm"
                                     />
                                 </div>
                             </motion.div>
@@ -215,12 +216,12 @@ const RegisterForm = () => {
                                 <label className={labelClasses}>Location</label>
                                 <div className="relative">
                                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                        <Globe className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                        <Globe className="h-5 w-5 text-white/70 group-focus-within:text-indigo-400 transition-colors" />
                                     </div>
                                     <select
                                         value={country}
                                         onChange={(e) => setCountry(e.target.value as CountryType)}
-                                        className="block w-full pl-11 pr-10 py-4 bg-white border-2 border-gray-100 rounded-2xl text-black focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base appearance-none cursor-pointer"
+                                        className="block w-full pl-11 pr-10 py-4 bg-white/10 border-2 border-white/20 rounded-2xl text-white focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all text-base appearance-none cursor-pointer backdrop-blur-sm"
                                     >
                                         <option value="VietName">🇻🇳 Vietnam</option>
                                         <option value="UnitedStates">🇺🇸 United States</option>
@@ -232,7 +233,7 @@ const RegisterForm = () => {
                                         <option value="OTHER">🌍 Other</option>
                                     </select>
                                     <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                                        <ChevronDown className="h-5 w-5 text-black" />
+                                        <ChevronDown className="h-5 w-5 text-white/70" />
                                     </div>
                                 </div>
                             </motion.div>
@@ -242,7 +243,7 @@ const RegisterForm = () => {
                                     <label className={labelClasses}>Password</label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <Lock className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                            <Lock className="h-5 w-5 text-white/70 group-focus-within:text-indigo-400 transition-colors" />
                                         </div>
                                         <input
                                             type={showPassword ? 'text' : 'password'}
@@ -255,7 +256,7 @@ const RegisterForm = () => {
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-black hover:text-black transition-colors"
+                                            className="absolute inset-y-0 right-0 pr-4 flex items-center text-white/70 hover:text-white transition-colors"
                                         >
                                             {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                         </button>
@@ -265,7 +266,7 @@ const RegisterForm = () => {
                                     <label className={labelClasses}>Confirm Password</label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                            <Lock className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
+                                            <Lock className="h-5 w-5 text-white/70 group-focus-within:text-indigo-400 transition-colors" />
                                         </div>
                                         <input
                                             type={showPassword ? 'text' : 'password'}
@@ -280,34 +281,24 @@ const RegisterForm = () => {
                             </div>
                         </div>
 
-                        {(validationError || isFailed) && (
-                            <motion.div variants={itemVariants} className="mt-6">
-                                <p className="text-red-500 text-sm font-semibold">
-                                    {validationError || errorFromMachine || "Registration failed. Please try again."}
-                                </p>
-                            </motion.div>
-                        )}
+                        <div className="mt-6">
+                            <p className="text-red-400 text-sm font-semibold">
+                                {validationError || errorFromMachine || "Registration failed. Please try again."}
+                            </p>
+                        </div>
 
                         <motion.div variants={itemVariants}>
                             <button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full mt-10 py-5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-black text-lg font-black rounded-2xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/40 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                                className="w-full mt-10 py-5 bg-white hover:bg-indigo-50 disabled:bg-white/20 disabled:text-white/50 text-indigo-600 text-lg font-black rounded-2xl shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
                             >
-                                {isLoading ? (
-                                    <span className="flex items-center justify-center">
-                                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                        Creating Account...
-                                    </span>
-                                ) : 'Sign Up'}
+                                {isLoading ? 'Creating Account...' : 'Sign Up'}
                             </button>
                         </motion.div>
 
-                        <motion.div variants={itemVariants} className="mt-8 pt-6 border-t border-gray-100/80 text-center">
-                            <span className="text-black text-sm font-medium">
+                        <motion.div variants={itemVariants} className="mt-8 pt-6 border-t border-white/10 text-center">
+                            <span className="text-white/70 text-sm font-medium">
                                 Already have an account?{' '}
                             </span>
                             <button
@@ -316,14 +307,14 @@ const RegisterForm = () => {
                                     e.preventDefault();
                                     handleLoginClick();
                                 }}
-                                className="text-sm font-black text-white hover:text-indigo-700 hover:underline transition-colors"
+                                className="text-sm font-black text-white hover:text-indigo-300 transition-colors"
                             >
                                 Sign In
                             </button>
                         </motion.div>
                     </form>
-                </div>
-            </motion.div>
+                </motion.div>
+            </LiquidGlassCard>
         </div>
     );
 };

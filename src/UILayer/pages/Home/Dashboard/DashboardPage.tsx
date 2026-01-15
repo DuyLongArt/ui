@@ -21,6 +21,7 @@ import { useCloudflareStore } from '../../../../OrchestraLayer/StateManager/Zust
 import { useTailScaleStore } from '../../../../OrchestraLayer/StateManager/Zustand/tailscaleStore';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import LiquidGlassCard from '../../../components/LiquidGlassCard';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -100,12 +101,12 @@ const DashboardPage = () => {
     } as any;
 
     return (
-        <div className="min-h-screen w-full p-4 md:p-8 space-y-8 bg-gradient-to-br! from-indigo-50! to-indigo-300! backdrop-blur-sm animate-fade-in-up pb-24">
+        <div className="min-h-screen w-full p-4 md:p-8 space-y-8 bg-linear-to-br! from-indigo-50! to-indigo-300! backdrop-blur-sm animate-fade-in-up pb-24">
 
             {/* Header Greeting */}
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <Typography variant="h2" className="text-black font-bold tracking-tight" {...commonProps}>
+                    <Typography variant="h2" className="text-black font-bold tracking-tight text-3xl md:text-4xl" {...commonProps}>
                         Welcome back, {userFirstName}! 👋
                     </Typography>
                     <Typography className="text-black font-medium" {...commonProps}>
@@ -209,32 +210,35 @@ const DashboardPage = () => {
 
                 {/* Sidebar / Extended Detail */}
                 <div className="space-y-8 col-span-1">
+
+
                     {/* Mesh Network Snapshot */}
-                    <GlassCard className="p-6 text-white shadow-bold " color='from-[#6F56D2FF] to-[#6F56D2]'>
+                    <LiquidGlassCard
+                        containerClassName="w-full"
+                        className="p-6 border-white/30"
+                        blobColor="bg-indigo-500/40"
+                    >
                         <div className="flex justify-between items-center mb-6">
                             <Typography variant="h6" className="text-white font-bold" {...commonProps}>Mesh Network</Typography>
-                            <span className="px-2 py-1 bg-green-50 text-green-600 text-[9px] font-black rounded border border-green-100">STABLE</span>
+                            <span className="px-2 py-1 bg-green-500/20 text-green-400 text-[9px] font-black rounded border border-green-500/30">STABLE</span>
                         </div>
                         <div className="space-y-4">
                             {devices.slice(0, 5).map(device => (
                                 <div key={device.id} className="flex items-center justify-between group">
                                     <div className="flex items-center gap-3">
-                                        <div className={`w-2 h-2 rounded-full ${device.connectedToControl ? 'bg-green-500 animate-pulse' : 'bg-slate-200'}`} />
-                                        <span className="text-xs font-bold text-white group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{device.hostname}</span>
+                                        <div className={`w-2 h-2 rounded-full ${device.connectedToControl ? 'bg-green-400 animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.5)]' : 'bg-white/20'}`} />
+                                        <span className="text-xs font-bold text-white/90 group-hover:text-white transition-colors uppercase tracking-tight">{device.hostname}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
                         <button
-                            variant="text"
-                            fullWidth
-                            className="mt-6 text-indigo-500 font-black text-xs! tracking-widest uppercase"
+                            className="mt-6 text-white/60 hover:text-white font-black text-xs! tracking-widest uppercase transition-colors flex items-center gap-2"
                             onClick={() => navigate('/utilities/index/tailscale')}
-                            {...commonProps}
                         >
-                            Mesh Details →
+                            Mesh Details <ChevronRight size={14} />
                         </button>
-                    </GlassCard>
+                    </LiquidGlassCard>
 
                     {/* Top DNS Targets */}
 

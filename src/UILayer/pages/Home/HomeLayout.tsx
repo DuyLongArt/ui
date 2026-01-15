@@ -40,7 +40,7 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
   const filterPageList = filterRoutes.map(r => r.title || r.path);
   const filterPathList = filterRoutes.map(r => r.path);
 
-  
+
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handleDrag = (_e: DraggableEvent, ui: DraggableData) => {

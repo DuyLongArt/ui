@@ -29,10 +29,10 @@ const MusicPage = () => {
                 <div className="absolute bottom-[-10%] left-[-10%] w-[50vh] h-[50vh] bg-indigo-600/30 rounded-full blur-[100px]" />
             </div>
 
-            <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 h-[85vh]">
+            <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:h-[85vh]">
 
                 {/* Playlist Section */}
-                <div className="lg:col-span-7 flex flex-col gap-6 h-full">
+                <div className="lg:col-span-7 flex flex-col gap-6 h-[50vh] lg:h-full">
                     {/* Header */}
                     <div className="flex items-center justify-between">
                         <div>
@@ -113,7 +113,7 @@ const MusicPage = () => {
                 </div>
 
                 {/* Player Section */}
-                <div className="lg:col-span-5 h-full flex flex-col">
+                <div className="lg:col-span-5 h-[60vh] lg:h-full flex flex-col">
                     <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 shadow-2xl h-full flex flex-col justify-between relative overflow-hidden">
 
                         {/* Default State */}

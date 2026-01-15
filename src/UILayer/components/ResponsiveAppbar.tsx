@@ -97,7 +97,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
 
   const NavList = ({ mobile = false }: { mobile?: boolean }) => (
 
-    <ul className={`flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ${mobile ? "mt-4 mb-4" : ""}`}>
+    <ul className={`flex flex-col gap-2  lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ${mobile ? "mt-4 mb-4" : ""}`}>
       {navigationItems.map(({ name, path }) => (
         <div
           key={name}
@@ -129,10 +129,10 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
   );
 
   return (
-    <div className="w-full relative">
+    <div className="w-full relative px-2 sm:px-4 py-2">
       <Navbar
         fullWidth
-        className="sticky top-0 h-max max-w-full px-2 py-2 lg:px-8 border border-white/40 rounded-2xl bg-gradient-to-r from-indigo-500/90 via-indigo-500/90 to-indigo-600/80 backdrop-blur-md shadow-lg"
+        className="sticky top-0 h-max max-w-full px-4 py-2 border border-white/40 rounded-2xl bg-linear-to-r from-indigo-500/90 via-indigo-500/90 to-indigo-600/80 backdrop-blur-md shadow-lg"
         {...commonProps}
       >
         <div className="flex items-center justify-between w-full">
@@ -140,7 +140,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
           {/* Logo with slight text shadow for better contrast against glass */}
           <p
             onClick={() => navigate("/home/index")}
-            className="cursor-pointer py-1.5 font-bold text-shadow-great text-2xl text-indigo-900 text-shadow-current mask-linear-from-neutral-950 lg:text-3xl hover:text-indigo-200 transition-colors drop-shadow-sm"
+            className="cursor-pointer py-1.5 md:px-1 lg:px-2 font-bold text-shadow-great text-xl sm:text-2xl text-indigo-900 text-shadow-current mask-linear-from-neutral-950 lg:text-3xl hover:text-indigo-200 transition-colors drop-shadow-sm shrink-0"
             style={{ fontFamily: 'serif' }}
           >
             ICE SITE
@@ -152,20 +152,20 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
 
           {/* Mini Player */}
           {currentSong && (
-            <div className="relative flex items-center justify-center">
+            <div className="items-center justify-center">
               <div
                 onClick={openMusicListAction}
                 className="hidden md:flex items-center gap-3 bg-black/20 backdrop-blur-md rounded-full px-4 py-1.5 mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
               >
 
                 <div className="w-8 h-8 rounded-full overflow-hidden relative">
-                  {/* Spinning disc effect */}
+
                   <div className={`w-full h-full bg-indigo-500 flex items-center justify-center`}>
                     <MusicIcon size={14} className="text-white" />
                   </div>
 
                 </div>
-                <div className="flex flex-col max-w-[100px] lg:max-w-[150px]">
+                <div className="flex flex-col max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[150px]">
                   <span className="text-xs text-white font-bold truncate">{currentSong.title}</span>
                   <span className="text-[10px] text-white truncate">{currentSong.artist || 'Unknown'}</span>
                 </div>
@@ -187,8 +187,8 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
           )}
 
 
-          <div className="flex items-center gap-4">
-            <div className="hover:opacity-80 transition-opacity cursor-pointer p-1 rounded-full hover:bg-white/10">
+          <div className="flex items-center  md:gap-2 lg:gap-4">
+            <div className="hover:opacity-80 transition-opacity cursor-pointer p-1 rounded-full hover:bg-white/10 shrink-0">
               <PersonProfileIcon onClick={() => navigate("/admin/person-profile")} />
             </div>
 

@@ -22,7 +22,7 @@ const config: Config = {
           // Add this inside your boxShadow object for a "shimmer" effect
           'glass': '0 0 10px rgba(255, 255, 255, 0.7), 0 0 30px rgba(0, 0, 0, 1)',
 
-          
+
         },
         primary: {
           50: '#eff6ff',

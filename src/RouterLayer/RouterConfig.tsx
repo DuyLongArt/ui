@@ -1,6 +1,7 @@
 import { lazy } from "react";
 // Eager loaded core/type components
 import type { Route } from "./RouterProtocol";
+import EntryLayout from "../UILayer/pages/Home/EntryLayout.tsx";
 
 // Lazy load components
 const EntryPage = lazy(() => import("../UILayer/pages/Public/EntryPage.tsx"));
@@ -43,7 +44,7 @@ export const appRoutes: Route[] = [
     {
         type: "domain",
         path: "/login",
-        component: <OutletLayout />,
+        component: <EntryLayout />,
         title: "Login Domain",
         children: [
             {
@@ -67,7 +68,7 @@ export const appRoutes: Route[] = [
     {
         type: "domain",
         path: "entry",
-        component: <OutletLayout />,
+        component: <EntryLayout />,
         title: "Entry",
         children: [
             {

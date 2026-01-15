@@ -172,7 +172,7 @@ const StoragePage = () => {
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <Typography variant="h3" className="font-bold text-white" {...commonProps}>
+                        <Typography variant="h3" className="font-bold text-slate-800" {...commonProps}>
                             Storage & Assets
                         </Typography>
                     </div>
@@ -185,11 +185,11 @@ const StoragePage = () => {
                 {/* Search Bar */}
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search className="h-5 w-5 text-white" />
+                        <Search className="h-5 w-5 text-slate-400" />
                     </div>
                     <input
                         type="text"
-                        className="block w-full pl-10 pr-3 py-3 border-none rounded-2xl bg-white shadow-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        className="block w-full pl-10 pr-3 py-3 border-none rounded-2xl bg-white shadow-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                         placeholder="Search your files..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -233,11 +233,11 @@ const StoragePage = () => {
                 {/* Folders Section */}
                 <div>
                     <div className="flex justify-between items-center mb-4">
-                        <Typography variant="h5" className="font-bold text-white" {...commonProps}>Folders</Typography>
+                        <Typography variant="h5" className="font-bold text-slate-800" {...commonProps}>Folders</Typography>
                         <Button variant="text" color="blue" className="normal-case font-medium" {...commonProps}>View All</Button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                         <FolderCard
                             icon={<ImageIcon className="text-amber-500" size={24} />}
                             title="Images"
@@ -262,15 +262,15 @@ const StoragePage = () => {
                 {/* Recent Files Section */}
                 <div>
                     <div className="flex justify-between items-center mb-4">
-                        <Typography variant="h5" className="font-bold text-white" {...commonProps}>Recent Files</Typography>
-                        <IconButton variant="text" color="gray" size="sm" {...commonProps}>
-                            <MoreVertical size={20} />
+                        <Typography variant="h5" className="font-bold text-slate-800" {...commonProps}>Recent Files</Typography>
+                        <IconButton variant="text" color="blue-gray" size="sm" {...commonProps}>
+                            <MoreVertical size={20} className="text-slate-600" />
                         </IconButton>
                     </div>
 
                     <div className="space-y-3">
                         {filteredFiles.length === 0 ? (
-                            <div className="text-center py-10 text-white">No files found</div>
+                            <div className="text-center py-10 text-slate-500">No files found</div>
                         ) : (
                             filteredFiles.map((file, index) => (
                                 <motion.div
@@ -289,10 +289,10 @@ const StoragePage = () => {
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                        <Typography variant="h6" className="text-sm font-bold text-white truncate" {...commonProps}>
+                                        <Typography variant="h6" className="text-sm font-bold text-slate-800 truncate" {...commonProps}>
                                             {file.file.name}
                                         </Typography>
-                                        <div className="flex items-center gap-2 text-xs text-white">
+                                        <div className="flex items-center gap-2 text-xs text-slate-500">
                                             <span>{file.size}</span>
                                             <span>•</span>
                                             <span>{file.date}</span>
@@ -340,8 +340,8 @@ const FolderCard = ({ icon, title, count, color }: { icon: React.ReactNode, titl
             {icon}
         </div>
         <div>
-            <Typography variant="h6" className="font-bold text-white" {...commonProps}>{title}</Typography>
-            <Typography className="text-xs text-white font-medium" {...commonProps}>{count}</Typography>
+            <Typography variant="h6" className="font-bold text-slate-800" {...commonProps}>{title}</Typography>
+            <Typography className="text-xs text-slate-500 font-medium" {...commonProps}>{count}</Typography>
         </div>
     </div>
 );
