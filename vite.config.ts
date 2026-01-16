@@ -42,7 +42,7 @@ export default defineConfig({
       '/cloudflare-graphql': {
         target: 'https://api.cloudflare.com/client/v4/graphql',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/cloudflare-graphql/, ''),
+        rewrite: (path) => path.replace(/^\/cloudflare-graphql\/?/, ''),
         secure: true,
       }
     }

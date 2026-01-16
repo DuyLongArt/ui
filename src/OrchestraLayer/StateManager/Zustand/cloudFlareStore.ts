@@ -57,7 +57,7 @@ export const useCloudflareStore = create<CloudflareStore>((set) => ({
 
             const apiKey = getEnv('VITE_CLOUDFLARE_API_BEAR');
 
-            const response = await axios.post("/cloudflare-graphql",
+            const response = await axios.post("/cloudflare-graphql/",
                 { query },
                 {
                     headers: {
@@ -75,10 +75,22 @@ export const useCloudflareStore = create<CloudflareStore>((set) => ({
             }
         } catch (error: any) {
             console.error("❌ Failed to fetch Cloudflare DNS data:", error);
-            set({
-                error: error.response?.data?.errors?.[0]?.message || error.message || "Failed to fetch DNS data",
-                isLoading: false
-            });
+            let errorMessage = "Failed to fetch DNS data";
+
+            if (error.response) {
+                // Server responded with non-2xx code
+                const cfErrors = error.response.data?.errors;
+                errorMessage = cfErrors?.[0]?.message || `Server Error: ${error.response.status}`;
+                if (typeof error.response.data === 'string' && error.response.data.includes('<!DOCTYPE html>')) {
+                    errorMessage = "Proxy Error: Nginx returned HTML instead of JSON. Check your API path.";
+                }
+            } else if (error.request) {
+                errorMessage = "Network Error: No response from server.";
+            } else {
+                errorMessage = error.message;
+            }
+
+            set({ error: errorMessage, isLoading: false });
         }
     }
 }));
