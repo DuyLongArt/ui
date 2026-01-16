@@ -140,7 +140,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
           {/* Logo with slight text shadow for better contrast against glass */}
           <p
             onClick={() => navigate("/home/index")}
-            className="cursor-pointer py-1.5 md:px-1 lg:px-2 font-bold text-shadow-great text-xl sm:text-2xl text-indigo-900 text-shadow-current mask-linear-from-neutral-950 lg:text-3xl hover:text-indigo-200 transition-colors drop-shadow-sm shrink-0"
+            className="cursor-pointer py-1.5 md:px-1 lg:px-2 font-bold text-shadow-great text-xl md:text-2xl text-indigo-900 text-shadow-current mask-linear-from-neutral-950 lg:text-3xl hover:text-indigo-200 transition-colors drop-shadow-sm shrink-0"
             style={{ fontFamily: 'serif' }}
           >
             ICE SITE
