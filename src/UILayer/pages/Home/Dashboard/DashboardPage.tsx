@@ -101,16 +101,16 @@ const DashboardPage = () => {
     } as any;
 
     return (
-        <div className="min-h-screen w-full p-4 md:p-8 space-y-8 bg-linear-to-br! from-indigo-50! to-indigo-300! backdrop-blur-sm animate-fade-in-up pb-24">
+        <div className="min-h-screen w-full px-3 py-2 sm:p-4 md:p-8 space-y-3 sm:space-y-6 md:space-y-8 bg-linear-to-br! from-indigo-50! to-indigo-300! backdrop-blur-sm animate-fade-in-up pb-24">
 
             {/* Header Greeting */}
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-1 sm:gap-4">
                 <div>
-                    <Typography variant="h2" className="text-black font-bold tracking-tight text-3xl md:text-4xl" {...commonProps}>
+                    <Typography variant="h2" className="text-black font-bold tracking-tight text-xl sm:text-3xl md:text-4xl" {...commonProps}>
                         Welcome back, {userFirstName}! 👋
                     </Typography>
-                    <Typography className="text-black font-medium" {...commonProps}>
-                        System status: <span className="text-green-600 font-bold">All services operational</span>
+                    <Typography className="text-black text-xs sm:text-base font-medium" {...commonProps}>
+                        System status: <span className="text-green-600 font-bold">All operational</span>
                     </Typography>
                 </div>
                 <div className="flex gap-4 items-center">
@@ -120,18 +120,17 @@ const DashboardPage = () => {
                 </div>
             </header>
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
                 {stats.map((stat, i) => (
-                    <GlassCard key={i} className="p-6 transition-transform hover:-translate-y-1">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className={`p-2 rounded-xl ${stat.bg} ${stat.color}`}>
-                                {stat.icon}
+                    <GlassCard key={i} className="p-3 sm:p-6 transition-transform hover:-translate-y-1">
+                        <div className="flex items-center justify-between mb-1 sm:mb-4">
+                            <div className={`p-1 sm:p-2 rounded-lg ${stat.bg} ${stat.color}`}>
+                                {React.cloneElement(stat.icon as React.ReactElement<any>, { size: 16 })}
                             </div>
-                            <span className="text-[10px] font-black text-white uppercase tracking-widest">{stat.trend}</span>
+                            <span className="text-[8px] sm:text-[10px] font-black text-white uppercase tracking-widest">{stat.trend}</span>
                         </div>
-                        <Typography variant="h3" className="text-white font-black" {...commonProps}>{stat.value}</Typography>
-                        <Typography className="text-white text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.label}</Typography>
+                        <Typography variant="h4" className="text-white font-black text-lg sm:text-2xl" {...commonProps}>{stat.value}</Typography>
+                        <Typography className="text-white text-[9px] sm:text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.label}</Typography>
                     </GlassCard>
                 ))}
             </div>

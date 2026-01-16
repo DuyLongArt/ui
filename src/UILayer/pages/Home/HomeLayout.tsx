@@ -52,16 +52,19 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
   }, [state.value]);
 
   return (
-    // 3. LAYOUT FIX: 'flex-col' ensures the header stays top and content fills the rest
-    <div className="flex flex-col h-full  bg-indigo-200 w-full overflow-visible relative">
+    <div className="flex flex-col h-full bg-indigo-200 w-full overflow-x-hidden relative">
 
       {/* Header Section (Fixed height / shrinking) */}
-      <div className="flex    w-full border-2 flex-row items-center justify-start gap-2 shadow-sm z-100 backdrop-blur-sm">
-        <div className="hidden md:block lg:block">
+      <div className="flex w-full flex-row items-center justify-start z-100 backdrop-blur-sm sticky top-0">
+        <div className="hidden md:block">
           <OrchestraButton onClick={() => send({ type: 'CLICK' })} />
         </div>
         <div className="flex-1">
-          <ResponsiveAppBar pageList={filterPageList} pathList={filterPathList} />
+          <ResponsiveAppBar
+            pageList={filterPageList}
+            pathList={filterPathList}
+            onOpenDrawer={() => send({ type: 'CLICK' })}
+          />
         </div>
       </div>
 

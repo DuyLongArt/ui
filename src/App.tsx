@@ -12,7 +12,7 @@ import OrchestraLayer from './OrchestraLayer/OrchestraLayer';
 
 const App: React.FC = () => {
   return (
-    <Box>
+    <div className="h-full w-full">
 
       <BrowserRouter>
         <LocalDataLayer>
@@ -45,7 +45,7 @@ const App: React.FC = () => {
       </BrowserRouter>
 
 
-    </Box>
+    </div>
   )
 }
 export default App

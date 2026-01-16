@@ -96,7 +96,7 @@ const config: Config = {
         },
       },
       screens: {
-        'xs': '475px',
+        'xs': '375px',
         '3xl': '1600px',
       },
       zIndex: {

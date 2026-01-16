@@ -100,7 +100,7 @@ const AppRouterLayer: React.FC<ChildrenInterface> = ({ children }) => {
   const routesElement = useRoutes(transformRoutes(allRoutes));
 
   return (
-    <div className="h-screen w-screen">
+    <div className="h-full w-full overflow-x-hidden">
       {routesElement}
       {children}
     </div>
