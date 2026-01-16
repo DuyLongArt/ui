@@ -1,5 +1,6 @@
 import axios from "axios";
 import { create } from "zustand";
+import { getEnv } from "../../Utilities/envUtils";
 
 
 interface TailscaleDevice {
@@ -45,8 +46,8 @@ export const useTailScaleStore = create<TailscaleStore>((set) => ({
     fetchDevices: async () => {
         set({ isLoading: true, error: null });
         try {
-            // Using VITE_ prefix for client-side env variables in Vite
-            const apiKey = import.meta.env.VITE_TAILSCALE_USERNAME;
+            // Priority: window._env_ (Runtime) -> import.meta.env (Build-time)
+            const apiKey = getEnv('VITE_TAILSCALE_USERNAME');
 
             const response = await axios.get("/tailscale-api/tailnet/-/devices", {
                 auth: {

@@ -1,6 +1,7 @@
 import axios from "axios";
 // import { error } from "console";
 import { create } from "zustand";
+import { getEnv } from "../../Utilities/envUtils";
 
 export interface DNSGroup {
     count: number;
@@ -54,7 +55,7 @@ export const useCloudflareStore = create<CloudflareStore>((set) => ({
                 }
             }`;
 
-            const apiKey = import.meta.env.VITE_CLOUDFLARE_API_BEAR;
+            const apiKey = getEnv('VITE_CLOUDFLARE_API_BEAR');
 
             const response = await axios.post("/cloudflare-graphql",
                 { query },

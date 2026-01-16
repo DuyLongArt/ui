@@ -9,3 +9,10 @@ interface ImportMetaEnv {
 interface ImportMeta {
     readonly env: ImportMetaEnv
 }
+
+interface Window {
+    _env_: {
+        VITE_CLOUDFLARE_API_BEAR: string;
+        VITE_TAILSCALE_USERNAME: string;
+    }
+}
