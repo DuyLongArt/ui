@@ -46,7 +46,7 @@ export const useTailScaleStore = create<TailscaleStore>((set) => ({
         set({ isLoading: true, error: null });
         try {
             // Using VITE_ prefix for client-side env variables in Vite
-            const apiKey = import.meta.env.VITE_TAILSCALE_API_KEY;
+            const apiKey = import.meta.env.VITE_TAILSCALE_USERNAME;
 
             const response = await axios.get("/tailscale-api/tailnet/-/devices", {
                 auth: {

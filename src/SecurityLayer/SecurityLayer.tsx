@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import type { ChildrenInterface } from "../OrchestraLayer/ChildrenComponent";
 import { AuthenticateFactor, checkCookies } from "../OrchestraLayer/StateManager/XState/AuthenticateMachine";
 import { useSelector } from "@xstate/react";
+import { useUserAccountStore } from "@/OrchestraLayer/StateManager/Zustand/userProfileStore";
 // import console from "console";
 
 // Constants
@@ -22,7 +23,7 @@ const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const authActorRef = AuthenticateFactor.useActorRef();
-
+  const userAccountStore = useUserAccountStore();
   // Track if navigation has already happened to prevent loops
   const hasNavigated = useRef(false);
   const previousState = useRef<string | null>(null);
@@ -39,6 +40,7 @@ const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
   // Reset navigation flag when location changes (user navigates manually)
   useEffect(() => {
     hasNavigated.current = false;
+    userAccountStore.getUserRole();
   }, [location.pathname]);
 
   // Safe navigation helper with deduplication
