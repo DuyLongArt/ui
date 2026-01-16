@@ -132,7 +132,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList })
     <div className="w-full relative md:px-2 lg:px-2 py-2">
       <Navbar
         fullWidth
-        className="sticky top-0 h-max max-w-full px-4 py-2 border border-white/40 rounded-2xl bg-linear-to-r from-indigo-500/90 via-indigo-500/90 to-indigo-600/80 backdrop-blur-md shadow-lg"
+        className="sticky top-0 h-max max-w-full md:px-4 lg:px-4 py-2 border border-white/40 rounded-2xl bg-linear-to-r from-indigo-500/90 via-indigo-500/90 to-indigo-600/80 backdrop-blur-md shadow-lg"
         {...commonProps}
       >
         <div className="flex items-center justify-between w-full">
