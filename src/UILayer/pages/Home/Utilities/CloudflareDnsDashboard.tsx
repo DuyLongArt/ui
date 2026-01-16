@@ -16,7 +16,7 @@ import { motion } from 'framer-motion';
 import { useCloudflareStore } from '../../../../OrchestraLayer/StateManager/Zustand/cloudFlareStore';
 
 const CloudflareDnsDashboard = () => {
-    const { dnsData, fetchDnsData } = useCloudflareStore();
+    const { dnsData, fetchDnsData, isLoading, error } = useCloudflareStore();
 
     React.useEffect(() => {
         fetchDnsData();
@@ -86,12 +86,25 @@ const CloudflareDnsDashboard = () => {
                     </div>
                 </div>
                 <div className="flex gap-3">
-                    <div className="px-4 py-2 bg-white/70 backdrop-blur-md border border-slate-100 rounded-xl shadow-sm flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                        <span className="text-xs font-bold text-white">LIVE SYNC</span>
-                    </div>
+                    <button
+                        onClick={fetchDnsData}
+                        disabled={isLoading}
+                        className="px-4 py-2 bg-white/70 backdrop-blur-md border border-slate-100 rounded-xl shadow-sm flex items-center gap-2 hover:bg-white transition-colors disabled:opacity-50"
+                    >
+                        <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-orange-500 animate-spin' : 'bg-green-500 animate-pulse'}`} />
+                        <span className="text-xs font-bold text-white uppercase">
+                            {isLoading ? 'Syncing...' : 'Live Sync'}
+                        </span>
+                    </button>
                 </div>
             </header>
+
+            {error && (
+                <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-2xl text-red-500 text-sm font-bold flex items-center gap-3">
+                    <Cloud size={18} />
+                    <span>Failed to fetch DNS analytics: {error}</span>
+                </div>
+            )}
 
             {/* Quick Stats Grid */}
             <motion.div
@@ -189,28 +202,38 @@ const CloudflareDnsDashboard = () => {
                         </div>
 
                         <div className="flex-1 flex items-end justify-between gap-4 px-4 pb-4">
-                            {analytics.timeline.map(([date, count]) => {
-                                const height = (count / Math.max(...analytics.timeline.map(t => t[1]))) * 100;
-                                return (
-                                    <div key={date} className="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
-                                        <div className="w-full relative h-[60%] flex items-end">
-                                            <motion.div
-                                                initial={{ height: 0 }}
-                                                animate={{ height: `${height}%` }}
-                                                transition={{ duration: 1, ease: "easeOut" }}
-                                                className="w-full bg-gradient-to-t from-orange-500 to-orange-400 rounded-t-xl shadow-lg shadow-orange-100 group-hover:from-orange-600 transition-all cursor-pointer relative"
-                                            >
-                                                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10 font-bold whitespace-nowrap">
-                                                    {count} Queries
-                                                </div>
-                                            </motion.div>
+                            {isLoading ? (
+                                <div className="w-full h-full flex items-center justify-center">
+                                    <Activity className="text-orange-200 animate-pulse" size={48} />
+                                </div>
+                            ) : analytics.timeline.length === 0 ? (
+                                <div className="w-full h-full flex items-center justify-center text-white/40 font-bold">
+                                    No data available for the selected period.
+                                </div>
+                            ) : (
+                                analytics.timeline.map(([date, count]) => {
+                                    const height = (count / Math.max(...analytics.timeline.map(t => t[1]))) * 100;
+                                    return (
+                                        <div key={date} className="flex-1 flex flex-col items-center gap-3 h-full justify-end group">
+                                            <div className="w-full relative h-[60%] flex items-end">
+                                                <motion.div
+                                                    initial={{ height: 0 }}
+                                                    animate={{ height: `${height}%` }}
+                                                    transition={{ duration: 1, ease: "easeOut" }}
+                                                    className="w-full bg-linear-to-t from-orange-500 to-orange-400 rounded-t-xl shadow-lg shadow-orange-100 group-hover:from-orange-600 transition-all cursor-pointer relative"
+                                                >
+                                                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-10 font-bold whitespace-nowrap">
+                                                        {count} Queries
+                                                    </div>
+                                                </motion.div>
+                                            </div>
+                                            <div className="text-[10px] font-black text-white uppercase tracking-tighter">
+                                                {date.split('-').slice(1).join('/')}
+                                            </div>
                                         </div>
-                                        <div className="text-[10px] font-black text-white uppercase tracking-tighter">
-                                            {date.split('-').slice(1).join('/')}
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                    );
+                                })
+                            )}
                         </div>
                     </GlassCard>
                 </motion.div>

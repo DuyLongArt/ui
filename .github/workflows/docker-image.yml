@@ -25,7 +25,8 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag duylongcontainer/ui:latest
+      run: docker build . --file Dockerfile --tag duylongcontainer/ui:latest --build-arg TAILSCALE_USERNAME=${{ secrets.TAILSCALE_USERNAME }} --build-arg CLOUDFLARE_API_BEAR=${{ secrets.CLOUDFLARE_API_BEAR }}
 
     - name: Push to Dockerhub
       run: docker push duylongcontainer/ui:latest
+

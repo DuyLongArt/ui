@@ -12,8 +12,10 @@ export interface DNSGroup {
 
 interface CloudflareStore {
     dnsData: DNSGroup[];
+    isLoading: boolean;
+    error: string | null;
     setDnsData: (data: DNSGroup[]) => void;
-    fetchDnsData: () => void;
+    fetchDnsData: () => Promise<void>;
 }
 
 export const useCloudflareStore = create<CloudflareStore>((set) => ({
@@ -119,8 +121,11 @@ export const useCloudflareStore = create<CloudflareStore>((set) => ({
         { "count": 90, "dimensions": { "date": "2026-01-10", "queryName": "truenas.duylong.art", "queryType": "AAAA" } },
         { "count": 40, "dimensions": { "date": "2026-01-10", "queryName": "truenas.duylong.art", "queryType": "TXT" } }
     ],
-    setDnsData: (dnsData) => set({ dnsData }),
+    isLoading: false,
+    error: null,
+    setDnsData: (dnsData: DNSGroup[]) => set({ dnsData }),
     fetchDnsData: async () => {
+        set({ isLoading: true, error: null });
         try {
             const today = new Date();
             const dateLeq = today.toISOString().split('T')[0];
@@ -148,22 +153,30 @@ export const useCloudflareStore = create<CloudflareStore>((set) => ({
                 }
             }`;
 
+            const apiKey = import.meta.env.VITE_CLOUDFLARE_API_KEY;
+
             const response = await axios.post("/cloudflare-graphql",
                 { query },
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + process.env.CLOUDFLARE_API_BEAR
+                        'Authorization': `Bearer ${apiKey}`
                     }
                 }
             );
 
             const data = response.data?.data?.viewer?.zones?.[0]?.dnsAnalyticsAdaptiveGroups;
             if (data) {
-                set({ dnsData: data });
+                set({ dnsData: data, isLoading: false });
+            } else {
+                set({ isLoading: false });
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error("❌ Failed to fetch Cloudflare DNS data:", error);
+            set({
+                error: error.response?.data?.errors?.[0]?.message || error.message || "Failed to fetch DNS data",
+                isLoading: false
+            });
         }
     }
 }));

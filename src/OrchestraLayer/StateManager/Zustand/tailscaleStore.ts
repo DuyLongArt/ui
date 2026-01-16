@@ -31,29 +31,40 @@ interface TailscaleDeviceResponse {
     devices: TailscaleDevice[];
 }
 
-interface tailScaleStoreType {
+interface TailscaleStore {
     devices: TailscaleDevice[];
-    fetchDevices: () => void;
+    isLoading: boolean;
+    error: string | null;
+    fetchDevices: () => Promise<void>;
 }
 
-export const useTailScaleStore = create<tailScaleStoreType>(
-    (set, get) => (
-        {
-            devices: [],
-            fetchDevices: () => {
-                axios.get("/tailscale-api/tailnet/-/devices",
-                    {
-                        auth: {
-                            username: process.env.TAILSCALE_USERNAME,
-                            password: ""
-                        }
-                    }
-                ).then((response) => {
-                    set({ devices: response.data.devices })
-                })
-            }
+export const useTailScaleStore = create<TailscaleStore>((set) => ({
+    devices: [],
+    isLoading: false,
+    error: null,
+    fetchDevices: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            // Using VITE_ prefix for client-side env variables in Vite
+            const apiKey = import.meta.env.VITE_TAILSCALE_API_KEY;
 
-        }));
+            const response = await axios.get("/tailscale-api/tailnet/-/devices", {
+                auth: {
+                    username: apiKey,
+                    password: ""
+                }
+            });
+
+            set({ devices: response.data.devices, isLoading: false });
+        } catch (err: any) {
+            console.error("❌ Tailscale Fetch Error:", err);
+            set({
+                error: err.response?.data?.message || err.message || "Unknown error",
+                isLoading: false
+            });
+        }
+    }
+}));
 
 // {
 //     "devices": [

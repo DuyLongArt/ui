@@ -16,7 +16,7 @@ import {
 import { useTailScaleStore } from '../../../../OrchestraLayer/StateManager/Zustand/tailscaleStore';
 
 const TailscaleDashboard = () => {
-    const { devices, fetchDevices } = useTailScaleStore();
+    const { devices, fetchDevices, isLoading, error } = useTailScaleStore();
 
     useEffect(() => {
         fetchDevices();
@@ -79,10 +79,12 @@ const TailscaleDashboard = () => {
                         size="sm"
                         variant="text"
                         onClick={fetchDevices}
-                        className="flex items-center gap-2 text-indigo-600 font-bold hover:bg-indigo-50"
+                        disabled={isLoading}
+                        className="flex items-center gap-2 text-indigo-600 font-bold hover:bg-indigo-50 disabled:opacity-50"
                         {...commonProps}
                     >
-                        <RefreshCw size={16} /> Refresh Nodes
+                        <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
+                        {isLoading ? "Fetching Nodes..." : "Refresh Nodes"}
                     </Button>
                     <Chip
                         value={`${stats.online} ONLINE`}
@@ -90,6 +92,13 @@ const TailscaleDashboard = () => {
                     />
                 </div>
             </header>
+
+            {error && (
+                <div className="p-4 bg-red-500/10 border border-red-500/50 rounded-2xl text-red-500 text-sm font-bold flex items-center gap-3">
+                    <Shield size={18} />
+                    <span>Failed to fetch mesh nodes: {error}</span>
+                </div>
+            )}
 
             {/* Network Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -164,54 +173,71 @@ const TailscaleDashboard = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100/30">
-                            {devices.map((device, index) => (
-                                <tr key={device.id} className="hover:bg-slate-50/40 transition-colors group">
-                                    <td className="p-4">
-                                        <div className="flex flex-col">
-                                            <Typography className="text-sm font-black text-white group-hover:text-indigo-600 transition-colors" {...commonProps}>
-                                                {device.hostname}
-                                            </Typography>
-                                            <Typography className="text-[10px] font-medium text-white" {...commonProps}>
-                                                {device.name}
-                                            </Typography>
+                            {isLoading ? (
+                                <tr>
+                                    <td colSpan={6} className="p-12 text-center">
+                                        <div className="flex flex-col items-center gap-3">
+                                            <RefreshCw size={32} className="text-indigo-500 animate-spin" />
+                                            <Typography className="text-white font-bold" {...commonProps}>Syncing Mesh Network...</Typography>
                                         </div>
-                                    </td>
-                                    <td className="p-4">
-                                        <code className="text-[11px] font-mono bg-white/50 px-2 py-1 rounded-lg border border-slate-200/50 text-white">
-                                            {device.addresses[0]}
-                                        </code>
-                                    </td>
-                                    <td className="p-4">
-                                        <div className="flex items-center gap-2">
-                                            <div className={`w-2 h-2 rounded-full ${device.connectedToControl ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`}></div>
-                                            <Typography className={`text-[11px] font-bold ${device.connectedToControl ? 'text-green-600' : 'text-white'}`} {...commonProps}>
-                                                {device.connectedToControl ? 'CONNECTED' : 'OFFLINE'}
-                                            </Typography>
-                                        </div>
-                                    </td>
-                                    <td className="p-4">
-                                        <div className="flex items-center gap-2">
-                                            {getOsIcon(device.os)}
-                                            <Typography className="text-xs font-bold text-white" {...commonProps}>
-                                                {device.os} <span className="text-[9px] text-white ml-1">v{device.clientVersion}</span>
-                                            </Typography>
-                                        </div>
-                                    </td>
-                                    <td className="p-4">
-                                        <div className="flex items-center gap-2 text-white">
-                                            <Clock size={14} className="opacity-40" />
-                                            <Typography className="text-[11px] font-bold" {...commonProps}>
-                                                {device.connectedToControl ? 'Online Now' : formatLastSeen(device.lastSeen)}
-                                            </Typography>
-                                        </div>
-                                    </td>
-                                    <td className="p-4">
-                                        <IconButton variant="text" size="sm" className="text-white hover:text-indigo-500" {...commonProps}>
-                                            <ChevronRight size={18} />
-                                        </IconButton>
                                     </td>
                                 </tr>
-                            ))}
+                            ) : devices.length === 0 ? (
+                                <tr>
+                                    <td colSpan={6} className="p-12 text-center text-white/50 font-bold italic">
+                                        No active nodes found in the mesh network.
+                                    </td>
+                                </tr>
+                            ) : (
+                                devices.map((device, index) => (
+                                    <tr key={device.id} className="hover:bg-slate-50/40 transition-colors group">
+                                        <td className="p-4">
+                                            <div className="flex flex-col">
+                                                <Typography className="text-sm font-black text-white group-hover:text-indigo-600 transition-colors" {...commonProps}>
+                                                    {device.hostname}
+                                                </Typography>
+                                                <Typography className="text-[10px] font-medium text-white" {...commonProps}>
+                                                    {device.name}
+                                                </Typography>
+                                            </div>
+                                        </td>
+                                        <td className="p-4">
+                                            <code className="text-[11px] font-mono bg-white/50 px-2 py-1 rounded-lg border border-slate-200/50 text-white">
+                                                {device.addresses[0]}
+                                            </code>
+                                        </td>
+                                        <td className="p-4">
+                                            <div className="flex items-center gap-2">
+                                                <div className={`w-2 h-2 rounded-full ${device.connectedToControl ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`}></div>
+                                                <Typography className={`text-[11px] font-bold ${device.connectedToControl ? 'text-green-600' : 'text-white'}`} {...commonProps}>
+                                                    {device.connectedToControl ? 'CONNECTED' : 'OFFLINE'}
+                                                </Typography>
+                                            </div>
+                                        </td>
+                                        <td className="p-4">
+                                            <div className="flex items-center gap-2">
+                                                {getOsIcon(device.os)}
+                                                <Typography className="text-xs font-bold text-white" {...commonProps}>
+                                                    {device.os} <span className="text-[9px] text-white ml-1">v{device.clientVersion}</span>
+                                                </Typography>
+                                            </div>
+                                        </td>
+                                        <td className="p-4">
+                                            <div className="flex items-center gap-2 text-white">
+                                                <Clock size={14} className="opacity-40" />
+                                                <Typography className="text-[11px] font-bold" {...commonProps}>
+                                                    {device.connectedToControl ? 'Online Now' : formatLastSeen(device.lastSeen)}
+                                                </Typography>
+                                            </div>
+                                        </td>
+                                        <td className="p-4">
+                                            <IconButton variant="text" size="sm" className="text-white hover:text-indigo-500" {...commonProps}>
+                                                <ChevronRight size={18} />
+                                            </IconButton>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>
