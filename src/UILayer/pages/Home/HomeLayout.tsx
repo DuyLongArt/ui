@@ -56,8 +56,8 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
     <div className="flex flex-col h-full  bg-indigo-200 w-full overflow-visible relative">
 
       {/* Header Section (Fixed height / shrinking) */}
-      <div className="flex w-full border-2 flex-row items-center justify-start gap-2 shadow-sm z-100 backdrop-blur-sm">
-        <div>
+      <div className="flex    w-full border-2 flex-row items-center justify-start gap-2 shadow-sm z-100 backdrop-blur-sm">
+        <div className="hidden md:block lg:block">
           <OrchestraButton onClick={() => send({ type: 'CLICK' })} />
         </div>
         <div className="flex-1">
