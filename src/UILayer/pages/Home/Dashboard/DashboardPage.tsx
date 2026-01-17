@@ -38,7 +38,7 @@ const DashboardPage = () => {
         fetchDnsData();
         truenasStorageStore.getPools();
         truenasStorageStore.setPercentage();
-    }, [fetchDevices, fetchDnsData, truenasStorageStore.getPools, truenasStorageStore.setPercentage]);
+    }, [fetchDevices, fetchDnsData, truenasStorageStore.getPools, truenasStorageStore.pools]);
 
     // Analytics Calculation for the chart
     const analytics = useMemo(() => {
@@ -80,8 +80,8 @@ const DashboardPage = () => {
         },
         {
             label: "Storage Health",
-            value: `${(truenasStorageStore.percentageUsed[0]*100).toFixed(2)}%`,
-            status: `${(truenasStorageStore.pools[0].size/1024/1024/1024).toFixed(2)}GB`,
+            value: `${(truenasStorageStore.percentageUsed[0] * 100).toFixed(2)}%`,
+            status: `${(truenasStorageStore.pools[0].size / 1024 / 1024 / 1024).toFixed(2)}GB`,
             icon: <HardDrive size={20} />,
             color: "text-green-600",
             bg: "bg-green-50",
@@ -136,12 +136,12 @@ const DashboardPage = () => {
                             <span className="text-[8px] sm:text-[10px] font-black text-white uppercase tracking-widest">{stat.trend}</span>
                         </div>
                         <div className="flex items-center justify-between">
-                             <Typography variant="h4" className="text-white font-black text-lg sm:text-2xl" {...commonProps}>{stat.value}</Typography>
-                             <Typography className="text-white text-[9px] sm:text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.status}</Typography>
+                            <Typography variant="h4" className="text-white font-black text-lg sm:text-2xl" {...commonProps}>{stat.value}</Typography>
+                            <Typography className="text-white text-[9px] sm:text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.status}</Typography>
                         </div>
-                       
+
                         <Typography className="text-white text-[9px] sm:text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.label}</Typography>
-                       
+
                     </GlassCard>
                 ))}
             </div>
