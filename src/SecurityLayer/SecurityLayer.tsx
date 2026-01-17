@@ -12,6 +12,7 @@ const AUTHENTICATED_STATE = "onLogin";
 const UNAUTHENTICATED_STATE = "onAuthenFailed";
 const LOADING_STATES = ["onInit", "onAuthen", "authenticating", "onTransaction"];
 const LOGOUT_STATES = "onLogout";
+const REGISTER_STATES = "validateCookiesAfterLogin";
 
 const ROUTES = {
   HOME: '/home/index',
@@ -98,7 +99,14 @@ const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
             return;
           }
         }
+        else {
+          if (currentStateValue === REGISTER_STATES) {
+            navigateToRoute("/admin/person-profile");
+          }
+          else {
 
+          }
+        }
         // Handle authenticated state
         if (currentStateValue === AUTHENTICATED_STATE) {
           if (isPublicPage) {
