@@ -159,7 +159,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden max-[1020px]:hidden! md:flex border-2 border-fuchsia-900 items-center ml-auto">
+          <div className="hidden max-[1020px]:hidden! md:flex border-1 border-white/10 bg-indigo-500/60 rounded-2xl items-center ml-auto">
             <NavList />
           </div>
 
