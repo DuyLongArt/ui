@@ -205,6 +205,10 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
     const [isExpanded, setIsExpanded] = useState(false);
 
     const handleToggle = () => {
+
+        
+
+
         setIsExpanded(!isExpanded);
     };
     const size = sizeScale * 48;

@@ -52,7 +52,7 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
   }, [state.value]);
 
   return (
-    <div className="flex flex-col h-full bg-indigo-200 w-full overflow-x-hidden relative">
+    <div className="flex flex-col h-full h-screen bg-indigo-200 w-full overflow-x-hidden relative">
 
       {/* Header Section (Fixed height / shrinking) */}
       <div className="flex w-full flex-row items-center justify-start z-100 backdrop-blur-sm sticky top-0">
@@ -89,7 +89,7 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
         nodeRef={nodeRef}
         position={position}
         onDrag={handleDrag}
-      // bounds="parent" // Optional: Prevents dragging off-screen
+        bounds="parent" // Optional: Prevents dragging off-screen
       >
         <div
           ref={nodeRef}
