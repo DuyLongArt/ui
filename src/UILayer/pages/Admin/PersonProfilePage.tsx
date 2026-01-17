@@ -145,7 +145,7 @@ const PersonProfilePage: React.FC = () => {
                     <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
 
                     <button
-                        className="absolute bottom-4 right-4 bg-white/20 backdrop-blur-md border border-white/40 text-white font-bold py-2 px-4 rounded-xl flex items-center hover:bg-white/30 transition-all shadow-lg text-sm"
+                        className="absolute bottom-4 z-40 right-4 bg-white/20 backdrop-blur-md border border-white/40 text-white font-bold py-2 px-4 rounded-xl flex items-center hover:bg-white/30 transition-all shadow-lg text-sm"
                         onClick={() => { setMode('cover'); setIsEditModalOpen(true); }}
                     >
                         <CameraIcon className="h-4 w-4 mr-2" />
@@ -440,12 +440,12 @@ const PersonProfilePage: React.FC = () => {
             {/* Edit Modal */}
             <AnimatePresence>
                 {isEditModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4  bg-black/60 backdrop-blur-sm">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-100"
+                            className="bg-white rounded-2xl shadow-2xl w-full max-w-lg  absolute top-10!  overflow-hidden border border-slate-100"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <div className="flex justify-between items-center p-5 border-b border-slate-100">
@@ -455,7 +455,7 @@ const PersonProfilePage: React.FC = () => {
                                 </button>
                             </div>
 
-                            <div className="p-6 border-b border-slate-100 shadow-2xl">
+                            <div className="p-6  border-slate-100  shadow-2xl">
                                 <input
                                     className="w-full p-2 m-2 border border-slate-300 rounded-xl mb-6 text-black focus:ring-2 focus:ring-indigo-500 outline-none"
                                     placeholder="Enter file name (optional)"
