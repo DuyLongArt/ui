@@ -39,13 +39,24 @@ const RegisterForm = () => {
 
     const [showPassword, setShowPassword] = useState(false);
     const [validationError, setValidationError] = useState<string | null>(null);
+    // const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [ipAddress, setIpAddress] = useState<string>('unknown');
 
     const actorRef = AuthenticateFactor.useActorRef();
     const navigate = useNavigate();
+    const isLoading = useSelector(actorRef, (snapshot) => snapshot.matches('registering'));
+    const errorFromMachine = useSelector(actorRef, (snapshot) => snapshot.context.error);
+    const successMessage = useSelector(actorRef, (snapshot) => snapshot.context.success);
+    const isFailed = !!errorFromMachine;
+
 
     // Fetch IP Address
     useEffect(() => {
+        if (successMessage) {
+            setTimeout(() => {
+                navigate("/entry/index")
+            }, 1000);
+        }
         const fetchIP = async () => {
             try {
                 const response = await fetch('https://api.ipify.org?format=json');
@@ -60,12 +71,9 @@ const RegisterForm = () => {
         };
 
         fetchIP();
-    }, []);
+    }, [successMessage]);
 
     // Derive State from XState Machine
-    const isLoading = useSelector(actorRef, (snapshot) => snapshot.matches('registering'));
-    const errorFromMachine = useSelector(actorRef, (snapshot) => snapshot.context.error);
-    const isFailed = !!errorFromMachine;
 
     const submitEvent = (event: React.FormEvent) => {
         event.preventDefault();
@@ -282,9 +290,10 @@ const RegisterForm = () => {
                         </div>
 
                         <div className="mt-6">
-                            <p className="text-red-400 text-sm font-semibold">
-                                {validationError || errorFromMachine || "Registration failed. Please try again."}
-                            </p>
+                            {/* {(validationError || (errorFromMachine && errorFromMachine.includes("Success")) && <p className="text-green-400 text-sm font-semibold">{validationError}</p>)} */}
+                            {validationError || (errorFromMachine && errorFromMachine.includes("failed") && <p className="text-red-400 text-sm font-semibold">{validationError}</p>)}
+
+                            {successMessage && <p className="text-green-400 text-sm font-semibold">{successMessage}</p>}
                         </div>
 
                         <motion.div variants={itemVariants}>

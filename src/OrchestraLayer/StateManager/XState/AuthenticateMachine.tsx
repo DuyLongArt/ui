@@ -11,6 +11,7 @@ type AuthMachineContext = {
   password: string;
 
   jwt: string;
+  success?: string;
   error?: string;
 };
 
@@ -106,6 +107,7 @@ const registerWithCredentials = fromPromise(
       }
 
       const response = await axios.post("/backend/auth/signup", input.payload);
+      console.log("✅ Register response:", response.data);
       return response.data;
     } catch (error) {
       console.error("❌ Error registering:", error);
@@ -116,7 +118,7 @@ const registerWithCredentials = fromPromise(
 
 // --- State Machine Definition ---
 const authenState = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEMCuAXAFmAdgZXWXTADoB7HASRwEt0BiAbQAYBdRUABzNjpoo4gAHogBMzAKwkAnBIDMARlEA2OcoDsAFgWa56gDQgAnogAcCkhObXmc06PUa5zUwF9XhtFlwEipCtR0TArsSCDcvOj8OIIiCOJSsooqalo6eoYmCJrK0iSm9vbKppqipnJyohLunhjY+ITE5DgAgnW49BAUpDQ4AG5kANakAGZg6ADGmABSAOoAKiyhXDx8AmFx8qL5EgoS5RJp0goKmWJqJJqOh+qmt8zKEppuHiBe9b5NFG3eOJ3dJF6A2GJDGkxmC0YIUEETWMQ2iC2Oz2ByOJzO2VyJAUlXspVMGjK0hqb3aDT8zR+9XoYAATrSyLSSJwADZEEaMgC2oPGUzmizYMNWUXWoE2lWR+zkh20x1OxkRym2+wksiuoj0TzkJPePkapD6yBZNAgfgAwmQhjQ4C0RsRaQAxXmYJiCsKwkXwsWIBTMdRyS4PUTSXQSeSHDEa5SXeQ4gph5QubWvXXkpqG42m4gWq02u10p3g4LLcLC6KxH1+gOaIMh6XhgwKhC4wNK5TaUzMUqaaTKHVkz7+Vpkh3IGgsyD0PAAVQAQgBZSgCkse8sIhAnPYkZga57qmumCTKDEh0yBgoEnEaYkpgf6ykjscTiD0ABKAFEAOKUPDzd+vpYhUiNdvQ3X1mEuHRfXUSR1CedRpAxJRVXyPY41EKMHmqW9fkHEhaTAKAaFge1eigf4cB6fohlIAiiJIulAPdMtRWEREJUPFFpTReUshOSQSGUJRrEOXZ1Dg7Dalw+86OI0icHIukGSZVl2S5fDCLkxi3RWYDWPFbZOKlGUFDlJDdAsaRTyUDUrHbdR+2kilUyiCYiDIiiqOBUgXJoNziCY3S4QrBAkSM1FZXRJsYIguCVA1DCEIqF4pI+e9fP8jylMZZk2XQDlaW5DK-EC0s9K9NjQo43ZjJ4jF7AsFE7ljK5JNJJz0yNE1zUtQZrVgW17QAGTIIi-lK1d9Mrf1W2DUMGwxdQt3MKpTJDDCNEctKKQzbrs16-rBrpEaxuLIDgvXaDq1rebuPqv0SGudsJBUGCDi2vUKQoE7enoIaAHlP3+6dl3Oz0Qp0ODt2kOwcTDOw9EbPi7BIXE4xrbQe2KD60yHE6yAweghBI5z81pAAKcCAEp6FTPDvtGgn0AmliKriSGpGYGHzHrBHxKQ1V1GxaQEN0dQHEeTRsNeHAyAgOBBDp-UwZAyqAFpjybDXtxsXW9b9HH6aoWh0BVqbslEDErgg311pKQ45F7aVDfvb4yTNtnEDUM9bmkKtNGeX3NCtp5BK573HBrX2XZ2rqszAHM+rze1CymD2QvsKREz2aR4tuUzNayURnkuYNcg0TcdyVGOvmHX5R3HSB08u5xo2LjDMdSSoMTUCDRAUISVX9S9ZBr2jNIY2kyOb0C1ADX3-cD0wQyQlQ++KDUYJF0pc7HkhiqiBSZ8qufHuXxe7mX4Om07PI4dlBD+733b48Tw6yZ+irJs9hBM7DnO87mF7ItBwZ8-biQQuJISmg94MzGsfdmzghY5GKC9O42h4JIS3GjaUVQuwYRSu1batd8YYAQT6RMeQVBHnWiccWVksEWG0DoF6IZB6OHcO4IAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QEMCuAXAFmAdgZXWXTADoB7HASRwEt0BiAbQAYBdRUABzNjpoo4gAHogBMzAKwkAnBIDMARlEA2OcoDsAFgWa56gDQgAnogAcCkhObXmc06PUa5zUwF9XhtFlwEipCtR0TArsSCDcvOj8OIIiCOJSsooqalo6eoYmCJrK0iSm9vbKppqipnJyohLunhjY+ITE5DgAgnW49BAUpDQ4AG5kANakAGZg6ADGmABSAOoAKiyhXDx8AmFx8qL5EgoS5RJp0goKmWJqJJqOh+qmt8zKEppuHiBe9b5NFG3eOJ3dJF6A2GJDGkxmC0YIUEETWMQ2iC2Oz2ByOJzO2VyJAUlXspVMGjK0hqb3aDT8zR+9XoYAATrSyLSSJwADZEEaMgC2oPGUzmizYMNWUXWoE2lWR+zkh20x1OxkRym2+wksiuoj0TzkJPePkapD6yBZNAgfgAwmQhjQ4C0RsRaQAxXmYJiCsKwkXwsWIBTMdRyS4PUTSXQSeSHDEa5SXeQ4gph5QubWvXXkpqG42m4gWq02u10p3g4LLcLC6KxH1+gOaIMh6XhgwKhC4wNK5TaUzMUqaaTKHVkz7+Vpkh3IGgsyD0PAAVQAQgBZSgCkse8sIhAnPYkZga57qmumCTKDEh0yBgoEnEaYkpgf6ykjscTiD0ABKAFEAOKUPDzd+vpYhUiNdvQ3X1mEuHRfXUSR1CedRpAxJRVXyPY41EKMHmqW9fkHEhaTAKAaFge1eigf4cB6fohlIAiiJIulAPdMtRWEREJUPFFpTReUshOSQSGUJRrEOXZ1Dg7Dalw+86OI0icHIukGSZVl2S5fDCLkxi3RWYDWPFbZOKlGUFDlJDdAsaRTyUDUrHbdR+2kilUyiCYiDIiiqOBUgXJoNziCY3S4QrBAkSM1FZXRJsYIguCVA1DCEIqF4pI+e9fP8jylMZZk2XQDlaW5DK-EC0s9K9NjQo43ZjJ4jF7AsFE7ljK5JNJJz0yNE1zUtQZrVgW17QAGTIIi-lK1d9Mrf1W2DUMGwxdQt3MKpTJDDCNEctKKQzbrs16-rBrpEaxuLIDgvXaDq1rebuPqv0SGudsJBUGCDi2vUKQoE6yAweghBI5z81pAAKcCAEp6FTPDvtG370AmliKriHQ4O3aQ7BxMM7D0Rs+NVdRsWkBDdHUBxHk0NrofvWHTqGgB5T96enZdzs9ELUakZgMfMescfEpC7BIXE4xrbQe2KdxXhwMgIDgQRqb8NmQMqgBaYSMVVxIrKsoSycqXIFAcnDtq+KhaHQZWpuyUQMSuCDfXWkpDjkXtpQ+tMhypXAreRxA1DPW5pCrTRniDzQ7aeQTuYDxwayDj28N2rMwBzPq83tQspl9kL7CkRM9mkeLblM48m1EZ5LmDXINE3HclUTmnh1+Udx0gHPLucaMK4w8XUkqDE1Ag0QFCElV-UvWRG6+nBPzIdAyHfHB0FpLIgvZ9dVbJpDLyJkm9HJp4qbvClZIY2kyI70C1ADIOQ7D0wQyQlRh+KDUYOJ0oi+nppiqiBSr6VRvo9R+987iPwjk2TseQsaygQiPH+BouopzTodYGJ1eiALiHnaOhdi7mF7ItBwIDg7iQQuJISmhEHNAwRVSafsNzOEJjkYoL07jaHgkhLcItpRVC7BhFK7VTZDh+hgLBPpEx5BUEedaJwyZWS4RYbQOgXohjHo4KWrggA */
   id: "authenState",
   types: {} as {
     context: AuthMachineContext;
@@ -127,7 +129,8 @@ const authenState = createMachine({
     username: "",
     password: "",
     jwt: "",
-    error: undefined
+    error: undefined,
+    success: undefined
   },
 
   states: {
@@ -255,6 +258,9 @@ const authenState = createMachine({
       }
     },
 
+    onGotoEntry: {
+      entry: () => console.log("📝 Registering user..."),
+    },
     registering: {
       entry: () => console.log("📝 Registering user..."),
       invoke: {
@@ -269,22 +275,10 @@ const authenState = createMachine({
           };
         },
         onDone: {
-          target: "validateCookiesAfterLogin",
+          target: "onInit",
           actions: [
-            assign({
-              jwt: ({ event }) => {
-                const output = event.output;
-                return output?.jwt || output || "";
-              }
-            }),
-            ({ event }) => {
-              console.log("✅ Registration successful.");
-              const jwt = event.output?.jwt;
-              if (jwt) {
-                console.log("💾 Saving JWT to cookies...");
-                saveJWTToCookies(jwt);
-              }
-            }
+            assign({ success: ({ event }) => (event.output as any)?.message || "Registration Success" }),
+
           ]
         },
         onError: {
@@ -368,6 +362,7 @@ const authenState = createMachine({
         const cookieJWT = checkCookies();
         console.log("Current JWT in cookies:", cookieJWT ? "✅ Present" : "❌ Missing");
       },
+
       on: {
         LOGOUT: {
           target: "onLogout"
