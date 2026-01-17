@@ -1,5 +1,5 @@
 
-import React, { PropsWithChildren, forwardRef } from "react";
+import React, { type PropsWithChildren, forwardRef } from "react";
 
 type LiquidGlassButtonProps = {
   className?: string;
