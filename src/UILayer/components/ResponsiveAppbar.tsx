@@ -141,7 +141,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
   );
 
   return (
-    <div className="w-full phone:border-2 phone:border-red-700   sticky top-0 z-100 px-1 py-1 sm:px-3 ">
+    <div className="w-full phone:border-2 phone:border-red-700   sticky top-0 z-100  py-1 ">
       {/* Custom Appbar Body - Replacing restrictive library Navbar */}
       <div className="h-max  md:px-2 lg:px-4 sm:px-4 sm:w-full max-[600px]:w-screen! md:w-full lg:w-full   py-2 rounded-xl phone:border-2 phone:border-red-700 sm:rounded-2xl bg-indigo-600/95 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300 ">
 
@@ -159,40 +159,53 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden phone:hidden md:flex items-center ml-auto">
+          <div className="hidden max-[1020px]:hidden! md:flex border-2 border-fuchsia-900 items-center ml-auto">
             <NavList />
           </div>
 
           {/* Mini Player Section - Restored to previous UI */}
           {currentSong && (
-            <div className="items-center hidden md:flex lg:flex  max-[600px]:w-screen! justify-center  mx-2">
+            <div className="items-center   md:flex lg:flex    justify-center mx-2">
               <div
                 onClick={openMusicListAction}
-                className="hidden md:flex items-center gap-3 bg-black/20 backdrop-blur-md rounded-full px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
+                className=" md:flex items-center gap-3 shrink-0  w-fit bg-black/20 backdrop-blur-md rounded-full px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
               >
-                <div className="w-8 h-8 rounded-full overflow-hidden relative">
+                <div className="w-8 h-8 max-[780px]:hidden rounded-full overflow-hidden relative">
                   <div className={`w-full h-full bg-indigo-500 flex items-center justify-center`}>
                     <MusicIcon size={14} className="text-white" />
                   </div>
                 </div>
-                <div className="flex flex-col max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[150px]">
+                <div className="flex flex-col max-[780px]:hidden max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[150px]">
                   <span className="text-xs text-white font-bold truncate">{currentSong.title}</span>
                   <span className="text-[10px] text-white truncate">{currentSong.artist || 'Unknown'}</span>
                 </div>
                 <div className="flex items-center gap-2 ml-2">
-                  <button onClick={togglePlay} className="p-1 rounded-full hover:bg-white/20 text-white transition-colors">
+                  <button onClick={togglePlay} className="p-1 max-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
                     {isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); playNext(); }}
-                    className="p-1 rounded-full hover:bg-white/20 text-white transition-colors"
+                    className="p-1 max-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
                   >
                     <SkipForward size={16} fill="currentColor" />
+                  </button>
+
+
+
+                   <button onClick={togglePlay} className="p-1   min-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
+                    {isPlaying ? <Pause size={10} fill="currentColor" /> : <Play size={10} fill="currentColor" />}
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); playNext(); }}
+                    className="p-1 min-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                  >
+                    <SkipForward size={10} fill="currentColor" />
                   </button>
                 </div>
               </div>
             </div>
           )}
+          
 
           {/* Action Section (Profile and Hamburger) */}
           <div className="flex items-center gap-0.5  ml-auto">
@@ -219,27 +232,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
             <NavList mobile />
 
             {/* Mobile Mini Player - Restored to previous UI */}
-            {currentSong && (
-              <div className="mt-4 flex items-center justify-between bg-black/20 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center shrink-0">
-                    <MusicIcon size={20} className="text-white" />
-                  </div>
-                  <div className="flex flex-col max-[360px]:hidden min-w-0">
-                    <span className="text-sm text-white font-bold truncate">{currentSong.title}</span>
-                    <span className="text-xs text-white truncate">{currentSong.artist || 'Unknown'}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <button onClick={togglePlay} className="p-2 rounded-full bg-white/10 text-white">
-                    {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" />}
-                  </button>
-                  <button onClick={(e) => { e.stopPropagation(); playNext(); }} className="p-2 rounded-full bg-white/10 text-white">
-                    <SkipForward size={20} fill="currentColor" />
-                  </button>
-                </div>
-              </div>
-            )}
+          
           </div>
         </div>
       </div>

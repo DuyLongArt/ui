@@ -98,33 +98,7 @@ export const appRoutes: Route[] = [
     
     ]
     },
-     {
-               
-            
-            
-                    type: "domain",
-                path: "IOT",
-                component: <OutletLayout />,
-                title: "IOT",
-                children: [
-                           {
-            type: "component",
-                path: "index",
-                component: <IOTPage />,
-                // title: "IOT",
-                children: [
-                  {type:"component",path:"blank",component:<BlankPage />}
-                ],
-                
-        },
-          {
-                        type: "component",
-                        path: "map",
-                        component: <IOTMap />,
-                        title: "Map",
-                    }
-                ]
-            },
+    
             {
                     type: "domain",
                 path: "personal",
@@ -192,6 +166,39 @@ export const appRoutes: Route[] = [
         ],
     },
   
+
+
+
+
+ {
+               
+            
+            
+                    type: "domain",
+                path: "IOT",
+                component: <OutletLayout />,
+                title: "IOT",
+                children: [
+                           {
+            type: "component",
+                path: "index",
+                component: <IOTPage />,
+                // title: "IOT",
+                children: [
+                  {type:"component",path:"blank",component:<BlankPage />}
+                ],
+                
+        },
+          {
+                        type: "component",
+                        path: "map",
+                        component: <IOTMap />,
+                        title: "Map",
+                    }
+                ]
+            },
+
+
     {
         type: "domain",
         path: "utilities",

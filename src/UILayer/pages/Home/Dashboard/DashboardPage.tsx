@@ -22,6 +22,7 @@ import { useTailScaleStore } from '../../../../OrchestraLayer/StateManager/Zusta
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import LiquidGlassCard from '../../../components/LiquidGlassCard';
+import ColorGlassCard from '@/UILayer/components/ColorGlassCard';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -141,7 +142,7 @@ const DashboardPage = () => {
 
                 {/* Activity / Main Section */}
                 <div className="lg:col-span-2 space-y-8">
-                    <GlassCard className="p-6 min-h-[400px]">
+                    <ColorGlassCard className="p-6 min-h-[400px]">
                         <div className="flex justify-between items-center mb-8">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-orange-500 text-white rounded-lg shadow-lg shadow-orange-100">
@@ -187,7 +188,7 @@ const DashboardPage = () => {
                                 <span key={date}>{date.split('-').slice(1).join('/')}</span>
                             ))}
                         </div>
-                    </GlassCard>
+                    </ColorGlassCard>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <GlassCard className="p-6 bg-slate-800 col-span-3 text-white">
