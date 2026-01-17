@@ -26,6 +26,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import PersonProfileIcon from "../../../components/PersonProfileIcon";
+import { useTruenasStorageStore } from '@/OrchestraLayer/StateManager/Zustand/truenasStorageStore';
 
 interface FileUpload {
     id: string;
@@ -61,10 +62,17 @@ const StoragePage = () => {
     const [files, setFiles] = useState<FileUpload[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [searchQuery, setSearchQuery] = useState("");
+    const { pools, percentageUsed, getPools, setPercentage } = useTruenasStorageStore();
+    useEffect(() => {
+        getPools();
+        setPercentage();
+    }, []);
+    console.log("+===============")
+    console.log(pools)
 
     // Statistics state
-    const totalStorage = 100; // GB
-    const [usedStorage, setUsedStorage] = useState(75.0);
+    const totalStorage = pools[0].size;
+    // const [usedStorage, setUsedStorage] = useState(percentageUsed);
     const [counts, setCounts] = useState({ images: 0, documents: 0, work: 0 });
 
     const fetchFiles = async () => {
@@ -100,7 +108,8 @@ const StoragePage = () => {
         });
         setCounts({ images: img, documents: doc, work: other });
         // Mock storage usage update
-        setUsedStorage(75.0 + (fileList.length * 0.01));
+        // setUsedStorage(75.0 + (fileList.length * 0.01));
+
     };
 
     useEffect(() => {
@@ -177,9 +186,9 @@ const StoragePage = () => {
                         </Typography>
                     </div>
 
-                    <div className="hover:opacity-80 transition-opacity cursor-pointer p-1 rounded-full hover:bg-black/5">
+                    {/* <div className="hover:opacity-80 transition-opacity cursor-pointer p-1 rounded-full hover:bg-black/5">
                         <PersonProfileIcon onClick={() => navigate("/admin/person-profile")} />
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Search Bar */}
@@ -211,7 +220,7 @@ const StoragePage = () => {
                         <div className="flex justify-between items-start mb-6">
                             <div>
                                 <Typography variant="small" className="opacity-80 font-medium mb-1" {...commonProps}>STORAGE USAGE</Typography>
-                                <Typography variant="h3" className="font-bold" {...commonProps}>{usedStorage.toFixed(1)} GB used</Typography>
+                                <Typography variant="h3" className="font-bold" {...commonProps}>{(pools[0].allocated/1024/1024/1024).toFixed(1)} GB used</Typography>
                             </div>
                             <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
                                 <Cloud className="text-white h-6 w-6" />
@@ -221,11 +230,11 @@ const StoragePage = () => {
                         <div className="w-full bg-black/20 rounded-full h-2 mb-2 overflow-hidden">
                             <div
                                 className="bg-white h-2 rounded-full transition-all duration-1000 ease-out"
-                                style={{ width: `${(usedStorage / totalStorage) * 100}%` }}
+                                style={{ width: `${(percentageUsed[0]) * 100}%` }}
                             />
                         </div>
                         <Typography variant="small" className="opacity-80" {...commonProps}>
-                            {Math.round((usedStorage / totalStorage) * 100)}% of {totalStorage}GB total storage used
+                            {Math.round((percentageUsed[0]) * 100)}% of {(pools[0].size/1024/1024/1024).toFixed(1)}GB total storage used
                         </Typography>
                     </div>
                 </motion.div>

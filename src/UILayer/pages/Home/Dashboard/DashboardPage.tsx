@@ -23,6 +23,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import LiquidGlassCard from '../../../components/LiquidGlassCard';
 import ColorGlassCard from '@/UILayer/components/ColorGlassCard';
+import { useTruenasStorageStore } from '@/OrchestraLayer/StateManager/Zustand/truenasStorageStore';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
@@ -31,10 +32,13 @@ const DashboardPage = () => {
     const { devices, fetchDevices } = useTailScaleStore();
     const userFirstName = userStore.information.profiles.firstName || "Guest";
 
+    const truenasStorageStore = useTruenasStorageStore();
     useEffect(() => {
         fetchDevices();
         fetchDnsData();
-    }, [fetchDevices, fetchDnsData]);
+        truenasStorageStore.getPools();
+        truenasStorageStore.setPercentage();
+    }, [fetchDevices, fetchDnsData, truenasStorageStore.getPools, truenasStorageStore.setPercentage]);
 
     // Analytics Calculation for the chart
     const analytics = useMemo(() => {
@@ -76,11 +80,12 @@ const DashboardPage = () => {
         },
         {
             label: "Storage Health",
-            value: "Optimal",
+            value: `${(truenasStorageStore.percentageUsed[0]*100).toFixed(2)}%`,
+            status: `${(truenasStorageStore.pools[0].size/1024/1024/1024).toFixed(2)}GB`,
             icon: <HardDrive size={20} />,
             color: "text-green-600",
             bg: "bg-green-50",
-            trend: "95%"
+            trend: `${truenasStorageStore.pools[0].status}`
         },
         {
             label: "Threats Blocked",
@@ -130,8 +135,13 @@ const DashboardPage = () => {
                             </div>
                             <span className="text-[8px] sm:text-[10px] font-black text-white uppercase tracking-widest">{stat.trend}</span>
                         </div>
-                        <Typography variant="h4" className="text-white font-black text-lg sm:text-2xl" {...commonProps}>{stat.value}</Typography>
+                        <div className="flex items-center justify-between">
+                             <Typography variant="h4" className="text-white font-black text-lg sm:text-2xl" {...commonProps}>{stat.value}</Typography>
+                             <Typography className="text-white text-[9px] sm:text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.status}</Typography>
+                        </div>
+                       
                         <Typography className="text-white text-[9px] sm:text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.label}</Typography>
+                       
                     </GlassCard>
                 ))}
             </div>

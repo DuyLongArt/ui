@@ -48,7 +48,12 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/cloudflare-graphql\/?/, ''),
         secure: true,
-      }
+      },
+      '/api': {
+        target: 'https://truenas.duylong.art',
+        changeOrigin: true,
+        secure: true,
+    }
     }
   }
 })

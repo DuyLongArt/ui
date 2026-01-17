@@ -20,7 +20,7 @@ const CustomDrawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
         playlist,
         setIsPlaying,
         setCurrentSong,
-        playPause
+        // playPause
     } = useMusicStore();
 
     const [openMusicList, setOpenMusicList] = useState(false);

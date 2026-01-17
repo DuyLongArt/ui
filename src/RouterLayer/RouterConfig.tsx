@@ -18,7 +18,7 @@ const IOTPage = lazy(() => import("../UILayer/pages/Home/IOT/IOTPage.tsx"));
 const NotFoundPage = lazy(() => import("../UILayer/pages/Error/NotFoundPage.tsx"));
 const OutletLayout = lazy(() => import("../UILayer/pages/Home/OutletLayout.tsx"));
 const IOTMap = lazy(() => import("../UILayer/pages/Home/IOT/IOTMap.tsx").then(m => ({ default: m.IOTMap })));
-const StoragePage = lazy(() => import("../UILayer/pages/Home/Utilities/StoragePage.tsx").then(m => ({ default: m.StoragePage })));
+const StoragePage = lazy(() => import("../UILayer/pages/Home/Utilities/StoragePage.tsx"));
 const UtilitiesPage = lazy(() => import("../UILayer/pages/Home/Utilities/UtilitiesPage.tsx"));
 const UtilitiesDashboardPage = lazy(() => import("../UILayer/pages/Home/Utilities/UtilitiesDashboardPage.tsx"));
 const PersonalPage = lazy(() => import("../UILayer/pages/Home/Person/PersonalPage.tsx"));
@@ -212,15 +212,15 @@ export const appRoutes: Route[] = [
                 children: [
                     {
                         type:"entry",
-                        path: "",
-                        allowedRoles: ["ADMIN"],
+                        path: "overview",
+                        // allowedRoles: ["ADMIN"],
                         component: <UtilitiesDashboardPage />,
                         title: "Overview",
                     },
                     {
                         type:"component",
                         path: "storage",
-                        allowedRoles: ["ADMIN"],
+                        // allowedRoles: ["ADMIN"],
                         // layout: <HomeLayout />,
                         component: <StoragePage />,
                         title: "Storage",
