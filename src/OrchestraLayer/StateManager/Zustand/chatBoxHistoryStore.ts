@@ -64,6 +64,7 @@ const useChatBoxHistoryStore = create<ChatBoxHistoryStore>((set, get) => ({
                     max_tokens: 1024,
                     top_p: 1,
                     stream: false,
+                    
                 },
                 {
                     headers: {
