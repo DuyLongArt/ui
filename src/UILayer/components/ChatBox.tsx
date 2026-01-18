@@ -29,7 +29,7 @@ const ChatBox: React.FC = () => {
                 Chat Box
             </div>
             <LiquidGlassCard
-                ref={scrollRef}
+                // ref={scrollRef}
                 className="w-100 overflow-y-scroll rounded-none! h-80 bg-in shadow-lg border-b no-scrollbar"
             >
 
