@@ -1,3 +1,4 @@
+import { getEnv } from "@/OrchestraLayer/Utilities/envUtils";
 import axios from "axios";
 import { create } from "zustand";
 
@@ -37,7 +38,7 @@ const useChatBoxHistoryStore = create<ChatBoxHistoryStore>((set, get) => ({
     },
     fetchAnswer: async (question: string) => {
         set({ isTyping: true });
-
+        const apiKey = getEnv('VITE_GROQ_API_KEY');
         // Add the question to history immediately with a placeholder answer
         set((state) => ({
             chatHistory: [...state.chatHistory, {
@@ -66,7 +67,7 @@ const useChatBoxHistoryStore = create<ChatBoxHistoryStore>((set, get) => ({
                 },
                 {
                     headers: {
-                        "Authorization": `Bearer ${window._env_.VITE_GROQ_API_KEY}`,
+                        "Authorization": `Bearer ${apiKey}`,
                         "Content-Type": "application/json"
                     }
                 }
