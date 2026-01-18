@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUserProfileStore } from '../../OrchestraLayer/StateManager/Zustand/userProfileStore';
 
-interface MinIOUploadComponentProps {
+interface MinIOAddProps {
     onUpload: (file: File) => Promise<string> | void;
     progress?: number;
     isUploading?: boolean;
@@ -11,10 +11,9 @@ interface MinIOUploadComponentProps {
     maxSizeInMB?: number;
     nameFromInput?: string;
     mode: string;
-    onHandleClose?: () => void;
 }
 
-const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
+const MinIOAdd: React.FC<MinIOAddProps> = ({
     onUpload,
     progress = 0,
     isUploading = false,
@@ -23,7 +22,6 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
     maxSizeInMB = 30,
     nameFromInput = "",
     mode = "",
-    onHandleClose = () => { },
     // avatarUpdate = false
 }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -90,7 +88,7 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
 
         }
         if (selectedFile) {
-            const newFile = new File([selectedFile], nameFromInput + ".png", { type: selectedFile.type });
+            const newFile = new File([selectedFile], nameFromInput, { type: selectedFile.type });
             const result = onUpload(newFile);
 
 
@@ -205,12 +203,9 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
 
             <div className="mt-4 flex gap-3 justify-end">
                 <button
-                    onClick={() => {
-                        handleClear();
-                        onHandleClose();
-                    }}
+                    onClick={handleClear}
                     disabled={isUploading || !selectedFile}
-                    className="px-4 py-2 text-sm font-medium text-white bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none  focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="px-4 py-2 text-sm font-medium text-white bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                     Cancel
                 </button>
@@ -226,4 +221,4 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
     );
 };
 
-export default MinIOUploadComponent;
+export default MinIOAdd;

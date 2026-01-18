@@ -160,7 +160,7 @@ const PersonProfilePage: React.FC = () => {
                         <div className="relative group cursor-pointer" onClick={() => { setMode('admin'); setIsEditModalOpen(true); }}>
                             <div className="w-[140px] h-[140px] md:w-[180px] md:h-[180px] rounded-full border-4 border-white shadow-2xl overflow-hidden bg-white ring-4 ring-white/50">
                                 <img src={profileBlobUrl} alt="Profile" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:border-indigo-900! group-hover:border flex items-center justify-center transition-opacity duration-300">
                                     <CameraIcon className="w-8 h-8 text-white" />
                                 </div>
                             </div>
@@ -169,7 +169,7 @@ const PersonProfilePage: React.FC = () => {
 
                         {/* Info */}
                         <div className="mt-4 md:mt-0 md:ml-6 flex-1 text-center md:text-left">
-                            <Typography variant="h2" className="text-3xl font-extrabold text-white" {...commonProps}>
+                            <Typography variant="h2" className="text-4xl [text-stroke:1px_indigo] font-bold [-webkit-text-stroke:1px_indigo] text-shadow-lg text-shadow-color-black font-extrabold text-indigo-500" {...commonProps}>
                                 {user.profiles.firstName} {user.profiles.lastName}
                             </Typography>
                             <Typography className="text-white font-medium mb-3" {...commonProps}>
@@ -467,6 +467,7 @@ const PersonProfilePage: React.FC = () => {
                                     progress={state.context.progress}
                                     isUploading={state.matches('uploading')}
                                     error={state.context.error}
+                                    onHandleClose={handleCloseModal}
                                     nameFromInput={nameFromInput}
                                     mode={mode}
                                 />

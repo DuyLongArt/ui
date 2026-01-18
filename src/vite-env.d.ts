@@ -4,6 +4,7 @@ interface ImportMetaEnv {
     readonly VITE_CLOUDFLARE_API_BEAR: string
     readonly VITE_TAILSCALE_USERNAME: string
     readonly VITE_TRUENAS_BEAR: string
+    readonly VITE_GROQ_API_KEY: string
     // more env variables...
 }
 
@@ -16,5 +17,6 @@ interface Window {
         VITE_CLOUDFLARE_API_BEAR: string;
         VITE_TAILSCALE_USERNAME: string;
         VITE_TRUENAS_BEAR: string;
+        VITE_GROQ_API_KEY: string;
     }
 }

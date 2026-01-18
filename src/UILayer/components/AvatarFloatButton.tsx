@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { AvatarImage } from "../../DataLayer/LocalDataLayer/assets/AvatarImage";
 import { useObjectImageEtagStore } from "../../OrchestraLayer/StateManager/Zustand/objectImageStore";
 import { useUserProfileStore } from "../../OrchestraLayer/StateManager/Zustand/userProfileStore";
+import { ChatBox } from "./ChatBox";
+import { Icon, Search } from "lucide-react";
 interface AvatarFloatButtonProps {
     x: number;
     y: number;
@@ -12,12 +14,14 @@ interface AvatarFloatButtonProps {
     collaboratorDistance?: number; // Distance of collaborators from center (default: 60)
 }
 
-const CollaborateIcon: React.FC<{ size: number; collaboratorDistance: number }> = ({
+const CollaborateIcon: React.FC<{ size: number; collaboratorDistance: number, parentAction: (action: string) => void }> = ({
     size,
+    parentAction,
     collaboratorDistance
 }) => {
+    // const [chatBoxOpen, setChatBoxOpen] = useState(false);
     const collaborators = [
-        { color: "bg-red-500", delay: 0 },
+        { color: "bg-red-500", delay: 0, onClick: () => { parentAction("ChatBox") }, icon: "ChatBox" },
         { color: "bg-blue-500", delay: 0.1 },
         { color: "bg-green-500", delay: 0.2 },
         { color: "bg-amber-500", delay: 0.3 },
@@ -42,8 +46,9 @@ const CollaborateIcon: React.FC<{ size: number; collaboratorDistance: number }> 
                 {collaborators.map((collaborator, index) => {
                     const position = positions[index];
                     return (
-                        <motion.div
+                        <motion.button
                             key={index}
+
                             initial={{ x: 0, y: 0, opacity: 0, scale: 0 }}
                             animate={{
                                 x: position.x,
@@ -58,37 +63,38 @@ const CollaborateIcon: React.FC<{ size: number; collaboratorDistance: number }> 
                                 damping: 20,
                                 delay: collaborator.delay,
                             }}
-                            className={`absolute rounded-full ${collaborator.color} border-2 border-white/90 shadow-lg`}
+                            className={`absolute ${collaborator.color} shadow-lg pointer-events-auto active:scale-90 transition-transform`}
                             style={{
+                                zIndex: 100,
+                                width: `${collaboratorSize * 1.6}px`,
+                                height: `${collaboratorSize * 1.6}px`,
+                                left: `calc(50% - ${collaboratorSize}px)`,
+                                top: `calc(50% - ${collaboratorSize}px)`,
+                            }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                collaborator.onClick();
+                            }}
+                        >
+                            {/* <button style={{
                                 width: `${collaboratorSize}px`,
                                 height: `${collaboratorSize}px`,
                                 left: `calc(50% - ${collaboratorSize / 2}px)`,
                                 top: `calc(50% - ${collaboratorSize / 2}px)`,
-                            }}
-                        >
-                            <motion.div
-                                animate={{
-                                    scale: [1, 1.1, 1],
-                                    opacity: [0.8, 1, 0.8]
-                                }}
-                                transition={{
-                                    duration: 2,
-                                    repeat: Infinity,
-                                    delay: collaborator.delay,
-                                }}
-                                className="w-full h-full rounded-full bg-white/20"
-                            />
-
-                            <div className="absolute inset-1 rounded-full bg-white/40 flex items-center justify-center">
-                                <div
-                                    className="rounded-full bg-white/70"
+                            }} className="w-10  h-10 border-4! z-60 border-black! rounded-full! " onClick={() => { alert("click") }} /> */}
+                            <div className="absolute inset-1 rounded-full transparent flex items-center justify-center">
+                                {/* <div
+                                    className="rounded-full "
                                     style={{
-                                        width: `${Math.max(collaboratorSize * 0.3, 8)}px`,
-                                        height: `${Math.max(collaboratorSize * 0.3, 8)}px`,
+                                        width: `${Math.max(collaboratorSize * 0.2, 8)}px`,
+                                        height: `${Math.max(collaboratorSize * 0.2, 8)}px`,
                                     }}
-                                />
+                                /> */}
+                                {/* <Icon data-lucide={collaborator.icon} /> */}
+                                {/* <Icon data-lucide="message-circle" iconNode={["message-circle"]} /> */}
+                                {collaborator.icon === "ChatBox" && <Search />}
                             </div>
-                        </motion.div>
+                        </motion.button>
                     );
                 })}
             </AnimatePresence>
@@ -203,10 +209,10 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
     collaboratorDistance = 60
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-
+    const [chatBoxOpen, setChatBoxOpen] = useState(false);
     const handleToggle = () => {
 
-        
+
 
 
         setIsExpanded(!isExpanded);
@@ -230,122 +236,138 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
     // We don't need to manually fetch blob and create object URL, which causes "reloading" effect.
 
 
-
+    const parentAction = (action: string) => {
+        switch (action) {
+            case "ChatBox":
+                setChatBoxOpen(!chatBoxOpen);
+                setIsExpanded(false);
+                break;
+            default:
+                break;
+        }
+    }
 
     return (
-        <div
-            className="fixed z-50 border-2 border-red-500 rotate-45"
-            style={{
-                bottom: `${x}px`,
-                right: `${y}px`,
-            }}
-        >
-            <div className="relative flex items-center justify-center">
-                {/* Collaboration Icons */}
-                <AnimatePresence>
-                    {isExpanded && (
-                        <CollaborateIcon
-                            size={size}
-                            collaboratorDistance={collaboratorDistance}
-                        />
-                    )}
-
-                </AnimatePresence>
+        <div>
+            {chatBoxOpen && <ChatBox />}
+            <div
+                className="fixed z-50 rotate-45"
+                style={{
+                    bottom: `${x}px`,
+                    right: `${y}px`,
+                }}
+            >
+                <div className="relative flex items-center justify-center">
 
 
-                <StarEffect glowSize1={glowSize1} glowSize2={glowSize2} rotatingBorderSize={rotatingBorderSize} />
-                {/* Main Avatar Button */}
-                <motion.button
-                    onClick={handleToggle}
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="rounded-full flex items-center border-2  justify-center rotate-45 bg-white/95 backdrop-blur-xl border-white/30 shadow-2xl hover:shadow-3xl transition-all duration-300 ease-out hover:bg-white z-10"
-                    style={{
 
-                        width: `${size}px`,
-                        height: `${size}px`,
-                        borderWidth: `${borderWidth}px`,
-                        borderColor: '#4f46e5', // indigo-600
-                        boxShadow: `
+                    <StarEffect glowSize1={glowSize1} glowSize2={glowSize2} rotatingBorderSize={rotatingBorderSize} />
+                    {/* Main Avatar Button */}
+                    <motion.button
+                        onClick={handleToggle}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="rounded-full flex items-center border-2  justify-center rotate-45 bg-white/95 backdrop-blur-xl border-white/30 shadow-2xl hover:shadow-3xl transition-all duration-300 ease-out hover:bg-white z-10"
+                        style={{
+
+                            width: `${size}px`,
+                            height: `${size}px`,
+                            borderWidth: `${borderWidth}px`,
+                            borderColor: '#4f46e5', // indigo-600
+                            boxShadow: `
               0 8px 32px rgba(0, 0, 0, 0.12),
               0 4px 16px rgba(0, 0, 0, 0.08),
               inset 0 1px 0 rgba(255, 255, 255, 0.6)
             `,
-                    }}
-                >
-                    <motion.div
-                        animate={{ rotate: isExpanded ? 360 : 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className=" rounded-full border-2 border-white/20"
-                    // style={{
-                    //     width: "50px",
-                    //     height:"50px",
-                    // }}
+                        }}
                     >
-                        <div
-                            className=" rounded-full rotate-270 block "
+                        <motion.div
+                            animate={{ rotate: isExpanded ? 360 : 0 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className=" rounded-full border-2 border-white/20"
+                        // style={{
+                        //     width: "50px",
+                        //     height:"50px",
+                        // }}
+                        >
+                            <div
+                                className=" rounded-full rotate-270 block "
+                                style={{
+                                    width: `${avatarSize}px`,
+                                    height: `${avatarSize}px`,
+                                }}
+                            >
+
+
+                                <AvatarImage width={avatarSize} height={avatarSize}
+                                    networkUrl={ADMIN_IMAGE_URL}
+                                />
+                            </div>
+                        </motion.div>
+                    </motion.button>
+
+                    {/* Ripple Effect on Click */}
+                    <AnimatePresence>
+                        {isExpanded && (
+                            <RippleEffect size={size + 10} />
+
+                        )}
+                    </AnimatePresence>
+
+                    {/* Status indicator */}
+                    <motion.div
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                        }}
+                        className="absolute bg-green-400 rounded-full border-2 border-white shadow-lg z-20"
+                        style={{
+                            width: `${statusSize}px`,
+                            height: `${statusSize}px`,
+                            top: '-2px',
+                            right: '-2px',
+                        }}
+                    />
+
+                    {/* Notification badge */}
+                    {!isExpanded && (
+                        <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            exit={{ scale: 0 }}
+                            className="absolute bg-red-500 text-white rounded-full flex items-center justify-center font-bold shadow-lg z-30"
                             style={{
-                                width: `${avatarSize}px`,
-                                height: `${avatarSize}px`,
+                                width: `${badgeSize}px`,
+                                height: `${badgeSize}px`,
+                                fontSize: `${Math.max(badgeSize * 0.5, 10)}px`,
+                                top: '-4px',
+                                right: '-4px',
                             }}
                         >
 
-
-                            <AvatarImage width={avatarSize} height={avatarSize}
-                                networkUrl={ADMIN_IMAGE_URL}
-                            />
-                        </div>
-                    </motion.div>
-                </motion.button>
-
-                {/* Ripple Effect on Click */}
-                <AnimatePresence>
-                    {isExpanded && (
-                        <RippleEffect size={size + 10} />
-
+                        </motion.div>
                     )}
-                </AnimatePresence>
 
-                {/* Status indicator */}
-                <motion.div
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                    }}
-                    className="absolute bg-green-400 rounded-full border-2 border-white shadow-lg z-20"
-                    style={{
-                        width: `${statusSize}px`,
-                        height: `${statusSize}px`,
-                        top: '-2px',
-                        right: '-2px',
-                    }}
-                />
+                    {/* Floating particles */}
+                    {isExpanded && (
+                        <FloatingParticle size={size * 1.5} delay={0} />
+                    )}
 
-                {/* Notification badge */}
-                {!isExpanded && (
-                    <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        exit={{ scale: 0 }}
-                        className="absolute bg-red-500 text-white rounded-full flex items-center justify-center font-bold shadow-lg z-30"
-                        style={{
-                            width: `${badgeSize}px`,
-                            height: `${badgeSize}px`,
-                            fontSize: `${Math.max(badgeSize * 0.5, 10)}px`,
-                            top: '-4px',
-                            right: '-4px',
-                        }}
-                    >
-
-                    </motion.div>
-                )}
-
-                {/* Floating particles */}
-                {isExpanded && (
-                    <FloatingParticle size={size * 1.5} delay={0} />
-                )}
+                    {/* Collaboration Icons - Moved here for better stacking */}
+                    <AnimatePresence>
+                        {isExpanded && (
+                            <div className="absolute inset-0 pointer-events-none">
+                                <CollaborateIcon
+                                    size={size}
+                                    parentAction={parentAction}
+                                    collaboratorDistance={collaboratorDistance}
+                                />
+                            </div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </div>
         </div>
     );

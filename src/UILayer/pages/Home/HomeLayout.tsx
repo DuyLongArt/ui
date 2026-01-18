@@ -48,8 +48,8 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
   };
   useEffect(() => {
     useUserProfileStore.getState().fetchFromDatabase();
-
-  }, [state.value]);
+    setPosition({ x: localStorage.getItem('avatar-pos') ? JSON.parse(localStorage.getItem('avatar-pos')!).x : 0, y: localStorage.getItem('avatar-pos') ? JSON.parse(localStorage.getItem('avatar-pos')!).y : 0 });
+  }, [state.value, localStorage.getItem('avatar-pos') ? JSON.parse(localStorage.getItem('avatar-pos')!).x : 0, localStorage.getItem('avatar-pos') ? JSON.parse(localStorage.getItem('avatar-pos')!).y : 0]);
 
   return (
     <div className="flex flex-col h-full h-screen bg-indigo-200 w-full overflow-x-hidden relative">
@@ -90,11 +90,19 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
         position={position}
         onDrag={handleDrag}
         bounds="parent" // Optional: Prevents dragging off-screen
+
+        // nodeRef={nodeRef}
+  defaultPosition={{ x: localStorage.getItem('avatar-pos') ? JSON.parse(localStorage.getItem('avatar-pos')!).x : 0, y: localStorage.getItem('avatar-pos') ? JSON.parse(localStorage.getItem('avatar-pos')!).y : 0 }}
+  onStop={(_e, data) => {
+    localStorage.setItem('avatar-pos', JSON.stringify({ x: data.x, y: data.y }));
+  }}
       >
         <div
           ref={nodeRef}
           className="absolute bottom-4 right-4 md:bottom-10 md:right-10 origin-bottom-right scale-75 md:scale-100 z-1000 cursor-move touch-none"
-
+// nodeRef={nodeRef}
+  // defaultPosition={{ x: savedX, y: savedY }}
+  
         >
           <AvatarFloatButton
             x={0}
@@ -104,6 +112,9 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
           />
         </div>
       </Draggable>
+
+
+
 
     </div>
   );

@@ -229,7 +229,7 @@ const DashboardPage = () => {
                         blobColor="bg-indigo-500/40"
                     >
                         <div className="flex justify-between items-center mb-6">
-                            <Typography variant="h6" className="text-white font-bold" {...commonProps}>Mesh Network</Typography>
+                            <Typography variant="h6" className="text-black/60 font-bold" {...commonProps}>Mesh Host</Typography>
                             <span className="px-2 py-1 bg-green-500/20 text-green-400 text-[9px] font-black rounded border border-green-500/30">STABLE</span>
                         </div>
                         <div className="space-y-4">
