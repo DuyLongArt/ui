@@ -43,7 +43,7 @@ const CollaborateIcon: React.FC<{ size: number; collaboratorDistance: number, pa
         { x: -collaboratorDistance * 0.866, y: -collaboratorDistance * 0.5 },
     ];
 
-    const collaboratorSize = Math.max(size * 0.4, 20); // Min 20px, or 40% of main size
+    const collaboratorSize = Math.max(size * 0.5, 24); // Increased size for better touch (50% of main size, min 24px)
 
     return (
         <div className="absolute inset-0 pointer-events-none">
@@ -73,12 +73,12 @@ const CollaborateIcon: React.FC<{ size: number; collaboratorDistance: number, pa
                                 zIndex: 100,
                                 width: `${collaboratorSize * 1.6}px`,
                                 height: `${collaboratorSize * 1.6}px`,
-                                left: `calc(50% - ${collaboratorSize}px)`,
-                                top: `calc(50% - ${collaboratorSize}px)`,
+                                left: `calc(50% - ${collaboratorSize * 0.8}px)`, // Centering fix: 1.6 / 2 = 0.8
+                                top: `calc(50% - ${collaboratorSize * 0.8}px)`,
                             }}
-                            onClick={(e) => {
+                            onTap={(e) => {
                                 e.stopPropagation();
-                                collaborator.onClick();
+                                collaborator.onClick?.();
                             }}
                         >
                             {/* <button style={{
@@ -210,19 +210,15 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
     const [isExpanded, setIsExpanded] = useState(false);
     const [chatBoxOpen, setChatBoxOpen] = useState(false);
     const handleToggle = () => {
-
         if (currentAction === "ChatBox") {
-            // setCurrentAction("ChatBox");
             setChatBoxOpen(!chatBoxOpen);
             setCurrentAction("");
+            setIsExpanded(false);
+            return;
         }
 
-
-if(!isExpanded && currentAction === ""){
-       setIsExpanded(!isExpanded);
-}
-
-     
+        // Toggle expanded state
+        setIsExpanded(!isExpanded);
     };
     const size = sizeScale * 48;
     // Calculate responsive sizes
@@ -271,7 +267,7 @@ if(!isExpanded && currentAction === ""){
                     <StarEffect glowSize1={glowSize1} glowSize2={glowSize2} rotatingBorderSize={rotatingBorderSize} />
                     {/* Main Avatar Button */}
                     <motion.button
-                        onClick={handleToggle}
+                        onTap={handleToggle}
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                         className="rounded-full flex items-center border-2  justify-center rotate-45 bg-white/95 backdrop-blur-xl border-white/30 shadow-2xl hover:shadow-3xl transition-all duration-300 ease-out hover:bg-white z-10"

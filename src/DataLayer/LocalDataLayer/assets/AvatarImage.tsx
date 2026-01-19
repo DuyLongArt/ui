@@ -37,7 +37,7 @@ export const AvatarImage: React.FC<{ width: number, height: number, networkUrl: 
 
 
   return (
-    <div  style={{ width: `${width * 4}px !important`, height: `${height * 4}px !important`, clipPath: 'circle(50%)' }}>
+    <div style={{ width: `${width}px`, height: `${height}px`, clipPath: 'circle(50%)' }} className="overflow-hidden">
       {/* {!isReady && <div className="bg-gray-200 animate-pulse w-full h-full" />}
       {!isLoaded && (
         <div className="absolute inset-0 bg-gray-300 animate-pulse flex items-center justify-center">
@@ -48,10 +48,10 @@ export const AvatarImage: React.FC<{ width: number, height: number, networkUrl: 
 
       <img
         src={networkUrl}
-      
+
         // 👈 Triggers a re-render when bytes arrive
         // style={{ display: isReady ? 'block' : 'none' }}
-        className="w-full h-full object bg-amber-50"
+        className="w-full h-full object-cover bg-amber-50"
       />
     </div>
   );
