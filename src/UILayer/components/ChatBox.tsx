@@ -27,7 +27,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onClose }) => {
     };
 
     return (
-        <div className="fixed bottom-4 right-2 left-2 sm:left-auto sm:right-4 z-50 flex flex-col items-center sm:items-end">
+        <div className="fixed bottom-10 sm:bottom-4 right-2 left-2 sm:left-auto sm:right-4 z-50 flex flex-col items-center sm:items-end">
             {/* Display Area - Added ref here */}
             {/* <div className="border-b w-110! border-black font-bold bg-indigo-700! text-white! sticky top-0 backdrop-blur-md p-2 z-10">
                 Chat Box
@@ -87,7 +87,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onClose }) => {
                         value={message}
                         onChange={handleInputChange}
                         placeholder="Type a message..."
-                        className="flex-1 p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/40 outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-sm"
+                        className="flex-1 p-4 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/40 outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-base"
                         onKeyDown={(e) => {
                             if (e.key === "Enter" && message.trim()) {
                                 chatBoxHistoryStore.fetchAnswer(message);
