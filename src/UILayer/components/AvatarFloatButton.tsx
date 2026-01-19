@@ -252,7 +252,7 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
 
     return (
         <div>
-            {chatBoxOpen && <ChatBox />}
+            {chatBoxOpen && <ChatBox onClose={() => { setChatBoxOpen(false); setCurrentAction(""); }} />}
             <div
                 className="fixed z-50 rotate-0"
                 style={{

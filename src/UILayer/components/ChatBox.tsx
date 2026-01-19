@@ -4,7 +4,11 @@ import LiquidGlassCard from "./LiquidGlassCard";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-const ChatBox: React.FC = () => {
+interface ChatBoxProps {
+    onClose?: () => void;
+}
+
+const ChatBox: React.FC<ChatBoxProps> = ({ onClose }) => {
     const [message, setMessage] = useState("");
     const chatBoxHistoryStore = useChatBoxHistoryStore();
 
@@ -23,15 +27,35 @@ const ChatBox: React.FC = () => {
     };
 
     return (
-        <div className="fixed bottom-4 right-4 z-50">
+        <div className="fixed bottom-4 right-2 left-2 sm:left-auto sm:right-4 z-50 flex flex-col items-center sm:items-end">
             {/* Display Area - Added ref here */}
             {/* <div className="border-b w-110! border-black font-bold bg-indigo-700! text-white! sticky top-0 backdrop-blur-md p-2 z-10">
                 Chat Box
             </div> */}
             <div
-                // ref={scrollRef}
-                className="w-110! overflow-y-scroll rounded-md bg-indigo-700/30 backdrop-blur-sm  border-none!  h-75 shadow-lg  no-scrollbar"
+                ref={scrollRef}
+                className="w-full sm:w-110 overflow-y-scroll rounded-t-xl bg-white/10 backdrop-blur-md border border-white/20 h-[50vh] sm:h-75 shadow-2xl no-scrollbar flex flex-col"
             >
+                <div className="sticky top-0 z-20 bg-indigo-700/80 backdrop-blur-md p-3 flex justify-between items-center text-white border-b border-white/10">
+                    <div className="flex items-center gap-2 font-bold">
+                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                        AI Assistant
+                    </div>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => onClose?.()}
+                            className="text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded transition-colors sm:hidden"
+                        >
+                            Close
+                        </button>
+                        <button
+                            onClick={() => chatBoxHistoryStore.clearChat()}
+                            className="text-xs bg-white/20 hover:bg-white/30 px-2 py-1 rounded transition-colors"
+                        >
+                            Clear
+                        </button>
+                    </div>
+                </div>
 
                 <div className="p-2 text-sm text-gray-800">
                     {[...chatBoxHistoryStore.chatHistory].reverse().map((chat) => (
@@ -56,20 +80,33 @@ const ChatBox: React.FC = () => {
             </div>
 
             {/* Input Area */}
-            <div className="w-110! bg-indigo-950 rounded-b-lg shadow-lg p-2">
-                <input
-                    type="text"
-                    value={message}
-                    onChange={handleInputChange}
-                    placeholder="Type a message..."
-                    className="w-full p-2  bg-white text-black outline-none"
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" && message.trim()) {
-                            chatBoxHistoryStore.fetchAnswer(message);
-                            setMessage("");
-                        }
-                    }}
-                />
+            <div className="w-full sm:w-110 bg-indigo-950/90 backdrop-blur-lg rounded-b-xl shadow-2xl p-3 border border-t-0 border-white/10">
+                <div className="relative flex items-center gap-2">
+                    <input
+                        type="text"
+                        value={message}
+                        onChange={handleInputChange}
+                        placeholder="Type a message..."
+                        className="flex-1 p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder:text-white/40 outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-sm"
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" && message.trim()) {
+                                chatBoxHistoryStore.fetchAnswer(message);
+                                setMessage("");
+                            }
+                        }}
+                    />
+                    <button
+                        onClick={() => {
+                            if (message.trim()) {
+                                chatBoxHistoryStore.fetchAnswer(message);
+                                setMessage("");
+                            }
+                        }}
+                        className="bg-indigo-600 hover:bg-indigo-500 text-white p-2.5 rounded-lg transition-colors shadow-lg"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m22 2-7 20-4-9-9-4Z" /><path d="M22 2 11 13" /></svg>
+                    </button>
+                </div>
             </div>
 
             <style>{`
