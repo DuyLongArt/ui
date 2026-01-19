@@ -143,7 +143,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
   return (
     <div className="w-full phone:border-2 phone:border-red-700   sticky top-0 z-100  py-1 ">
       {/* Custom Appbar Body - Replacing restrictive library Navbar */}
-      <div className="h-max    md:px-2 lg:px-4 sm:px-4 sm:w-full max-[600px]:w-screen! md:w-full lg:w-full   py-2 rounded-xl phone:border-2 phone:border-red-700 sm:rounded-2xl bg-indigo-600/60 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300 ">
+      <div className="h-max    md:px-2 lg:px-4 sm:px-4 sm:w-full max-[600px]:w-screen! md:w-full lg:w-full px-1  py-2 md:rounded-xl lg:rounded-xl phone:border-2 phone:border-red-700 sm:rounded-2xl bg-indigo-600/60 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300 ">
 
         <div className="flex items-center justify-between w-full h-10 sm:h-12 flex-nowrap gap-1">
 
