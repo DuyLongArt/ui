@@ -369,7 +369,7 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
                         {isExpanded && (
                             <div className="absolute inset-0 pointer-events-none">
                                 <CollaborateIcon
-                                    size={size}
+                                    size={sizeScale}
                                     parentAction={parentAction}
                                     collaboratorDistance={collaboratorDistance}
                                 />
