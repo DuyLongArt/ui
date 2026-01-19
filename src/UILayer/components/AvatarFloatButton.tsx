@@ -8,7 +8,7 @@ import { useUserProfileStore } from "../../OrchestraLayer/StateManager/Zustand/u
 import { ChatBox } from "./ChatBox";
 import { AirplayIcon, Icon, Search } from "lucide-react";
 const ChatGPTIcon: React.FC = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linejoin="round" d="M18.38 27.94v-14.4l11.19-6.46c6.2-3.58 17.3 5.25 12.64 13.33" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linejoin="round" d="m18.38 20.94l12.47-7.2l11.19 6.46c6.2 3.58 4.1 17.61-5.23 17.61" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linejoin="round" d="m24.44 17.44l12.47 7.2v12.93c0 7.16-13.2 12.36-17.86 4.28" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linejoin="round" d="M30.5 21.2v14.14L19.31 41.8c-6.2 3.58-17.3-5.25-12.64-13.33" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linejoin="round" d="m30.5 27.94l-12.47 7.2l-11.19-6.46c-6.21-3.59-4.11-17.61 5.22-17.61" stroke-width="1"/><path fill="none" stroke="currentColor" stroke-linejoin="round" d="m24.44 31.44l-12.47-7.2V11.31c0-7.16 13.2-12.36 17.86-4.28" stroke-width="1"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48"><path fill="none" stroke="currentColor" stroke-linejoin="round" d="M18.38 27.94v-14.4l11.19-6.46c6.2-3.58 17.3 5.25 12.64 13.33" stroke-width="1" /><path fill="none" stroke="currentColor" stroke-linejoin="round" d="m18.38 20.94l12.47-7.2l11.19 6.46c6.2 3.58 4.1 17.61-5.23 17.61" stroke-width="1" /><path fill="none" stroke="currentColor" stroke-linejoin="round" d="m24.44 17.44l12.47 7.2v12.93c0 7.16-13.2 12.36-17.86 4.28" stroke-width="1" /><path fill="none" stroke="currentColor" stroke-linejoin="round" d="M30.5 21.2v14.14L19.31 41.8c-6.2 3.58-17.3-5.25-12.64-13.33" stroke-width="1" /><path fill="none" stroke="currentColor" stroke-linejoin="round" d="m30.5 27.94l-12.47 7.2l-11.19-6.46c-6.21-3.59-4.11-17.61 5.22-17.61" stroke-width="1" /><path fill="none" stroke="currentColor" stroke-linejoin="round" d="m24.44 31.44l-12.47-7.2V11.31c0-7.16 13.2-12.36 17.86-4.28" stroke-width="1" /></svg>
     // <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.612 4.42a2.1 2.1 0 0 0-2.018-1.512h-.614a2.106 2.106 0 0 0-2.072 1.725l-1.053 5.736l.262-.894a2.105 2.105 0 0 1 2.018-1.516h3.57l1.499.582l1.445-.582h-.423a2.1 2.1 0 0 1-2.018-1.512zM7.605 19.576a2.105 2.105 0 0 0 2.023 1.52h1.307a2.1 2.1 0 0 0 2.103-2.05l.142-5.53l-.298 1.013a2.1 2.1 0 0 1-2.018 1.512H7.262l-1.284-.698l-1.392.698h.413c.939 0 1.761.618 2.023 1.52z" /><path fill="currentColor" d="M14.505 2.903H7.214c-2.086 0-3.335 2.752-4.166 5.509c-.992 3.263-2.286 7.63 1.453 7.63H7.65a2.11 2.11 0 0 0 2.028-1.526a884 884 0 0 1 2.263-7.802c.382-1.294.702-2.401 1.191-3.095a1.63 1.63 0 0 1 1.374-.716" /><path fill="currentColor" d="M14.505 2.903H7.214c-2.086 0-3.335 2.752-4.166 5.509c-.992 3.263-2.286 7.63 1.453 7.63H7.65a2.11 2.11 0 0 0 2.028-1.526a884 884 0 0 1 2.263-7.802c.382-1.294.702-2.401 1.191-3.095a1.63 1.63 0 0 1 1.374-.716M9.499 21.097h7.292c2.085 0 3.334-2.757 4.165-5.509c.988-3.263 2.281-7.629-1.458-7.629H16.35c-.942 0-1.77.622-2.027 1.53a843 843 0 0 1-2.263 7.802c-.382 1.294-.703 2.406-1.192 3.095a1.62 1.62 0 0 1-1.369.711" /><path fill="currentColor" d="M9.499 21.097h7.292c2.085 0 3.334-2.757 4.165-5.509c.988-3.263 2.281-7.629-1.458-7.629H16.35c-.942 0-1.77.622-2.027 1.53a843 843 0 0 1-2.263 7.802c-.382 1.294-.703 2.406-1.192 3.095a1.62 1.62 0 0 1-1.369.711" /></svg>
 );
 
@@ -205,14 +205,24 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
     sizeScale = 1,
     collaboratorDistance = 60
 }) => {
+
+    const [currentAction, setCurrentAction] = useState("");
     const [isExpanded, setIsExpanded] = useState(false);
     const [chatBoxOpen, setChatBoxOpen] = useState(false);
     const handleToggle = () => {
 
+        if (currentAction === "ChatBox") {
+            // setCurrentAction("ChatBox");
+            setChatBoxOpen(!chatBoxOpen);
+            setCurrentAction("");
+        }
 
 
+if(!isExpanded && currentAction === ""){
+       setIsExpanded(!isExpanded);
+}
 
-        setIsExpanded(!isExpanded);
+     
     };
     const size = sizeScale * 48;
     // Calculate responsive sizes
@@ -232,10 +242,10 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
     // URL is stable (until version changes), so let the browser handle caching naturally.
     // We don't need to manually fetch blob and create object URL, which causes "reloading" effect.
 
-
     const parentAction = (action: string) => {
         switch (action) {
             case "ChatBox":
+                setCurrentAction("ChatBox");
                 setChatBoxOpen(!chatBoxOpen);
                 setIsExpanded(false);
                 break;
@@ -248,7 +258,7 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
         <div>
             {chatBoxOpen && <ChatBox />}
             <div
-                className="fixed z-50 rotate-45"
+                className="fixed z-50 rotate-0"
                 style={{
                     bottom: `${x}px`,
                     right: `${y}px`,
@@ -288,7 +298,7 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
                         // }}
                         >
                             <div
-                                className=" rounded-full rotate-270 block "
+                                className=" rounded-full  rotate-270 block "
                                 style={{
                                     width: `${avatarSize}px`,
                                     height: `${avatarSize}px`,
@@ -299,6 +309,12 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
                                 <AvatarImage width={avatarSize} height={avatarSize}
                                     networkUrl={ADMIN_IMAGE_URL}
                                 />
+                                {chatBoxOpen && (
+                                    <div className="absolute -bottom-1  -right-1 bg-indigo-600 rounded-full p-0.5 shadow-sm">
+                                        <ChatGPTIcon />
+                                    </div>
+                                )}
+
                             </div>
                         </motion.div>
                     </motion.button>

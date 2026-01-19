@@ -67,7 +67,7 @@ const PersonProfilePage: React.FC = () => {
 
     useEffect(() => {
         useUserProfileStore.getState().fetchFromDatabase();
-      
+
         if (state.matches('success')) {
             if (mode === 'admin') {
                 imageObjectStore.incrementAvatarVersion();
@@ -158,7 +158,7 @@ const PersonProfilePage: React.FC = () => {
                     <div className="flex flex-col md:flex-row items-end -mt-[70px] mb-6">
                         {/* Avatar */}
                         <div className="relative group cursor-pointer" onClick={() => { setMode('admin'); setIsEditModalOpen(true); }}>
-                            <div className="w-[140px] h-[140px] md:w-[180px] md:h-[180px] rounded-full border-4 border-white shadow-2xl overflow-hidden bg-white ring-4 ring-white/50">
+                            <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] rounded-full border-4 border-white shadow-2xl overflow-hidden bg-white ring-4 ring-white/50">
                                 <img src={profileBlobUrl} alt="Profile" className="w-full h-full object-cover" />
                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:border-indigo-900! group-hover:border flex items-center justify-center transition-opacity duration-300">
                                     <CameraIcon className="w-8 h-8 text-white" />
@@ -169,10 +169,10 @@ const PersonProfilePage: React.FC = () => {
 
                         {/* Info */}
                         <div className="mt-4 md:mt-0 md:ml-6 flex-1 text-center md:text-left">
-                            <Typography variant="h2" className="text-4xl [text-stroke:1px_indigo] font-bold [-webkit-text-stroke:1px_indigo] text-shadow-lg text-shadow-color-black font-extrabold text-indigo-500" {...commonProps}>
+                            <Typography variant="h2" className="text-4xl [text-stroke:1px_indigo]   [-webkit-text-stroke:1px_indigo] text-shadow-lg text-shadow-color-black font-extrabold text-indigo-500" {...commonProps}>
                                 {user.profiles.firstName} {user.profiles.lastName}
                             </Typography>
-                            <Typography className="text-white font-medium mb-3" {...commonProps}>
+                            <Typography className="text-black font-medium mb-3" {...commonProps}>
                                 {user.profiles.friends.toLocaleString()} friends • {user.profiles.mutual} mutual
                             </Typography>
                             {/* {}USER ROLE */}

@@ -159,7 +159,7 @@ const DashboardPage = () => {
                                     <Cloud size={20} />
                                 </div>
                                 <div>
-                                    <Typography variant="h5" className="text-white font-bold" {...commonProps}>DNS Traffic Analytics</Typography>
+                                    <Typography variant="h5" className="text-white font-bold" {...commonProps}>DNS Traffic in 7 days</Typography>
                                     <Typography className="text-white text-xs font-bold" {...commonProps}>Zone: duylong.art</Typography>
                                 </div>
                             </div>

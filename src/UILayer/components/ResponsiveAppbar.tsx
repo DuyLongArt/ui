@@ -143,15 +143,15 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
   return (
     <div className="w-full phone:border-2 phone:border-red-700   sticky top-0 z-100  py-1 ">
       {/* Custom Appbar Body - Replacing restrictive library Navbar */}
-      <div className="h-max  md:px-2 lg:px-4 sm:px-4 sm:w-full max-[600px]:w-screen! md:w-full lg:w-full   py-2 rounded-xl phone:border-2 phone:border-red-700 sm:rounded-2xl bg-indigo-600/95 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300 ">
+      <div className="h-max    md:px-2 lg:px-4 sm:px-4 sm:w-full max-[600px]:w-screen! md:w-full lg:w-full   py-2 rounded-xl phone:border-2 phone:border-red-700 sm:rounded-2xl bg-indigo-600/60 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300 ">
 
         <div className="flex items-center justify-between w-full h-10 sm:h-12 flex-nowrap gap-1">
 
           {/* Logo Section */}
-          <div className="flex items-center shrink min-w-0 lg:pr-2 md:pr-2 phone:pr-1">
+          <div className="flex items-center shrink min-w-0 floating-text lg:pr-2 md:pr-2 phone:pr-1">
             <p
               onClick={() => navigate("/home/index")}
-              className="cursor-pointer font-bold text-shadow-great text-sm xs:text-base sm:text-2xl text-white hover:text-indigo-200 transition-all truncate"
+              className="cursor-pointer font-bold text-shadow-lg text-md text-stroke items-center mt-1 xs:text-base sm:text-2xl hover:text-[#291067] text-border md:text-2xl lg:text-2xl text-indigo-200 transition-all truncate"
               style={{ fontFamily: 'serif' }}
             >
               ICE SITE
@@ -159,7 +159,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden max-[1020px]:hidden! md:flex border-1 border-white/10 bg-indigo-500/60 rounded-2xl items-center ml-auto">
+          <div className="hidden max-[1020px]:hidden! md:flex border border-white/10 bg-indigo-500/60 rounded-2xl items-center ml-auto">
             <NavList />
           </div>
 
@@ -192,7 +192,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
 
 
 
-                   <button onClick={togglePlay} className="p-1   min-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
+                  <button onClick={togglePlay} className="p-1   min-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
                     {isPlaying ? <Pause size={10} fill="currentColor" /> : <Play size={10} fill="currentColor" />}
                   </button>
                   <button
@@ -205,7 +205,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
               </div>
             </div>
           )}
-          
+
 
           {/* Action Section (Profile and Hamburger) */}
           <div className="flex items-center gap-0.5  ml-auto">
@@ -232,7 +232,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
             <NavList mobile />
 
             {/* Mobile Mini Player - Restored to previous UI */}
-          
+
           </div>
         </div>
       </div>
