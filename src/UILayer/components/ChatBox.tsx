@@ -6,20 +6,31 @@ import remarkGfm from "remark-gfm";
 
 interface ChatBoxProps {
     onClose?: () => void;
-    anchorPosition?: { x: number; y: number };
+    // anchorPosition removed as user reverted the prop passing in AvatarFloatButton
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({ onClose, anchorPosition }) => {
+const ChatBox: React.FC<ChatBoxProps> = ({ onClose }) => {
     const [message, setMessage] = useState("");
     const chatBoxHistoryStore = useChatBoxHistoryStore();
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [chatBoxHistoryStore.chatHistory]);
+
+    // Check for mobile device on mount and resize
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.matchMedia("(max-width: 768px)").matches || "ontouchstart" in window);
+        };
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
 
     // Auto-focus on mount
     useEffect(() => {
@@ -32,17 +43,20 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onClose, anchorPosition }) => {
         setMessage(e.target.value);
     };
 
-    return (
-        <div className="fixed bottom-10 sm:bottom-4  md:right-2 md:left-2 sm:left-auto sm:right-4 flex flex-col items-center sm:items-end">
-            {/* Display Area - Added ref here */}
-            {/* <div className="border-b w-110! border-black font-bold bg-indigo-700! text-white! sticky top-0 backdrop-blur-md p-2 z-10">
-                Chat Box
-            </div> */}
+    const content = (
+        <div
+            className={`fixed flex flex-col items-center sm:items-end 
+                ${isMobile ? "bottom-0 left-0 right-0 w-full z-[999999] pointer-events-auto h-[100dvh]" : "bottom-10 right-4 sm:bottom-4 md:right-2 md:left-2 sm:left-auto sm:right-4 z-50"} 
+            `}
+        >
+            {/* Unified Card Container - Mobile: Full Screen-ish, Desktop: Card */}
             <div
                 ref={scrollRef}
-                className="w-full md:w-110 overflow-y-scroll rounded-t-xl bg-white/10 backdrop-blur-md border border-white/20 md:h-[450px] h-[350px] sm:h-75 shadow-2xl no-scrollbar flex flex-col"
+                className={`flex flex-col overflow-hidden shadow-2xl backdrop-blur-xl bg-white/10 border border-white/20 
+                    ${isMobile ? "w-full h-full rounded-none" : "w-full md:w-110 rounded-xl md:h-[500px] h-[350px] sm:h-75 shadow-2xl"}
+                `}
             >
-                <div className="sticky top-0 z-20 bg-indigo-700/80 backdrop-blur-md p-1 flex justify-between items-center text-white border-b border-white/10">
+                <div className="sticky top-0 z-20 bg-indigo-700/80 backdrop-blur-md p-3 flex justify-between items-center text-white border-b border-white/10 shrink-0">
                     <div className="flex items-center gap-2 font-bold">
                         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                         AI Assistant
@@ -58,10 +72,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onClose, anchorPosition }) => {
                     </div>
                 </div>
 
-                {/* Messages Area - Glassy & Light */}
+                {/* Messages Area */}
                 <div
-                    ref={scrollRef}
-                    className="md:h-[550px]  h-[250px] sm:h-80 overflow-y-scroll p-4 space-y-4 bg-indigo-50/30 no-scrollbar"
+                    className={`flex-1 overflow-y-scroll p-4 space-y-4 bg-indigo-50/30 no-scrollbar ${isMobile ? 'pointer-events-auto' : ''}`}
                 >
                     {chatBoxHistoryStore.chatHistory.map((chat) => (
                         <div className="flex flex-col gap-2" key={chat.index}>
@@ -92,7 +105,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onClose, anchorPosition }) => {
                     )}
                 </div>
 
-                {/* Input Area - Dark & Contrast */}
+                {/* Input Area */}
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -100,10 +113,15 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onClose, anchorPosition }) => {
                             chatBoxHistoryStore.fetchAnswer(message);
                             setMessage("");
                             // Re-focus input after sending for rapid fire chatting
-                            setTimeout(() => inputRef.current?.focus(), 10);
+                            if (!isMobile) {
+                                setTimeout(() => inputRef.current?.focus(), 10);
+                            } else {
+                                // On mobile, maybe don't aggressive refocus if keyboard dismisses, but we'll keep it for now
+                                setTimeout(() => inputRef.current?.focus(), 10);
+                            }
                         }
                     }}
-                    className="bg-[#2e2e48] p-3 border-t border-indigo-900/10"
+                    className={`bg-[#2e2e48] p-3 border-t border-indigo-900/10 shrink-0 ${isMobile ? 'pb-8 pointer-events-auto' : ''}`} // Add padding bottom for mobile home bar
                 >
                     <div className="flex items-center gap-2 bg-[#3e3e5e] rounded-xl p-1 pr-1.5 border border-white/5 focus-within:ring-2 focus-within:ring-indigo-500/50 transition-all">
                         <input
@@ -139,7 +157,13 @@ const ChatBox: React.FC<ChatBoxProps> = ({ onClose, anchorPosition }) => {
         </div>
     );
 
+    // Apply Portal ONLY on Mobile (width < 768px or touch device)
+    if (isMobile) {
+        return createPortal(content, document.body);
+    }
 
+    // On Desktop, render normally (inline) to preserve existing behavior
+    return content;
 };
 
 export { ChatBox };
