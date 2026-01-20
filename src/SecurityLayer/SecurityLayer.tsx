@@ -41,7 +41,7 @@ const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
   // Reset navigation flag when location changes (user navigates manually)
   useEffect(() => {
     hasNavigated.current = false;
-    userAccountStore.getUserRole();
+    // userAccountStore.getUserRole();
   }, [location.pathname]);
 
   // Safe navigation helper with deduplication
@@ -99,7 +99,7 @@ const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
             return;
           }
         }
-      
+
         // Handle authenticated state
         if (currentStateValue === AUTHENTICATED_STATE) {
           if (isPublicPage) {

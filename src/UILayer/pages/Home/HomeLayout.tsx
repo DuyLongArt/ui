@@ -11,16 +11,18 @@ import AvatarFloatButton from '../../components/AvatarFloatButton.tsx';
 import Draggable from 'react-draggable';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import { usePersonInformationQuery, useInformationDetailsQuery, useUserAccountQuery, useUserSkillsQuery } from '../../../DataLayer/APILayer/userQueries';
-import { useTruenasPoolsQuery, useTailscaleDevicesQuery } from '../../../DataLayer/APILayer/infrastructureQueries';
+import { useTruenasPoolsQuery, useTailscaleDevicesQuery, useCloudflareDnsDataQuery } from '../../../DataLayer/APILayer/infrastructureQueries';
 import { useUserAccountStore, useUserProfileStore, useUserSkillStore } from '../../../OrchestraLayer/StateManager/Zustand/userProfileStore.ts';
 import { useTruenasStorageStore } from '../../../OrchestraLayer/StateManager/Zustand/truenasStorageStore';
 import { useTailScaleStore } from '../../../OrchestraLayer/StateManager/Zustand/tailscaleStore';
 import MainButton from '../../components/MainButton.tsx';
+import { useCloudflareStore } from '@/OrchestraLayer/StateManager/Zustand/cloudFlareStore.ts';
 
 const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
   const [state, send] = useMachine(orchestraButton);
 
   const userStore = useUserAccountStore();
+  const cloudflareStore = useCloudflareStore();
   const nodeRef = useRef<HTMLDivElement>(null);
 
   // TanStack Query: Fetch Data
@@ -31,7 +33,13 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
 
   const { data: poolsInfo } = useTruenasPoolsQuery();
   const { data: devicesInfo } = useTailscaleDevicesQuery();
+  const { data: dnsData } = useCloudflareDnsDataQuery();  
 
+  useEffect(() => {
+    if (dnsData) {
+      cloudflareStore.setDnsData(dnsData);
+    }
+  }, [dnsData]);
   // Sync Person Information to Zustand
   useEffect(() => {
     if (personInfo) {
@@ -111,7 +119,7 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
   // Sync Tailscale Devices to Zustand
   useEffect(() => {
     if (devicesInfo) {
-      useTailScaleStore.setState({ devices: devicesInfo, isLoading: false, error: null });
+      useTailScaleStore.setState({ devices: devicesInfo, });
     }
   }, [devicesInfo]);
 

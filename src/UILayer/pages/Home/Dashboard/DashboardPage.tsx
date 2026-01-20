@@ -24,21 +24,28 @@ import { useNavigate } from 'react-router-dom';
 import LiquidGlassCard from '../../../components/LiquidGlassCard';
 import ColorGlassCard from '@/UILayer/components/ColorGlassCard';
 import { useTruenasStorageStore } from '@/OrchestraLayer/StateManager/Zustand/truenasStorageStore';
+import { useCloudflareDnsDataQuery } from '@/DataLayer/APILayer/infrastructureQueries';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
     const userStore = useUserProfileStore();
-    const { dnsData, fetchDnsData } = useCloudflareStore();
-    const { devices, fetchDevices } = useTailScaleStore();
+    const { dnsData,fetchDnsData} = useCloudflareStore();
+    const { devices, } = useTailScaleStore();
     const userFirstName = userStore.information.profiles.firstName || "Guest";
 
     const truenasStorageStore = useTruenasStorageStore();
+    // const { data: dnsDataQuery } = useCloudflareDnsDataQuery();  
+    
+    //   useEffect(() => {
+    //     if (dnsDataQuery) {
+    //       useCloudflareStore.setState({ dnsData: dnsDataQuery });
+    //     }
+    //   }, [dnsData]);
     useEffect(() => {
-        fetchDevices();
-        fetchDnsData();
-        truenasStorageStore.getPools();
+        // fetchDnsData();
+        // truenasStorageStore.getPools();
         truenasStorageStore.setPercentage();
-    }, [fetchDevices, fetchDnsData, truenasStorageStore.getPools, truenasStorageStore.pools]);
+    }, [truenasStorageStore.pools]);
 
     // Analytics Calculation for the chart
     const analytics = useMemo(() => {
@@ -112,7 +119,7 @@ const DashboardPage = () => {
             {/* Header Greeting */}
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-1 sm:gap-4">
                 <div>
-                    <Typography variant="h2" className="text-black font-bold tracking-tight text-xl sm:text-3xl md:text-4xl" {...commonProps}>
+                    <Typography variant="h3" className="text-black font-bold tracking-tight text-xl sm:text-3xl md:text-4xl" {...commonProps}>
                         Welcome back, {userFirstName}! 👋
                     </Typography>
                     <Typography className="text-black text-xs sm:text-base font-medium" {...commonProps}>

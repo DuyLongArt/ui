@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { getEnv } from '../../OrchestraLayer/Utilities/envUtils';
+import type { DNSGroup } from '@/OrchestraLayer/StateManager/Zustand/cloudFlareStore';
 
 // --- TrueNAS Types ---
 export interface PoolProps {
@@ -67,7 +68,55 @@ const fetchTailscaleDevices = async () => {
     });
     return data.devices;
 };
+const fetchDnsData = async () => {
+    try {
+        const today = new Date();
+        const dateLeq = today.toISOString().split('T')[0];
+        // Subtract 6 days to get exactly 7 days of data including today (e.g., 10th to 16th)
+        const dateGeq = new Date(today.getTime() - (6 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0];
 
+        const query = `{
+                viewer {
+                    zones(filter: { zoneTag: "e37d2be8f168aa87d1e04b0f1e39f583" }) {
+                        dnsAnalyticsAdaptiveGroups(
+                            limit: 1000
+                            filter: { 
+                            date_geq: "${dateGeq}", 
+                                date_leq: "${dateLeq}" 
+                            }
+                            orderBy: [date_ASC]
+                        ) {
+                            count
+                            dimensions {
+                                date
+                                queryName
+                                queryType
+                            }
+                        }
+                    }
+                }
+            }`;
+
+        const apiKey = getEnv('VITE_CLOUDFLARE_API_BEAR');
+
+        const response = await axios.post("/cloudflare-graphql/",
+            { query },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                }
+            }
+        );
+        const data = response.data?.data?.viewer?.zones?.[0]?.dnsAnalyticsAdaptiveGroups;
+
+        return (data as DNSGroup[]) || [];
+
+    } catch (error) {
+        console.error("❌ Cloudflare Fetch Error:", error);
+        throw error;
+    }
+}
 // --- Hooks ---
 
 export const useTruenasPoolsQuery = () => {
@@ -89,3 +138,11 @@ export const useTailscaleDevicesQuery = () => {
         staleTime: 1000 * 60,
     });
 };
+export const useCloudflareDnsDataQuery = () => {
+    return useQuery({
+        queryKey: ['cloudflare', 'dns-data'],
+        queryFn: fetchDnsData,
+        refetchInterval: 60000,
+        staleTime: 1000 * 60,
+    })
+}

@@ -42,7 +42,7 @@ const PersonalPage = () => {
   const user = userStore.information;
   const userAccountStore = useUserAccountStore();
   useEffect(() => {
-    userAccountStore.getUserRole();
+    // userAccountStore.getUserRole();
   }, []);
 
   const stats = [

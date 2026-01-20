@@ -66,7 +66,7 @@ const PersonProfilePage: React.FC = () => {
     ];
 
     useEffect(() => {
-        useUserProfileStore.getState().fetchFromDatabase();
+        // useUserProfileStore.getState().fetchFromDatabase();
 
         if (state.matches('success')) {
             if (mode === 'admin') {
