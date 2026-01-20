@@ -183,7 +183,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
 
 
 
-                <div className="flex items-center  min-[350px]:gap-0 max-[350px]:gap-2 max-[350px]:ml-2">
+                <div className="flex items-center  max-[350px]:gap-1 min-[350px]:gap-2 min-[350px]:ml-2">
 
 
 
@@ -242,7 +242,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
           </div>
         </div>
         {/* Mobile Menu */}
-        <div className={` w-full   overflow-hidden transition-all duration-500 ease-in-out ${openNav ? 'max-h-[600px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+        <div className={` w-full    overflow-hidden transition-all duration-500 ease-in-out ${openNav ? 'max-h-[600px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
           <div className="w-full pb-4 px-1">
             <NavList mobile />
 
