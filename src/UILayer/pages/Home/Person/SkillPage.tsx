@@ -28,9 +28,7 @@ const categoryColor = {
 const SkillPage = () => {
     const useSkillStore = useUserSkillStore();
 
-    useEffect(() => {
-        useSkillStore.getUserSkill();
-    }, [])
+
     var skills = useSkillStore.value;
     console.log("Skills: ", skills);
     return (
@@ -55,23 +53,23 @@ const SkillPage = () => {
                         >
                             <div className={`mb-4 border-2 border-${categoryColor[skill.category]} shadow-sm  rounded-xl w-full  p-6 h-full`}>
 
-                            
-                            <div className={`mb-4 inline-block p-3 rounded-xl bg-${categoryColor[skill.category]} shadow-sm group-hover:scale-110 transition-transform `}>
-                                {skillIcons[skill.name]}
-                            </div>
-                            <Typography
-                                variant="h5"
-                                className="font-bold text-white mb-2"
-                                placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}
-                            >
-                                {skill.name}
-                            </Typography>
-                            <Typography
-                                className="text-white leading-relaxed text-sm"
-                                placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}
-                            >
-                                {skill.description}
-                            </Typography>
+
+                                <div className={`mb-4 inline-block p-3 rounded-xl bg-${categoryColor[skill.category]} shadow-sm group-hover:scale-110 transition-transform `}>
+                                    {skillIcons[skill.name]}
+                                </div>
+                                <Typography
+                                    variant="h5"
+                                    className="font-bold text-white mb-2"
+                                    placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}
+                                >
+                                    {skill.name}
+                                </Typography>
+                                <Typography
+                                    className="text-white leading-relaxed text-sm"
+                                    placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}
+                                >
+                                    {skill.description}
+                                </Typography>
                             </div>
                         </GlassCard>
                     ))}

@@ -62,9 +62,9 @@ const StoragePage = () => {
     const [files, setFiles] = useState<FileUpload[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const { pools, percentageUsed, getPools, setPercentage } = useTruenasStorageStore();
+    const { pools, percentageUsed, setPercentage } = useTruenasStorageStore();
     useEffect(() => {
-        getPools();
+        // getPools();
         setPercentage();
     }, []);
     console.log("+===============")
@@ -220,7 +220,7 @@ const StoragePage = () => {
                         <div className="flex justify-between items-start mb-6">
                             <div>
                                 <Typography variant="small" className="opacity-80 font-medium mb-1" {...commonProps}>STORAGE USAGE</Typography>
-                                <Typography variant="h3" className="font-bold" {...commonProps}>{(pools[0].allocated/1024/1024/1024).toFixed(1)} GB used</Typography>
+                                <Typography variant="h3" className="font-bold" {...commonProps}>{(pools[0].allocated / 1024 / 1024 / 1024).toFixed(1)} GB used</Typography>
                             </div>
                             <div className="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
                                 <Cloud className="text-white h-6 w-6" />
@@ -234,7 +234,7 @@ const StoragePage = () => {
                             />
                         </div>
                         <Typography variant="small" className="opacity-80" {...commonProps}>
-                            {Math.round((percentageUsed[0]) * 100)}% of {(pools[0].size/1024/1024/1024).toFixed(1)}GB total storage used
+                            {Math.round((percentageUsed[0]) * 100)}% of {(pools[0].size / 1024 / 1024 / 1024).toFixed(1)}GB total storage used
                         </Typography>
                     </div>
                 </motion.div>

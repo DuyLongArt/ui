@@ -16,11 +16,9 @@ import { motion } from 'framer-motion';
 import { useCloudflareStore } from '../../../../OrchestraLayer/StateManager/Zustand/cloudFlareStore';
 
 const CloudflareDnsDashboard = () => {
-    const { dnsData, fetchDnsData, isLoading, error } = useCloudflareStore();
+    const { dnsData, isLoading, error } = useCloudflareStore();
 
-    React.useEffect(() => {
-        fetchDnsData();
-    }, [fetchDnsData]);
+    
 
     const commonProps = {
         placeholder: undefined,
@@ -86,16 +84,7 @@ const CloudflareDnsDashboard = () => {
                     </div>
                 </div>
                 <div className="flex gap-3">
-                    <button
-                        onClick={fetchDnsData}
-                        disabled={isLoading}
-                        className="px-4 py-2 bg-white/70 backdrop-blur-md border border-slate-100 rounded-xl shadow-sm flex items-center gap-2 hover:bg-white transition-colors disabled:opacity-50"
-                    >
-                        <div className={`w-2 h-2 rounded-full ${isLoading ? 'bg-orange-500 animate-spin' : 'bg-green-500 animate-pulse'}`} />
-                        <span className="text-xs font-bold text-white uppercase">
-                            {isLoading ? 'Syncing...' : 'Live Sync'}
-                        </span>
-                    </button>
+                  
                 </div>
             </header>
 
