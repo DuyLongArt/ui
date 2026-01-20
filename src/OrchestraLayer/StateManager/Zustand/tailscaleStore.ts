@@ -1,6 +1,5 @@
 import axios from "axios";
 import { create } from "zustand";
-import { getEnv } from "../../Utilities/envUtils";
 
 
 interface TailscaleDevice {
@@ -34,37 +33,10 @@ interface TailscaleDeviceResponse {
 
 interface TailscaleStore {
     devices: TailscaleDevice[];
-    isLoading: boolean;
-    error: string | null;
-    fetchDevices: () => Promise<void>;
 }
 
 export const useTailScaleStore = create<TailscaleStore>((set) => ({
     devices: [],
-    isLoading: false,
-    error: null,
-    fetchDevices: async () => {
-        set({ isLoading: true, error: null });
-        try {
-            // Priority: window._env_ (Runtime) -> import.meta.env (Build-time)
-            const apiKey = getEnv('VITE_TAILSCALE_USERNAME');
-
-            const response = await axios.get("/tailscale-api/tailnet/-/devices", {
-                auth: {
-                    username: apiKey,
-                    password: ""
-                }
-            });
-
-            set({ devices: response.data.devices, isLoading: false });
-        } catch (err: any) {
-            console.error("❌ Tailscale Fetch Error:", err);
-            set({
-                error: err.response?.data?.message || err.message || "Unknown error",
-                isLoading: false
-            });
-        }
-    }
 }));
 
 // {

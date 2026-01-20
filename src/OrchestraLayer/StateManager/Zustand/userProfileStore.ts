@@ -42,15 +42,12 @@ export interface UserInformation {
 
 interface UserAccountState {
     account: UserAccount;
-
-    getUserRole: () => Promise<void>;
 }
 
 interface UserInformationState {
     information: UserInformation;
     updateProfileImageUrl: (url: string) => void;
     updateProfile: () => Promise<void>;
-    fetchFromDatabase: () => Promise<void>;
     editProfile: (university: string, location: string) => void;
 }
 
@@ -81,65 +78,6 @@ const useUserProfileStore = create<UserInformationState>()(
                     profileImageUrl: 'https://backend.duylong.art/object/duylongwebappobjectdatabase/admin.png',
                     alias: '',
                 },
-            },
-
-            fetchFromDatabase: async () => {
-                try {
-                    const token = Cookies.get('auth_jwt');
-                    if (!token) return;
-
-                    // Fetch Person Information
-                    const response = await axios.get(`${API_BASE_URL}/person/information`, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-
-                    const data = response.data;
-
-                    set((state) => ({
-                        information: {
-                            ...state.information,
-                            profiles: {
-                                ...state.information.profiles,
-                                id: data.id,
-                                firstName: data.firstName,
-                                lastName: data.lastName,
-                                profileImageUrl: data.profileImageUrl || state.information.profiles.profileImageUrl,
-                                alias: data.alias,
-                            },
-                        }
-                    }));
-
-                    // Fetch Details
-                    const responseDetails = await axios.get(`${API_BASE_URL}/information/details`, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-
-                    const dataDetails = responseDetails.data;
-                    console.log("✅ Profile Sync Successful: ", dataDetails);
-
-                    set((state) => ({
-                        information: {
-                            ...state.information,
-                            details: {
-                                ...state.information.details,
-                                identity_id: dataDetails.id,
-                                github_url: dataDetails.github_url,
-                                website_url: dataDetails.website_url,
-                                company: dataDetails.company,
-                                university: dataDetails.university,
-                                location: dataDetails.location,
-                                country: dataDetails.country,
-                                bio: dataDetails.bio,
-                                occupation: dataDetails.occupation,
-                                education_level: dataDetails.education_level,
-                                linkedin_url: dataDetails.linkedin_url,
-                            }
-                        }
-                    }));
-
-                } catch (error) {
-                    console.error("❌ Failed to fetch user profile:", error);
-                }
             },
 
             updateProfileImageUrl: (url: string) => set((state) => ({
@@ -197,26 +135,6 @@ const useUserAccountStore = create<UserAccountState>((set) => ({
     account: {
         role: 'USER',
         ip: ''
-    },
-
-    getUserRole: async () => {
-        try {
-            const token = Cookies.get('auth_jwt');
-            const response = await axios.get(`${API_BASE_URL}/account/information`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            set((state) => ({
-                ...state,
-                account: {
-                    ...state.account,
-                    role: response.data.role,
-                    ip: response.data.deviceIP,
-                },
-            }));
-        }
-        catch (error) {
-            console.error("❌ Failed to get user role:", error);
-        }
     }
 }));
 
@@ -229,30 +147,11 @@ interface SkillType {
 }
 interface UserSkillState {
     value: SkillType[];
-    getUserSkill: () => Promise<void>;
 }
 const useUserSkillStore = create<UserSkillState>()(
     persist(
         (set) => ({
             value: [],
-            getUserSkill: async () => {
-                try {
-                    const token = Cookies.get('auth_jwt');
-                    const response = await axios.get<SkillType[]>(`${API_BASE_URL}/person/skills`, {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                    console.log("✅ Database Skill Successful:", response.data);
-                    set((state) => ({
-
-                        ...state,
-                        value: response.data
-                    }));
-                }
-                catch (error) {
-                    console.error("❌ Failed to get user skill:", error);
-                }
-            }
-
         }),
         {
             name: 'user-skills-storage',
