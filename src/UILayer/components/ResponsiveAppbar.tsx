@@ -148,7 +148,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
         <div className="flex items-center justify-between w-full h-10 sm:h-12 flex-nowrap gap-1">
 
           {/* Logo Section */}
-          <div className="flex items-center shrink min-w-0 floating-text lg:pr-2 md:pr-2 phone:pr-1">
+          <div className="flex items-center shrink max-[350px]:text-sm floating-text lg:pr-2 md:pr-2 phone:pr-1">
             <p
               onClick={() => navigate("/home/index")}
               className="cursor-pointer font-bold text-shadow-lg text-md text-stroke items-center mt-1 xs:text-base sm:text-2xl hover:text-[#291067] text-border md:text-2xl lg:text-2xl text-indigo-200 transition-all truncate"
@@ -165,10 +165,10 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
 
           {/* Mini Player Section - Restored to previous UI */}
           {currentSong && (
-            <div className="items-center   md:flex lg:flex    justify-center mx-2">
+            <div className="items-center   md:flex lg:flex    justify-center max-[350px]:mx-2">
               <div
                 onClick={openMusicListAction}
-                className=" md:flex items-center gap-3 shrink-0  w-fit bg-black/20 backdrop-blur-md rounded-full px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
+                className=" md:flex items-center gap-3 shrink-0  w-fit bg-black/20 backdrop-blur-md rounded-full max-[350px]:px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
               >
                 <div className="w-8 h-8 max-[780px]:hidden rounded-full overflow-hidden relative">
                   <div className={`w-full h-full bg-indigo-500 flex items-center justify-center`}>
@@ -179,36 +179,42 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
                   <span className="text-xs text-white font-bold truncate">{currentSong.title}</span>
                   <span className="text-[10px] text-white truncate">{currentSong.artist || 'Unknown'}</span>
                 </div>
-                <div className="flex items-center gap-2 ml-2">
+
+
+
+
+                <div className="flex items-center  min-[350px]:gap-0 max-[350px]:gap-2 max-[350px]:ml-2">
 
 
 
                   <button
                     onClick={(e) => { e.stopPropagation(); playPrev(); }}
-                    className="p-1 max-[400px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                    className="p-1 max-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
                   >
                     <SkipBack size={16} fill="currentColor" />
                   </button>
                   
-                  <button onClick={togglePlay} className="p-1 max-[400px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
+                  <button onClick={togglePlay} className="p-1 max-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
                     {isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); playNext(); }}
-                    className="p-1 max-[400px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                    className="p-1 max-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
                   >
                     <SkipForward size={16} fill="currentColor" />
                   </button>
 
 
-                  <button onClick={togglePlay} className="p-1   min-[400px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
-                    {isPlaying ? <Pause size={10} fill="currentColor" /> : <Play size={10} fill="currentColor" />}
+
+
+                  <button onClick={togglePlay} className="   min-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
+                    {isPlaying ? <Pause size={6} fill="currentColor" /> : <Play size={6} fill="currentColor" />}
                   </button>
                   <button
                     onClick={(e) => { openMusicListAction(); }}
-                    className="p-1 min-[400px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                    className=" min-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
                   >
-                    <DiamondMinus size={10} fill="currentColor" />
+                    <DiamondMinus size={6} fill="currentColor" />
                   </button>
                 </div>
               </div>
@@ -248,11 +254,11 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
 
       {openMusicList && (
         <div className="absolute top-full right-0 z-200 w-full max-w-[320px] sm:hidden lg:block md:block p-2 mt-2">
-          <ul className="bg-indigo-900/75 border border-white/20 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl max-h-[400px]">
+          <ul className="bg-indigo-900/75 border border-white/20 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-xl max-h-[350px]">
             <div className="p-3 border-b border-white/10">
               <span className="text-xs font-bold text-indigo-200 uppercase tracking-wider">Playlist</span>
             </div>
-            <div className="overflow-y-auto custom-scrollbar max-h-[400px]">
+            <div className="overflow-y-auto custom-scrollbar max-h-[350px]">
               {Array.isArray(playlist) && playlist.length > 0 ? (
                 playlist.map((item, index) => (
                   <li
