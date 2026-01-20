@@ -29,21 +29,13 @@ import { useCloudflareDnsDataQuery } from '@/DataLayer/APILayer/infrastructureQu
 const DashboardPage = () => {
     const navigate = useNavigate();
     const userStore = useUserProfileStore();
-    const { dnsData,fetchDnsData} = useCloudflareStore();
-    const { devices, } = useTailScaleStore();
+    const { dnsData } = useCloudflareStore();
+    const { devices } = useTailScaleStore();
     const userFirstName = userStore.information.profiles.firstName || "Guest";
 
     const truenasStorageStore = useTruenasStorageStore();
-    // const { data: dnsDataQuery } = useCloudflareDnsDataQuery();  
-    
-    //   useEffect(() => {
-    //     if (dnsDataQuery) {
-    //       useCloudflareStore.setState({ dnsData: dnsDataQuery });
-    //     }
-    //   }, [dnsData]);
+
     useEffect(() => {
-        // fetchDnsData();
-        // truenasStorageStore.getPools();
         truenasStorageStore.setPercentage();
     }, [truenasStorageStore.pools]);
 

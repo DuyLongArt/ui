@@ -8,7 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import PersonProfileIcon from "./PersonProfileIcon";
 import { useMusicStore } from "../../OrchestraLayer/StateManager/Zustand/musicStore";
-import { Play, Pause, SkipForward, Square, Music as MusicIcon } from "lucide-react";
+import { Play, Pause, SkipForward, Square, Music as MusicIcon, SkipBack, Headphones, HeartCrackIcon, DiamondMinus } from "lucide-react";
 import { MusicList, type MusicListProps } from "../pages/Home/Music/MusicList";
 
 interface ResponsiveListProps {
@@ -28,7 +28,7 @@ const commonProps = {
 const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, onOpenDrawer }) => {
   const [openNav, setOpenNav] = useState(false);
   const navigate = useNavigate();
-  const { currentSong, isPlaying, playlist, setIsPlaying, playNext, setCurrentSong } = useMusicStore();
+  const { currentSong, isPlaying, playlist, setIsPlaying, playNext, setCurrentSong, playPrev } = useMusicStore();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [openMusicList, setOpenMusicList] = useState(false);
 
@@ -180,26 +180,35 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
                   <span className="text-[10px] text-white truncate">{currentSong.artist || 'Unknown'}</span>
                 </div>
                 <div className="flex items-center gap-2 ml-2">
-                  <button onClick={togglePlay} className="p-1 max-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
+
+
+
+                  <button
+                    onClick={(e) => { e.stopPropagation(); playPrev(); }}
+                    className="p-1 max-[400px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                  >
+                    <SkipBack size={16} fill="currentColor" />
+                  </button>
+                  
+                  <button onClick={togglePlay} className="p-1 max-[400px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
                     {isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
                   </button>
                   <button
                     onClick={(e) => { e.stopPropagation(); playNext(); }}
-                    className="p-1 max-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                    className="p-1 max-[400px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
                   >
                     <SkipForward size={16} fill="currentColor" />
                   </button>
 
 
-
-                  <button onClick={togglePlay} className="p-1   min-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
+                  <button onClick={togglePlay} className="p-1   min-[400px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
                     {isPlaying ? <Pause size={10} fill="currentColor" /> : <Play size={10} fill="currentColor" />}
                   </button>
                   <button
-                    onClick={(e) => { e.stopPropagation(); playNext(); }}
-                    className="p-1 min-[350px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                    onClick={(e) => { openMusicListAction(); }}
+                    className="p-1 min-[400px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
                   >
-                    <SkipForward size={10} fill="currentColor" />
+                    <DiamondMinus size={10} fill="currentColor" />
                   </button>
                 </div>
               </div>
@@ -213,7 +222,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
               <PersonProfileIcon onClick={() => navigate("/admin/person-profile")} />
             </div>
 
-            <div className="flex items-center phone:border-2 phone:border-red-500 lg:hidden md:hidden shrink-0.25">
+            <div className="flex items-center  lg:hidden md:hidden shrink-0.25">
               <IconButton
                 variant="text"
                 className="h-9 w-9 text-white! hover:bg-white/10 rounded-full flex items-center justify-center p-0"
@@ -227,7 +236,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
           </div>
         </div>
         {/* Mobile Menu */}
-        <div className={` w-full border-2 border-blue-950 overflow-hidden transition-all duration-500 ease-in-out ${openNav ? 'max-h-[600px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+        <div className={` w-full   overflow-hidden transition-all duration-500 ease-in-out ${openNav ? 'max-h-[600px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
           <div className="w-full pb-4 px-1">
             <NavList mobile />
 
@@ -243,7 +252,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
             <div className="p-3 border-b border-white/10">
               <span className="text-xs font-bold text-indigo-200 uppercase tracking-wider">Playlist</span>
             </div>
-            <div className="overflow-y-auto custom-scrollbar max-h-[350px]">
+            <div className="overflow-y-auto custom-scrollbar max-h-[400px]">
               {Array.isArray(playlist) && playlist.length > 0 ? (
                 playlist.map((item, index) => (
                   <li

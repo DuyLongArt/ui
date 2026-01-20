@@ -33,10 +33,11 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
 
   const { data: poolsInfo } = useTruenasPoolsQuery();
   const { data: devicesInfo } = useTailscaleDevicesQuery();
-  const { data: dnsData } = useCloudflareDnsDataQuery();  
+  const { data: dnsData } = useCloudflareDnsDataQuery();
 
   useEffect(() => {
     if (dnsData) {
+      console.log("📡 HomeLayout: Syncing DNS Data to Store:", dnsData);
       cloudflareStore.setDnsData(dnsData);
     }
   }, [dnsData]);
