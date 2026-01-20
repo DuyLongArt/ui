@@ -159,7 +159,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden max-[1020px]:hidden! md:flex border border-white/10 bg-indigo-500/60 rounded-2xl items-center ml-auto">
+          <div className="hidden max-[1020px]:hidden! md:flex border  border-white/10 bg-indigo-500/60 rounded-2xl items-center ml-auto">
             <NavList />
           </div>
 
@@ -168,10 +168,10 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
             <div className="items-center   md:flex lg:flex    justify-center max-[370px]:mx-2">
               <div
                 onClick={openMusicListAction}
-                className=" md:flex items-center gap-3 shrink-0  w-fit bg-black/20 backdrop-blur-md rounded-full max-[370px]:px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
+                className=" md:flex items-center gap-3 shrink-0  w-fit bg-black/20 backdrop-blur-md rounded-full min-[370px]:px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
               >
                 <div className="w-8 h-8 max-[780px]:hidden rounded-full overflow-hidden relative">
-                  <div className={`w-full h-full bg-indigo-500 flex items-center justify-center`}>
+                  <div className={`w-full h-full bg-indigo-500   flex items-center justify-center`}>
                     <MusicIcon size={14} className="text-white" />
                   </div>
                 </div>
@@ -183,7 +183,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
 
 
 
-                <div className="flex items-center  max-[370px]:gap-1 min-[370px]:gap-2 min-[370px]:ml-2">
+                <div className="flex items-center  max-[370px]:gap-1 min-[370px]:gap-2 min-[370px]:mr-3">
 
 
 
