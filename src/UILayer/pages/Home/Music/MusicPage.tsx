@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Play, Pause, SkipBack, SkipForward, Disc, Music as MusicIcon, Volume2, Search, Heart, Share2 } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Disc, Music as MusicIcon, Volume2, Search, Heart, Share2, RotateCw } from 'lucide-react';
 import { useMusicStore } from '../../../../OrchestraLayer/StateManager/Zustand/musicStore';
 
 /**
@@ -39,8 +39,17 @@ const MusicPage = () => {
                             <h1 className="text-4xl font-black tracking-tight mb-1">Library</h1>
                             <p className="text-white text-sm font-medium">Your personal collection</p>
                         </div>
-                        <div className="bg-white/10 p-3 rounded-full backdrop-blur-md">
-                            <Search size={20} className="text-white/70" />
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => fetchPlaylist()}
+                                className={`bg-white/10 p-3 rounded-full backdrop-blur-md hover:bg-white/20 transition-colors ${isLoading ? 'animate-spin' : ''}`}
+                                disabled={isLoading}
+                            >
+                                <RotateCw size={20} className="text-white/70" />
+                            </button>
+                            <div className="bg-white/10 p-3 rounded-full backdrop-blur-md">
+                                <Search size={20} className="text-white/70" />
+                            </div>
                         </div>
                     </div>
 

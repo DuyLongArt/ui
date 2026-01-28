@@ -38,21 +38,24 @@ const useMusicStore = create<MusicState>()(
                 set({ isLoading: true, error: null });
                 try {
                     console.log("🎵 Fetching music from API...");
-                    const response = await axios.get('https://backend.duylong.art/gomedia/api/music');
+                    const response = await axios.get(`https://backend.duylong.art/gomedia/api/music?t=${Date.now()}`);
                     console.log("✅ Music fetched successfully:", response.data);
 
                     if (response.data && Array.isArray(response.data.files)) {
                         const mappedSongs: Song[] = response.data.files.map((file: any) => ({
                             id: file.name,
-                            title: file.name.replace(/\.(mp3|wav|flac)$/i, ''), // Remove extension
-                            artist: 'Unknown Artist', // Parsing from filename is brittle without regex, keeping it simple for now
+                            title: file.name.replace(/\.(mp3|wav|flac|ogg|opus|m4a|aac|wma)$/i, ''), // Remove extension
+                            artist: 'Unknown Artist',
                             album: 'Unknown Album',
                             url: `https://backend.duylong.art${file.url}`,
-                            coverUrl: undefined, // API doesn't seem to provide cover yet
-                            duration: 0
                         }));
+                        console.log(`✅ Mapped ${mappedSongs.length} songs`);
 
-                        set({ playlist: mappedSongs, currentSong: mappedSongs[0], isLoading: false });
+                        set((state) => ({
+                            playlist: mappedSongs,
+                            currentSong: state.currentSong || mappedSongs[0],
+                            isLoading: false
+                        }));
                     } else {
                         console.warn("⚠️ API returned unexpected structure:", response.data);
                         set({ playlist: [], isLoading: false });
