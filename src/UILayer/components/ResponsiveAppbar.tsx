@@ -28,12 +28,16 @@ const commonProps = {
 const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, onOpenDrawer }) => {
   const [openNav, setOpenNav] = useState(false);
   const navigate = useNavigate();
-  const { currentSong, isPlaying, playlist, setIsPlaying, playNext, setCurrentSong, playPrev } = useMusicStore();
+  const { currentSong, isPlaying, playlist, setIsPlaying, playNext, setCurrentSong, playPrev, fetchPlaylist } = useMusicStore();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [openMusicList, setOpenMusicList] = useState(false);
 
   // Global Audio Logic
   useEffect(() => {
+
+    //  useEffect(() => {
+    fetchPlaylist();
+    // }, []);
     if (currentSong && audioRef.current) {
       if (audioRef.current.src !== currentSong.url) {
         audioRef.current.src = currentSong.url;
@@ -193,7 +197,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
                   >
                     <SkipBack size={16} fill="currentColor" />
                   </button>
-                  
+
                   <button onClick={togglePlay} className="p-1 max-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
                     {isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
                   </button>
@@ -206,17 +210,17 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
 
 
 
-<div className="max-[410px]:px-2 flex max-[410px]:gap-1">
+                  <div className="max-[410px]:px-2 flex max-[410px]:gap-1">
 
-                  <button onClick={togglePlay} className="   min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
-                    {isPlaying ? <Pause size={6} fill="currentColor" /> : <Play size={6} fill="currentColor" />}
-                  </button>
-                  <button
-                    onClick={(e) => { openMusicListAction(); }}
-                    className=" min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
-                  >
-                    <DiamondMinus size={6} fill="currentColor" />
-                  </button>
+                    <button onClick={togglePlay} className="   min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
+                      {isPlaying ? <Pause size={6} fill="currentColor" /> : <Play size={6} fill="currentColor" />}
+                    </button>
+                    <button
+                      onClick={(e) => { openMusicListAction(); }}
+                      className=" min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                    >
+                      <DiamondMinus size={6} fill="currentColor" />
+                    </button>
                   </div>
                 </div>
               </div>
