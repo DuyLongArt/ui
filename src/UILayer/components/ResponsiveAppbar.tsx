@@ -147,12 +147,12 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
   return (
     <div className="w-full phone:border-2 phone:border-red-700   sticky top-0 z-100  py-1 ">
       {/* Custom Appbar Body - Replacing restrictive library Navbar */}
-      <div className="h-max    md:px-2 lg:px-4 sm:px-4 sm:w-full max-[600px]:w-screen! md:w-full lg:w-full px-1  py-2 md:rounded-xl lg:rounded-xl phone:border-2 phone:border-red-700 sm:rounded-2xl bg-indigo-600/60 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300 ">
+      <div className="h-max    md:px-2 lg:px-4 sm:px-4 sm:w-full max-[600px]:w-screen!   md:w-full lg:w-full px-1  py-2 md:rounded-xl lg:rounded-xl phone:border-2 phone:border-red-700 sm:rounded-2xl bg-indigo-600/60 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300 ">
 
-        <div className="flex items-center justify-between w-full h-10 sm:h-12 flex-nowrap gap-1">
+        <div className="flex items-center min-[410px]:justify-between w-full  h-10 sm:h-12 flex-nowrap gap-1">
 
           {/* Logo Section */}
-          <div className="flex items-center shrink max-[410px]:text-sm floating-text lg:pr-2 md:pr-2 phone:pr-1">
+          <div className="flex items-center shrink max-[410px]:text-sm max-[410px]:ml-1 floating-text lg:pr-2 md:pr-2 phone:pr-1">
             <p
               onClick={() => navigate("/home/index")}
               className="cursor-pointer font-bold text-shadow-lg text-md text-stroke items-center mt-1 xs:text-base sm:text-2xl hover:text-[#291067] text-border md:text-2xl lg:text-2xl text-indigo-200 transition-all truncate"
@@ -168,69 +168,70 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
           </div>
 
           {/* Mini Player Section - Restored to previous UI */}
-          {currentSong && (
-            <div className="items-center   md:flex lg:flex    justify-center max-[410px]:mx-2">
-              <div
-                onClick={openMusicListAction}
-                className=" md:flex items-center gap-3 shrink-0  w-fit bg-black/20 backdrop-blur-md rounded-full min-[410px]:px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
-              >
-                <div className="w-8 h-8 max-[780px]:hidden rounded-full overflow-hidden relative">
-                  <div className={`w-full h-full bg-indigo-500   flex items-center justify-center`}>
-                    <MusicIcon size={14} className="text-white" />
-                  </div>
-                </div>
-                <div className="flex flex-col max-[780px]:hidden max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[150px]">
-                  <span className="text-xs text-white font-bold truncate">{currentSong.title}</span>
-                  <span className="text-[10px] text-white truncate">{currentSong.artist || 'Unknown'}</span>
-                </div>
-
-
-
-
-                <div className="flex items-center  max-[410px]:gap-1 min-[410px]:gap-2 min-[410px]:mr-3">
-
-
-
-                  <button
-                    onClick={(e) => { e.stopPropagation(); playPrev(); }}
-                    className="p-1 max-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
-                  >
-                    <SkipBack size={16} fill="currentColor" />
-                  </button>
-
-                  <button onClick={togglePlay} className="p-1 max-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
-                    {isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
-                  </button>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); playNext(); }}
-                    className="p-1 max-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
-                  >
-                    <SkipForward size={16} fill="currentColor" />
-                  </button>
-
-
-
-                  <div className="max-[410px]:px-2 flex max-[410px]:gap-1">
-
-                    <button onClick={togglePlay} className="   min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
-                      {isPlaying ? <Pause size={6} fill="currentColor" /> : <Play size={6} fill="currentColor" />}
-                    </button>
-                    <button
-                      onClick={(e) => { openMusicListAction(); }}
-                      className=" min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
-                    >
-                      <DiamondMinus size={6} fill="currentColor" />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
 
 
           {/* Action Section (Profile and Hamburger) */}
-          <div className="flex items-center gap-0.5  ml-auto">
-            <div className="cursor-pointer shrink-0">
+          <div className="flex items-center gap-0.5  ml-auto" >
+            {currentSong && (
+              <div className="items-center   md:flex lg:flex    justify-center">
+                <div
+                  onClick={openMusicListAction}
+                  className=" md:flex items-center gap-3 shrink-0   w-fit bg-black/20 backdrop-blur-md rounded-full min-[410px]:px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
+                >
+                  <div className="w-8 h-8 max-[780px]:hidden rounded-full overflow-hidden relative">
+                    <div className={`w-full h-full bg-indigo-500   flex items-center justify-center`}>
+                      <MusicIcon size={14} className="text-white" />
+                    </div>
+                  </div>
+                  <div className="flex flex-col max-[780px]:hidden max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[150px]">
+                    <span className="text-xs text-white font-bold truncate">{currentSong.title}</span>
+                    <span className="text-[10px] text-white truncate">{currentSong.artist || 'Unknown'}</span>
+                  </div>
+
+
+
+
+                  <div className="flex items-center  min-[410px]:gap-2 min-[410px]:mr-3">
+
+
+
+                    <button
+                      onClick={(e) => { e.stopPropagation(); playPrev(); }}
+                      className="p-1 max-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                    >
+                      <SkipBack size={16} fill="currentColor" />
+                    </button>
+
+                    <button onClick={togglePlay} className="p-1 max-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
+                      {isPlaying ? <Pause size={16} fill="currentColor" /> : <Play size={16} fill="currentColor" />}
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); playNext(); }}
+                      className="p-1 max-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                    >
+                      <SkipForward size={16} fill="currentColor" />
+                    </button>
+
+
+
+                    <div className="max-[410px]:px-2 flex max-[410px]:gap-1">
+
+                      <button onClick={togglePlay} className="   min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors">
+                        {isPlaying ? <Pause size={6} fill="currentColor" /> : <Play size={6} fill="currentColor" />}
+                      </button>
+                      <button
+                        onClick={(e) => { openMusicListAction(); }}
+                        className=" min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                      >
+                        <DiamondMinus size={6} fill="currentColor" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="cursor-pointer ">
               <PersonProfileIcon onClick={() => navigate("/admin/person-profile")} />
             </div>
 
