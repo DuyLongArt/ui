@@ -188,49 +188,49 @@ function GridComponent() {
                             className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden z-10"
                         >
                             <div className="flex justify-between items-center p-5 border-b border-slate-100 bg-slate-50/50">
-                                <h3 className="text-xl font-bold text-white">{editingId ? 'Edit Shortcut' : 'Add New Shortcut'}</h3>
-                                <button onClick={closeModal} className="p-2 rounded-full hover:bg-slate-200 text-white transition-colors">
+                                <h3 className="text-xl font-bold text-indigo-600">{editingId ? 'Edit Shortcut' : 'Add New Shortcut'}</h3>
+                                <button onClick={closeModal} className="p-2 rounded-full hover:bg-slate-200 text-slate-400 transition-colors">
                                     <XMarkIcon className="w-5 h-5" />
                                 </button>
                             </div>
 
                             <form onSubmit={handleSubmit} className="p-6 space-y-5">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-white ml-1">Title</label>
+                                    <label className="text-sm font-bold text-slate-700 ml-1">Title</label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <TagIcon className="h-5 w-5 text-white" />
+                                            <TagIcon className="h-5 w-5 text-slate-400" />
                                         </div>
                                         <input
                                             type="text"
                                             value={title}
                                             onChange={(e) => setTitle(e.target.value)}
                                             placeholder="e.g. Google Drive"
-                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-white"
+                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-slate-900 placeholder:text-slate-400"
                                             required
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-white ml-1">URL</label>
+                                    <label className="text-sm font-bold text-slate-700 ml-1">URL</label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <LinkIcon className="h-5 w-5 text-white" />
+                                            <LinkIcon className="h-5 w-5 text-slate-400" />
                                         </div>
                                         <input
                                             type="url"
                                             value={url}
                                             onChange={(e) => setUrl(e.target.value)}
                                             placeholder="https://..."
-                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-white"
+                                            className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all text-slate-900 placeholder:text-slate-400"
                                             required
                                         />
                                     </div>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-white ml-1">Card Color</label>
+                                    <label className="text-sm font-bold text-slate-700 ml-1">Card Color</label>
                                     <div className="grid grid-cols-4 gap-3">
                                         {colorOptions.map((opt) => (
                                             <button
@@ -248,7 +248,7 @@ function GridComponent() {
                                     <button
                                         type="button"
                                         onClick={closeModal}
-                                        className="flex-1 px-4 py-3 font-bold text-white bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
+                                        className="flex-1 px-4 py-3 font-bold text-slate-500 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
                                     >
                                         Cancel
                                     </button>

@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { EnvelopeIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/solid';
+import { motion } from 'framer-motion';
+import { Mail, Phone, MapPin, Send, MessageSquare, User, AtSign } from 'lucide-react';
+import LiquidGlassCard from '../../../components/LiquidGlassCard';
 
+/**
+ * ContactPage - Refined Flat Glass Design
+ * 
+ * featuring high-contrast glass inputs and a premium minimalist aesthetic.
+ */
 const ContactPage = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -14,117 +21,128 @@ const ContactPage = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form data submitted:', formData);
-        alert('Thank you for your message!');
+        console.log('Signal transmitted:', formData);
+        alert('Signal Received. We will respond shortly.');
     };
 
     return (
-        <div className="min-h-screen border-2 self-center flex items-center justify-center p-4">
-            <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden">
-                <div className="flex flex-col md:flex-row">
+        <div className="min-h-screen bg-[#0a0a14] text-white p-6 md:p-10 lg:p-14 overflow-hidden relative selection:bg-indigo-500/30">
+            {/* Ambient Background */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <motion.div animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.15, 0.1] }} transition={{ duration: 15, repeat: Infinity }} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] bg-indigo-600/10 rounded-full blur-[160px]" />
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02] mix-blend-overlay" />
+            </div>
+
+            <div className="relative z-10 max-w-6xl mx-auto h-full flex flex-col gap-12">
+                <header className="text-center space-y-4">
+                    <h1 className="text-5xl md:text-7xl font-black tracking-tighter bg-linear-to-b from-white to-white/40 bg-clip-text text-transparent">Connect.</h1>
+                    <p className="text-slate-500 font-bold uppercase tracking-[0.4em] text-xs">Establish a secure communication channel</p>
+                </header>
+
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+                    {/* Information Section */}
+                    <div className="lg:col-span-4 flex flex-col gap-6">
+                        <LiquidGlassCard containerClassName="h-full" className="p-10 border-white/10" blobColor="bg-indigo-500/20">
+                            <h3 className="text-2xl font-black mb-10 tracking-tight">Direct Feed</h3>
+                            <div className="space-y-12">
+                                <div className="flex items-start gap-5 group">
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 group-hover:bg-indigo-500/20 transition-colors">
+                                        <Mail size={22} className="text-indigo-400" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Email</p>
+                                        <p className="text-sm font-bold text-white/90">hello@duylong.art</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-5 group">
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 group-hover:bg-indigo-500/20 transition-colors">
+                                        <Phone size={22} className="text-indigo-400" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Secure Line</p>
+                                        <p className="text-sm font-bold text-white/90">+84 (System) Private</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-5 group">
+                                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 group-hover:bg-indigo-500/20 transition-colors">
+                                        <MapPin size={22} className="text-indigo-400" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Coordinates</p>
+                                        <p className="text-sm font-bold text-white/90">Ho Chi Minh City, VN</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mt-16 p-6 rounded-3xl bg-white/5 border border-white/5 italic text-slate-500 text-xs leading-relaxed">
+                                "Encrypted communication ensures your signals remain private and authenticated within our mainframe."
+                            </div>
+                        </LiquidGlassCard>
+                    </div>
 
                     {/* Form Section */}
-                    <div className="w-full md:w-1/2 p-8 md:p-12">
-                        <h2 className="text-3xl font-bold text-white mb-2">Contact Us</h2>
-                        <p className="text-white mb-8">We'd love to hear from you! Please fill out the form below.</p>
-
-                        <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                            <div>
-                                <label className="block text-sm font-medium text-white mb-1" htmlFor="name">Full Name</label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
-                                    placeholder="John Doe"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-white mb-1" htmlFor="email">Email Address</label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all"
-                                    placeholder="john@example.com"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-white mb-1" htmlFor="message">Your Message</label>
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    required
-                                    rows={5}
-                                    className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition-all resize-none"
-                                    placeholder="Write your message here..."
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transform transition-all hover:-translate-y-0.5"
-                            >
-                                Send Message
-                            </button>
-                        </form>
-                    </div>
-
-                    {/* Info Section */}
-                    <div className="w-full md:w-1/2 bg-gradient-to-br from-indigo-600 to-purple-700 p-8 md:p-12 text-white flex flex-col justify-center">
-                        <h3 className="text-2xl font-bold mb-6">Our Information</h3>
-                        <div className="flex flex-col gap-8">
-
-                            <div className="flex items-start gap-4">
-                                <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
-                                    <EnvelopeIcon className="h-6 w-6 text-white" />
+                    <div className="lg:col-span-8">
+                        <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-6xl p-8 md:p-14 shadow-2xl h-full">
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-10">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                    <div className="space-y-3">
+                                        <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+                                            <User size={12} /> Identity
+                                        </label>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            placeholder="Your full name"
+                                            required
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 transition-all placeholder:text-slate-700"
+                                        />
+                                    </div>
+                                    <div className="space-y-3">
+                                        <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+                                            <AtSign size={12} /> Contact Address
+                                        </label>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            placeholder="you@domain.com"
+                                            required
+                                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 transition-all placeholder:text-slate-700"
+                                        />
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="font-semibold text-white/90">Email</p>
-                                    <p className="text-white/80">contact@example.com</p>
-                                </div>
-                            </div>
 
-                            <div className="flex items-start gap-4">
-                                <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
-                                    <PhoneIcon className="h-6 w-6 text-white" />
+                                <div className="space-y-3">
+                                    <label className="flex items-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">
+                                        <MessageSquare size={12} /> Transmit Message
+                                    </label>
+                                    <textarea
+                                        name="message"
+                                        value={formData.message}
+                                        onChange={handleChange}
+                                        placeholder="Type your transmission here..."
+                                        required
+                                        rows={6}
+                                        className="w-full bg-white/5 border border-white/10 rounded-4xl px-6 py-5 text-sm focus:outline-none focus:ring-1 focus:ring-white/20 transition-all resize-none placeholder:text-slate-700"
+                                    />
                                 </div>
-                                <div>
-                                    <p className="font-semibold text-white/90">Phone</p>
-                                    <p className="text-white/80">+1 (234) 567-890</p>
-                                </div>
-                            </div>
 
-                            <div className="flex items-start gap-4">
-                                <div className="p-3 bg-white/20 rounded-lg backdrop-blur-sm">
-                                    <MapPinIcon className="h-6 w-6 text-white" />
-                                </div>
-                                <div>
-                                    <p className="font-semibold text-white/90">Address</p>
-                                    <p className="text-white/80">123 Main Street<br />Anytown, USA</p>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        {/* Decorational Circle */}
-                        <div className="mt-12 p-6 bg-white/10 rounded-2xl backdrop-blur-sm">
-                            <p className="text-sm text-white/80 italic">
-                                "We are committed to providing value and support. Reach out to us anytime!"
-                            </p>
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    type="submit"
+                                    className="w-full py-5 bg-white text-black font-black uppercase tracking-[0.3em] text-xs rounded-2xl shadow-[0_20px_40px_rgba(255,255,255,0.1)] hover:shadow-[0_25px_50px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center gap-3"
+                                >
+                                    Transmit Signal <Send size={16} />
+                                </motion.button>
+                            </form>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -132,4 +150,3 @@ const ContactPage = () => {
 };
 
 export default ContactPage;
-

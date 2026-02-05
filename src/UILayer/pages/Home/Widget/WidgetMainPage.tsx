@@ -14,6 +14,8 @@ import {
   useWidgetShortcutsQuery,
   useAddFolderMutation,
   useAddShortcutMutation,
+  useEditFolderMutation,
+  useUpdateShortcutMutation,
   useDeleteFolderMutation,
   useDeleteShortcutMutation,
 } from '../../../../DataLayer/APILayer/widgetQueries';
@@ -32,11 +34,50 @@ const WidgetMainPage: React.FC = () => {
 
   const addFolderMutation = useAddFolderMutation();
   const addShortcutMutation = useAddShortcutMutation();
+  const editFolderMutation = useEditFolderMutation();
+  const updateShortcutMutation = useUpdateShortcutMutation();
   const deleteFolderMutation = useDeleteFolderMutation();
   const deleteShortcutMutation = useDeleteShortcutMutation();
 
+  const [editingItem, setEditingItem] = useState<{ type: 'folder' | 'shortcut', id: number } | null>(null);
+
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (editingItem) {
+      if (editingItem.type === 'shortcut') {
+        updateShortcutMutation.mutate({
+          id: editingItem.id,
+          shortcut: {
+            shortcutName: newItemName,
+            shortcutUrl: newItemUrl,
+            folder: currentFolder!
+          }
+        }, {
+          onSuccess: () => {
+            setIsAddModalOpen(false);
+            setEditingItem(null);
+            setNewItemName('');
+            setNewItemUrl('');
+          }
+        });
+      } else {
+        editFolderMutation.mutate({
+          id: editingItem.id,
+          folder: {
+            folderName: newItemName,
+          }
+        }, {
+          onSuccess: () => {
+            setIsAddModalOpen(false);
+            setEditingItem(null);
+            setNewItemName('');
+          }
+        });
+      }
+      return;
+    }
+
     if (currentFolder) {
       addShortcutMutation.mutate({
         shortcutName: newItemName,
@@ -59,6 +100,21 @@ const WidgetMainPage: React.FC = () => {
         }
       });
     }
+  };
+
+  const handleEditFolder = (e: React.MouseEvent, folder: WidgetFolder) => {
+    e.stopPropagation();
+    setEditingItem({ type: 'folder', id: folder.id });
+    setNewItemName(folder.folderName);
+    setIsAddModalOpen(true);
+  };
+
+  const handleEditShortcut = (e: React.MouseEvent, shortcut: WidgetShortcut) => {
+    e.stopPropagation();
+    setEditingItem({ type: 'shortcut', id: shortcut.id });
+    setNewItemName(shortcut.shortcutName);
+    setNewItemUrl(shortcut.shortcutUrl);
+    setIsAddModalOpen(true);
   };
 
   const handleDeleteFolder = (e: React.MouseEvent, id: number) => {
@@ -165,12 +221,20 @@ const WidgetMainPage: React.FC = () => {
                     <span className="text-xs font-black text-slate-300 uppercase tracking-widest">
                       ID: {folder.id}
                     </span>
-                    <button
-                      onClick={(e) => handleDeleteFolder(e, folder.id)}
-                      className="opacity-0 group-hover:opacity-100 p-2 text-slate-300 hover:text-red-500 transition-all"
-                    >
-                      <TrashIcon className="w-5 h-5" />
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => handleEditFolder(e, folder)}
+                        className="opacity-0 group-hover:opacity-100 p-2 text-slate-300 hover:text-blue-600 transition-all"
+                      >
+                        <PencilIcon className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={(e) => handleDeleteFolder(e, folder.id)}
+                        className="opacity-0 group-hover:opacity-100 p-2 text-slate-300 hover:text-red-500 transition-all"
+                      >
+                        <TrashIcon className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               ))
@@ -209,6 +273,12 @@ const WidgetMainPage: React.FC = () => {
                     >
                       OPEN
                     </a>
+                    <button
+                      onClick={(e) => handleEditShortcut(e, shortcut)}
+                      className="p-3 text-slate-300 hover:text-blue-600 transition-all"
+                    >
+                      <PencilIcon className="w-5 h-5" />
+                    </button>
                     <button
                       onClick={(e) => handleDeleteShortcut(e, shortcut.id)}
                       className="p-3 text-slate-300 hover:text-red-500 transition-all"
@@ -258,14 +328,23 @@ const WidgetMainPage: React.FC = () => {
             >
               <div className="mb-10">
                 <h2 className="text-4xl font-black text-slate-900 tracking-tighter italic leading-none mb-4">
-                  {currentFolder ? "NEW WIDGET" : "NEW FOLDER"}
+                  {editingItem ? (editingItem.type === 'shortcut' ? "EDIT WIDGET" : "EDIT FOLDER") : (currentFolder ? "NEW WIDGET" : "NEW FOLDER")}
                 </h2>
                 <p className="text-slate-500 font-medium">
-                  {currentFolder
-                    ? "Add a quick shortcut to your collection."
-                    : "Give your new collection a standout name."}
+                  {editingItem
+                    ? "Modify the details of your selection."
+                    : (currentFolder
+                      ? "Add a quick shortcut to your collection."
+                      : "Give your new collection a standout name.")}
                 </p>
               </div>
+
+              {(addFolderMutation.isError || addShortcutMutation.isError || editFolderMutation.isError || updateShortcutMutation.isError) && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm font-bold flex items-center gap-3 animate-shake">
+                  <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                  Failed to save changes. Please try again.
+                </div>
+              )}
 
               <form onSubmit={handleAdd} className="space-y-8">
                 <div className="space-y-3">
@@ -302,17 +381,22 @@ const WidgetMainPage: React.FC = () => {
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                   <button
                     type="button"
-                    onClick={() => setIsAddModalOpen(false)}
+                    onClick={() => {
+                      setIsAddModalOpen(false);
+                      setEditingItem(null);
+                      setNewItemName('');
+                      setNewItemUrl('');
+                    }}
                     className="flex-1 bg-slate-100 text-slate-500 py-5 rounded-2xl font-black text-sm tracking-widest hover:bg-slate-200 transition-all uppercase"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={addFolderMutation.isPending || addShortcutMutation.isPending}
+                    disabled={addFolderMutation.isPending || addShortcutMutation.isPending || editFolderMutation.isPending || updateShortcutMutation.isPending}
                     className="flex-1 bg-slate-900 text-white py-5 rounded-2xl font-black text-sm tracking-widest shadow-xl shadow-slate-200 hover:bg-slate-800 transition-all uppercase disabled:opacity-50"
                   >
-                    Create Item
+                    {editingItem ? "Save Changes" : "Create Item"}
                   </button>
                 </div>
               </form>

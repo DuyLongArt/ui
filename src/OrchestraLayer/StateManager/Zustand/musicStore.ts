@@ -18,11 +18,17 @@ interface MusicState {
     isPlaying: boolean;
     isLoading: boolean;
     error: string | null;
+    volume: number;
+    isMuted: boolean;
+    audioElement: HTMLAudioElement | null;
     fetchPlaylist: () => Promise<void>;
     setCurrentSong: (song: Song) => void;
     setIsPlaying: (isPlaying: boolean) => void;
     playNext: () => void;
     playPrev: () => void;
+    setAudioElement: (audio: HTMLAudioElement | null) => void;
+    setVolume: (volume: number) => void;
+    setIsMuted: (isMuted: boolean) => void;
 }
 
 const useMusicStore = create<MusicState>()(
@@ -33,6 +39,13 @@ const useMusicStore = create<MusicState>()(
             isPlaying: false,
             isLoading: false,
             error: null,
+            volume: 0.8,
+            isMuted: false,
+            audioElement: null,
+
+            setAudioElement: (audio) => set({ audioElement: audio }),
+            setVolume: (volume) => set({ volume }),
+            setIsMuted: (isMuted) => set({ isMuted }),
 
             fetchPlaylist: async () => {
                 set({ isLoading: true, error: null });
@@ -89,7 +102,7 @@ const useMusicStore = create<MusicState>()(
         {
             name: 'music-storage',
             storage: createJSONStorage(() => localStorage),
-            partialize: (state) => ({ playlist: state.playlist, currentSong: state.currentSong }),
+            partialize: (state) => ({ playlist: state.playlist, currentSong: state.currentSong, volume: state.volume, isMuted: state.isMuted }),
         }
     )
 );
