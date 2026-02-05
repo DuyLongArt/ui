@@ -225,9 +225,7 @@ const MusicPage = () => {
                                             {currentSong.coverUrl ? (
                                                 <img src={currentSong.coverUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
                                             ) : (
-                                                <div className="w-full h-full bg-linear-to-br from-indigo-600/20 to-purple-600/20 flex items-center justify-center ">
-                                                    <MusicIcon size={120} strokeWidth={0.5} className="text-white/10" />
-                                                </div>
+                                              
                                             )}
                                             <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                         </motion.div>
