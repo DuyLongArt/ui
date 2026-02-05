@@ -22,7 +22,7 @@ interface GlassCardProps {
   color?: string;
 }
 
-const GlassCard: React.FC<GlassCardProps> = ({ children, color = " from-indigo-500/80 via-indigo-500 to-indigo-500/80 ", className = "", onClick }) => {
+const GlassCard: React.FC<GlassCardProps> = ({ children, color = " from-indigo-500/50 via-indigo-500/60 to-indigo-500/30 ", className = "", onClick }) => {
   return (
     <div
       onClick={onClick}

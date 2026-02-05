@@ -112,7 +112,7 @@ const DashboardPage = () => {
             <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-1 sm:gap-4">
                 <div>
                     <Typography variant="h3" className="text-black font-bold tracking-tight text-xl sm:text-3xl md:text-4xl" {...commonProps}>
-                        Welcome back, {userFirstName}! 👋
+                        Welcome back, {userFirstName}!
                     </Typography>
                     <Typography className="text-black text-xs sm:text-base font-medium" {...commonProps}>
                         System status: <span className="text-green-600 font-bold">All operational</span>
