@@ -28,23 +28,9 @@ const commonProps = {
 const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, onOpenDrawer }) => {
   const [openNav, setOpenNav] = useState(false);
   const navigate = useNavigate();
-  const { currentSong, isPlaying, playlist, setIsPlaying, playNext, setCurrentSong, playPrev, fetchPlaylist, setAudioElement, volume, isMuted } = useMusicStore();
+  const { currentSong, isPlaying, playlist, setIsPlaying, playNext, setCurrentSong, playPrev, fetchPlaylist } = useMusicStore();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [openMusicList, setOpenMusicList] = useState(false);
-
-  // Sync Audio Ref to Store
-  useEffect(() => {
-    if (audioRef.current) {
-      setAudioElement(audioRef.current);
-    }
-  }, [setAudioElement]);
-
-  // Sync Volume and Mute to Element
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = isMuted ? 0 : volume;
-    }
-  }, [volume, isMuted]);
 
   // Global Audio Logic
   useEffect(() => {
@@ -185,7 +171,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
 
 
           {/* Action Section (Profile and Hamburger) */}
-          <div className="flex items-center gap-0.5  ml-auto" onDoubleClick={() => navigate("/utilities/index/music")} >
+          <div className="flex items-center gap-0.5  ml-auto" >
             {currentSong && (
               <div className="items-center   md:flex lg:flex    justify-center">
                 <div

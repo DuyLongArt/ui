@@ -85,22 +85,22 @@ const LoginForm = () => {
         >
 
           <motion.div variants={itemVariants}>
-            <h1 className="text-4xl font-black text-white mb-2 tracking-tight">
+            <h1 className="text-4xl font-black text-black mb-2 tracking-tight">
               Welcome Back
             </h1>
-            <p className="text-white/80 mb-10 text-lg">
+            <p className="text-black mb-10 text-lg">
               Sign in to manage your account
             </p>
           </motion.div>
 
           <form onSubmit={submitEvent} className="space-y-6">
             <motion.div variants={itemVariants} className="relative group">
-              <label className="block text-left text-sm font-bold text-white/90 mb-2 ml-1">
+              <label className="block text-left text-sm font-bold text-black mb-2 ml-1">
                 Email or Username
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-white/60 group-focus-within:text-indigo-400 transition-colors" />
+                  <User className="h-5 w-5 text-black group-focus-within:text-indigo-500 transition-colors" />
                 </div>
                 <input
                   type="text"
@@ -108,18 +108,18 @@ const LoginForm = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   placeholder="Enter email or username"
-                  className="block w-full pl-11 pr-4 py-4 bg-white/10 border-2 border-white/20 rounded-2xl text-white placeholder-white/40 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all text-base backdrop-blur-sm"
+                  className="block w-full pl-11 pr-4 py-4 border-2 border-gray-100 rounded-2xl text-white placeholder-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base"
                 />
               </div>
             </motion.div>
 
             <motion.div variants={itemVariants} className="relative group">
-              <label className="block text-left text-sm font-bold text-white/90 mb-2 ml-1">
+              <label className="block text-left text-sm font-bold text-white mb-2 ml-1">
                 Password
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-white/60 group-focus-within:text-indigo-400 transition-colors" />
+                  <Lock className="h-5 w-5 text-white group-focus-within:text-indigo-500 transition-colors" />
                 </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -127,12 +127,12 @@ const LoginForm = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="block w-full pl-11 pr-12 py-4 bg-white/10 border-2 border-white/20 rounded-2xl text-white placeholder-white/40 focus:outline-none focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-400 transition-all text-base backdrop-blur-sm"
+                  className="block w-full pl-11 pr-12 py-4 border-2 border-gray-100 rounded-2xl text-white placeholder-white focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 transition-all text-base"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-white/60 hover:text-white transition-colors"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-white hover:text-white active:text-indigo-500 transition-colors"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
