@@ -147,7 +147,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
   return (
     <div className="w-full phone:border-2 phone:border-red-700   sticky top-0 z-100  py-1 ">
       {/* Custom Appbar Body - Replacing restrictive library Navbar */}
-      <div className="h-max    md:px-2 lg:px-4 sm:px-4 sm:w-full max-[600px]:w-screen!   md:w-full lg:w-full px-1  py-2 md:rounded-xl lg:rounded-xl phone:border-2 phone:border-red-700 sm:rounded-2xl bg-indigo-600/60 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300 ">
+      <div className="h-max    md:px-2 lg:px-4 sm:px-4 sm:w-full max-[600px]:w-screen! max-[410px]:rounded-xl  md:w-full lg:w-full px-1  py-2 md:rounded-xl lg:rounded-xl phone:border-2 phone:border-red-700 sm:rounded-2xl bg-indigo-600/60 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300 ">
 
         <div className="flex items-center min-[410px]:justify-between w-full  h-10 sm:h-12 flex-nowrap gap-1">
 
@@ -179,7 +179,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
                   className=" md:flex items-center gap-3 shrink-0   w-fit bg-black/20 backdrop-blur-md rounded-full min-[410px]:px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
                 >
                   <div className="w-8 h-8 max-[780px]:hidden rounded-full overflow-hidden relative">
-                    <div className={`w-full h-full bg-indigo-500   flex items-center justify-center`}>
+                    <div className={`w-full h-full bg-indigo-500   flex items-center justify-center`} onDoubleClick={() => { navigate('/utilities/index/music') }}>
                       <MusicIcon size={14} className="text-white" />
                     </div>
                   </div>
@@ -221,9 +221,16 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
                       </button>
                       <button
                         onClick={(e) => { openMusicListAction(); }}
-                        className=" min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors"
+                        
+                        className=" min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors "
                       >
                         <DiamondMinus size={6} fill="currentColor" />
+                      </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); navigate('/utilities/index/music') }}
+                        className=" min-[410px]:hidden rounded-full hover:bg-white/20 text-white transition-colors "
+                      >
+                        <MusicIcon size={6} fill="currentColor" />
                       </button>
                     </div>
                   </div>
