@@ -1,9 +1,24 @@
 import React from 'react';
-import { Typography, Button } from "@material-tailwind/react";
+import { Typography, Button, Tooltip, Chip, IconButton } from "@material-tailwind/react";
 import { GlassCard } from './GlassContainer';
-import { useUserAccountStore, useUserProfileStore } from '../../../../OrchestraLayer/StateManager/Zustand/userProfileStore';
+import { useUserProfileStore, useUserSkillStore } from '../../../../OrchestraLayer/StateManager/Zustand/userProfileStore';
 import { userArhiveStore } from '../../../../OrchestraLayer/StateManager/Zustand/userArhives';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+import {
+    Download,
+    Printer,
+    ExternalLink,
+    Github,
+    Linkedin,
+    Mail,
+    MapPin,
+    Briefcase,
+    GraduationCap,
+    Award,
+    Code2,
+    CheckCircle2
+} from 'lucide-react';
 
 // --- Icons ---
 const ArrowTopRightOnSquareIcon = () => (
@@ -21,166 +36,331 @@ interface AboutMePageProps {
 const AboutMePage: React.FC<AboutMePageProps> = () => {
     const userArchive = userArhiveStore();
     const userStore = useUserProfileStore();
-
+    const skillStore = useUserSkillStore();
 
     const [isCVExist, setIsCVExist] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(true);
+
     const CVPDFLink = `https://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/cv/cv.pdf`;
 
     React.useEffect(() => {
         const checkCV = async () => {
+            setIsLoading(true);
             try {
                 const response = await axios.get(CVPDFLink);
-                setIsCVExist(response.status === 200);
+                setIsCVExist(response.status === 200 || response.status === 304);
             } catch (error) {
                 console.error("CV not found or error fetching:", error);
                 setIsCVExist(false);
+            } finally {
+                setIsLoading(false);
             }
         };
         checkCV();
     }, [CVPDFLink]);
 
+    const handleDownload = () => {
+        window.open(CVPDFLink, '_blank');
+    };
+
+    const handlePrint = () => {
+        const printWindow = window.open(CVPDFLink, '_blank');
+        if (printWindow) {
+            printWindow.onload = () => {
+                printWindow.print();
+            };
+        }
+    };
+
+    const containerVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.6,
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, x: -20 },
+        visible: { opacity: 1, x: 0 }
+    };
+
+    // Shared common props for Material Tailwind components to avoid boilerplate error
+    const commonProps = {
+        placeholder: "",
+        onPointerEnterCapture: () => { },
+        onPointerLeaveCapture: () => { },
+        onResize: () => { },
+        onResizeCapture: () => { },
+    } as any;
 
     return (
-        <div className="p-2 md:p-4 grid grid-cols-1 md:grid-cols-3 gap-8 animate-fade-in-up">
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto"
+        >
+            {/* Header: Personal Info Hero */}
+            {/* <GlassCard className="p-8 md:p-12 overflow-hidden relative group" color="from-indigo-600/80 via-blue-600/70 to-indigo-800/80">
+                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <Award size={120} />
+                </div>
 
-            {/* Left Column: CV (Main Content) */}
-            <div className="md:col-span-2 space-y-8">
-
-                <GlassCard className="p-0 overflow-hidden shadow-bold flex flex-col h-full " color='from-indigo-400 via-indigo-400 to-indigo-400'>
-                    {/* Header with Title and Open Button */}
-                    <div className="p-4 md:p-6 border-b border-white/20 flex justify-between items-center bg-white/10 backdrop-blur-md">
-                        <Typography
-                            variant="h5"
-                            color="white"
-                            className="font-bold tracking-tight"
-                            placeholder=""
-                            onPointerEnterCapture={() => { }}
-                            onPointerLeaveCapture={() => { }}
-                            onResize={() => { }}
-                            onResizeCapture={() => { }}
-                        >
-                            Curriculum Vitae
-                        </Typography>
-
-                        <a href={CVPDFLink} target="_blank" rel="noopener noreferrer">
-                            <Button
-                                size="sm"
-                                variant="text"
-                                className="flex items-center text-white gap-2 hover:bg-white/20 normal-case"
-                                placeholder=""
-                                onPointerEnterCapture={() => { }}
-                                onPointerLeaveCapture={() => { }}
-                                onResize={() => { }}
-                                onResizeCapture={() => { }}
-                            >
-                                Open in new tab <ArrowTopRightOnSquareIcon />
-                            </Button>
-                        </a>
-                    </div>
-
-                    {/* PDF Embed Area */}
-
-                    {isCVExist && (
-                        <div className="w-full h-[80vh] min-h-[600px] bg-slate-50 relative">
-                            <iframe
-                                src={`${CVPDFLink}#toolbar=0&navpanes=0&scrollbar=0`}
-                                className="w-full h-full border-none"
-                                title="CV Preview"
+                <div className="flex flex-col md:flex-row gap-8 items-center md:items-start relative z-10">
+                    <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="relative"
+                    >
+                        <div className="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-4 border-white/30 shadow-2xl bg-indigo-500/50">
+                            <img
+                                src={userStore.information.profiles.profileImageUrl}
+                                alt="Profile"
+                                className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    (e.target as HTMLImageElement).src = "https://backend.duylong.art/object/duylongwebappobjectdatabase/admin.png";
+                                }}
                             />
+                        </div>
+                        <div className="absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-indigo-700 shadow-lg" />
+                    </motion.div>
 
-                            {/* Fallback for browsers that don't support iframes/pdf embedding */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center -z-10 text-white gap-2">
-                                <Typography
-                                    placeholder=""
-                                    onPointerEnterCapture={() => { }}
-                                    onPointerLeaveCapture={() => { }}
-                                    onResize={() => { }}
-                                    onResizeCapture={() => { }}
-                                >
-                                    Loading PDF...
-                                </Typography>
-                                <a href={CVPDFLink} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-sm">
-                                    Click here if it doesn't load
-                                </a>
+                    <div className="text-center md:text-left space-y-4 flex-1">
+                        <div>
+                            <Typography variant="h2" color="white" className="font-extrabold tracking-tight text-4xl md:text-5xl" {...commonProps}>
+                                {userStore.information.profiles.firstName} {userStore.information.profiles.lastName}
+                            </Typography>
+                            <Typography variant="h5" className="text-indigo-100 font-medium mt-1 flex items-center justify-center md:justify-start gap-2" {...commonProps}>
+                                <Briefcase size={20} /> {userStore.information.details.occupation || "Software Engineer"}
+                            </Typography>
+                        </div>
+
+                        <div className="flex flex-wrap justify-center md:justify-start gap-4 text-white/80 text-sm">
+                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
+                                <MapPin size={14} className="text-indigo-300" />
+                                {userStore.information.details.location}, {userStore.information.details.country}
+                            </div>
+                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
+                                <GraduationCap size={14} className="text-indigo-300" />
+                                {userStore.information.details.university}
                             </div>
                         </div>
-                    )}
-                </GlassCard>
-            </div>
 
-            {/* Right Column: Bio / About Me */}
-            <div className="space-y-6">
-                <GlassCard className="p-6 md:p-8">
-                    <Typography
-                        variant="small"
-                        className="text-white uppercase tracking-widest mb-4 font-bold text-2xl"
-                        placeholder=""
-                        onPointerEnterCapture={() => { }}
-                        onPointerLeaveCapture={() => { }}
-                        onResize={() => { }}
-                        onResizeCapture={() => { }}
-                    >
-                        About Me
-                    </Typography>
-                    <Typography
-                        className="text-white  italic leading-relaxed text-2xl font-light"
-                        placeholder=""
-                        onPointerEnterCapture={() => { }}
-                        onPointerLeaveCapture={() => { }}
-                        onResize={() => { }}
-                        onResizeCapture={() => { }}
-                    >
-                        "{userStore.information.details.bio || "No bio available."}"
-                    </Typography>
-                </GlassCard>
+                        <div className="flex justify-center md:justify-start gap-4 pt-2">
+                            {userStore.information.details.github_url && (
+                                <Tooltip content="GitHub Profile">
+                                    <IconButton variant="text" color="white" className="bg-white/10 hover:bg-white/20" onClick={() => window.open(userStore.information.details.github_url, '_blank')} {...commonProps}>
+                                        <Github size={20} />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                            {userStore.information.details.linkedin_url && (
+                                <Tooltip content="LinkedIn Profile">
+                                    <IconButton variant="text" color="white" className="bg-white/10 hover:bg-white/20" onClick={() => window.open(userStore.information.details.linkedin_url, '_blank')} {...commonProps}>
+                                        <Linkedin size={20} />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                            <Tooltip content="Email Me">
+                                <IconButton variant="text" color="white" className="bg-white/10 hover:bg-white/20" onClick={() => window.location.href = `mailto:contact@duylong.art`} {...commonProps}>
+                                    <Mail size={20} />
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                    </div>
+                </div>
+            </GlassCard> */}
 
-                {/* Highlights Section */}
-                {userArchive.archive && userArchive.archive.length > 0 && (
-                    <GlassCard className="p-6 md:p-8">
-                        <Typography
-                            variant="small"
-                            className="text-white uppercase tracking-widest mb-4 font-bold text-xs"
-                            placeholder=""
-                            onPointerEnterCapture={() => { }}
-                            onPointerLeaveCapture={() => { }}
-                            onResize={() => { }}
-                            onResizeCapture={() => { }}
-                        >
-                            Highlights
-                        </Typography>
-                        <div className="space-y-6">
-                            {userArchive.archive.map((item, i) => (
-                                <div key={i} className="flex gap-4 items-start group">
-                                    <div className="w-2 h-2 mt-2 rounded-full bg-blue-500 shrink-0 group-hover:scale-125 transition-transform duration-300"></div>
-                                    <div>
-                                        <Typography
-                                            className="text-sm font-bold text-white"
-                                            placeholder=""
-                                            onPointerEnterCapture={() => { }}
-                                            onPointerLeaveCapture={() => { }}
-                                            onResize={() => { }}
-                                            onResizeCapture={() => { }}
-                                        >
-                                            {item.category}
-                                        </Typography>
-                                        <Typography
-                                            className="text-sm text-white mt-1"
-                                            placeholder=""
-                                            onPointerEnterCapture={() => { }}
-                                            onPointerLeaveCapture={() => { }}
-                                            onResize={() => { }}
-                                            onResizeCapture={() => { }}
-                                        >
-                                            {item.content}
-                                        </Typography>
-                                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Left Column: CV Preview */}
+                <div className="md:col-span-2 space-y-6">
+                    <GlassCard className="p-0 overflow-hidden shadow-bold flex flex-col h-full group/cv" color='from-slate-800 via-slate-900 to-black'>
+                        {/* CV Toolbar */}
+                        <div className="p-4 md:px-6 md:py-4 border-b border-white/10 flex flex-wrap justify-between items-center bg-white/5 backdrop-blur-xl">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400">
+                                    <CheckCircle2 size={24} />
                                 </div>
-                            ))}
+                                <div>
+                                    <Typography variant="h6" color="white" className="font-bold leading-tight" {...commonProps}>
+                                        Curriculum Vitae
+                                    </Typography>
+                                    <Typography variant="small" className="text-white/40 text-[10px] uppercase tracking-widest font-bold" {...commonProps}>
+                                        Professional Document
+                                    </Typography>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 mt-2 sm:mt-0">
+                                <Tooltip content="Download PDF">
+                                    <IconButton size="sm" variant="text" className="text-white bg-white/5 hover:bg-white/10 p-2" onClick={handleDownload} {...commonProps}>
+                                        <Download size={18} />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip content="Print CV">
+                                    <IconButton size="sm" variant="text" className="text-white bg-white/5 hover:bg-white/10 p-2" onClick={handlePrint} {...commonProps}>
+                                        <Printer size={18} />
+                                    </IconButton>
+                                </Tooltip>
+                                <Button
+                                    size="sm"
+                                    color="indigo"
+                                    variant="gradient"
+                                    className="flex items-center gap-2 normal-case py-2"
+                                    onClick={() => window.open(CVPDFLink, '_blank')}
+                                    {...commonProps}
+                                >
+                                    View Full Screen <ArrowTopRightOnSquareIcon />
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* PDF Embed Area */}
+                        <div className="w-full h-[70vh] min-h-[500px] bg-slate-900/50 relative overflow-hidden group">
+                            {isLoading ? (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                                </div>
+                            ) : isCVExist ? (
+                                <iframe
+                                    src={`${CVPDFLink}#toolbar=0&navpanes=0&scrollbar=0`}
+                                    className="w-full h-full border-none opacity-90 group-hover:opacity-100 transition-opacity"
+                                    title="CV Preview"
+                                />
+                            ) : (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center text-white gap-4 p-8 text-center">
+                                    <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-white/20 mb-2">
+                                        <ExternalLink size={40} />
+                                    </div>
+                                    <Typography variant="h5" color="white" {...commonProps}>CV Document Not Found</Typography>
+                                    <Typography className="text-white/60 max-w-md" {...commonProps}>
+                                        We couldn't locate your CV at the expected location. Please ensure the file is uploaded correctly.
+                                    </Typography>
+                                    <Button variant="outlined" color="white" className="border-white/20" onClick={() => window.location.reload()} {...commonProps}>
+                                        Try Refreshing
+                                    </Button>
+                                </div>
+                            )}
+
+                            {/* Hover Overlay for direct link */}
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none md:hidden">
+                                <Typography className="text-white text-sm bg-black/60 px-4 py-2 rounded-full border border-white/20" {...commonProps}>
+                                    Viewing Preview
+                                </Typography>
+                            </div>
                         </div>
                     </GlassCard>
-                )}
+                </div>
+
+                {/* Right Column: Dynamic Bio & Skills */}
+                <div className="space-y-6">
+                    {/* About Me Section */}
+                    <motion.div variants={itemVariants}>
+                        <GlassCard className="p-8 relative overflow-hidden">
+                            <div className="absolute -top-4 -right-4 text-white/5 rotate-12">
+                                <Briefcase size={80} />
+                            </div>
+                            <Typography
+                                variant="small"
+                                className="text-black uppercase tracking-[0.2em] mb-4 font-black text-xs"
+                                {...commonProps}
+                            >
+                                Executive Summary
+                            </Typography>
+                            <Typography
+                                className="text-white leading-relaxed text-lg font-light italic border-l-2 border-indigo-500/50 pl-6 py-2"
+                                {...commonProps}
+                            >
+                                "{userStore.information.details.bio || "Crafting digital experiences with passion and precision. Specializing in modern web architectures and performance-driven solutions."}"
+                            </Typography>
+                        </GlassCard>
+                    </motion.div>
+
+                    {/* Skills Summary Section */}
+                    {skillStore.value && skillStore.value.length > 0 && (
+                        <motion.div variants={itemVariants}>
+                            <GlassCard className="p-8">
+                                <Typography
+                                    variant="small"
+                                    className="text-black uppercase tracking-[0.2em] mb-6 font-black text-xs"
+                                    {...commonProps}
+                                >
+                                    Technical Expertise
+                                </Typography>
+                                <div className="flex flex-wrap gap-2">
+                                    {skillStore.value.map((skill, i) => (
+                                        <motion.div
+                                            key={i}
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                        >
+                                            <Chip
+                                                size="sm"
+                                                variant="filled"
+                                                value={skill.name}
+                                                className="bg-indigo-500/20 text-indigo-100 border border-indigo-500/30 font-medium normal-case py-1.5 px-3"
+                                                {...commonProps}
+                                            />
+                                        </motion.div>
+                                    ))}
+                                </div>
+                                <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between group cursor-pointer" onClick={() => window.location.href = '/home/person/skill'}>
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 rounded-lg bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                                            <Code2 size={18} />
+                                        </div>
+                                        <span className="text-sm font-bold text-white/80 group-hover:text-white">View detailed skills</span>
+                                    </div>
+                                    <ExternalLink size={14} className="text-white/40 group-hover:text-white transition-all" />
+                                </div>
+                            </GlassCard>
+                        </motion.div>
+                    )}
+
+                    {/* Career Highlights Section */}
+                    {userArchive.archive && userArchive.archive.length > 0 && (
+                        <motion.div variants={itemVariants}>
+                            <GlassCard className="p-8">
+                                <Typography
+                                    variant="small"
+                                    className="text-black uppercase tracking-[0.2em] mb-6 font-black text-xs"
+                                    {...commonProps}
+                                >
+                                    Career Highlights
+                                </Typography>
+                                <div className="space-y-8 relative before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-white/10">
+                                    {userArchive.archive.map((item, i) => (
+                                        <div key={i} className="flex gap-6 items-start relative list-none">
+                                            <div className="w-6 h-6 rounded-full bg-indigo-500 border-4 border-slate-900 shrink-0 z-10 shadow-lg shadow-indigo-500/20 mt-1"></div>
+                                            <div>
+                                                <Typography
+                                                    className="text-xs font-black text-indigo-300 uppercase tracking-wider mb-1"
+                                                    {...commonProps}
+                                                >
+                                                    {item.category || "Achievement"}
+                                                </Typography>
+                                                <Typography
+                                                    className="text-sm text-white/90 leading-relaxed font-medium"
+                                                    {...commonProps}
+                                                >
+                                                    {item.content}
+                                                </Typography>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </GlassCard>
+                        </motion.div>
+                    )}
+                </div>
             </div>
-        </div>
+        </motion.div>
     );
 };
 
