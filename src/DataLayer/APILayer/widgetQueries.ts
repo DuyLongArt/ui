@@ -7,7 +7,7 @@ const API_BASE_URL = '/backend/widgets';
 export interface WidgetFolder {
     id: number;
     folderName: string;
-    identity_id?: number;
+    // identity_id?: number;
 }
 
 export interface WidgetShortcut {
