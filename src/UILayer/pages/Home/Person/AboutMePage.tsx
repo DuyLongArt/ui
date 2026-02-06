@@ -24,7 +24,7 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
 
 
     const [isCVExist, setIsCVExist] = React.useState(false);
-    const CVPDFLink = `http://192.168.22.4:9000/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/cv.pdf`;
+    const CVPDFLink = `http://192.168.22.4:9000/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/cv/cv.pdf`;
 
     React.useEffect(() => {
         const checkCV = async () => {
