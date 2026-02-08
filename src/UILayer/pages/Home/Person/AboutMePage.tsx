@@ -116,24 +116,23 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
 
                     <div className="flex flex-col md:flex-row gap-8 items-center md:items-start relative z-10">
 
+                        <div className="flex-1 flex flex-row md:flex-row gap-8 items-center md:items-start">
+                            <div className="flex-1 text-center  md:text-left space-y-4">
+                                <div>
+                                    <p variant="h2" color="white" className="font-black tracking-tight text-2xl md:text-4xl" {...commonProps}>
+                                        {userStore.information.profiles.firstName} {userStore.information.profiles.lastName}
+                                    </p>
+                                    <p variant="h5" className="text-indigo-400 font-bold tracking-widest uppercase text-sm md:text-base mt-2" {...commonProps}>
+                                        {userStore.information.details.occupation || "Software Engineer / Designer"}
+                                    </p>
 
-                        <div className="flex-1 text-center md:text-left space-y-4">
-                            <div>
-                                <p variant="h2" color="white" className="font-black tracking-tight text-2xl md:text-4xl" {...commonProps}>
-                                    {userStore.information.profiles.firstName} {userStore.information.profiles.lastName}
-                                </p>
-                                <p variant="h5" className="text-indigo-400 font-bold tracking-widest uppercase text-sm md:text-base mt-2" {...commonProps}>
-                                    {userStore.information.details.occupation || "Software Engineer / Designer"}
-                                </p>
+                                </div>
+                              
                             </div>
-
-                            <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                                <div className="flex items-center gap-2 text-white/70 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                              <div className="flex items-center gap-2 text-white/70 bg-white/5 px-4 py-2 rounded-full border border-white/10 max-[410px]:hidden">
                                     <MapPin size={16} className="text-indigo-400" />
                                     <span className="text-sm">{userStore.information.details.location || "Remote"}, {userStore.information.details.country || "Earth"}</span>
                                 </div>
-
-                            </div>
 
                             <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
                                 {userStore.information.details.github_url && (
