@@ -53,6 +53,7 @@ export const useWidgetShortcutsQuery = (folderId: number | null) => {
 // Mutations
 export const useAddFolderMutation = () => {
     const queryClient = useQueryClient();
+    console.log("useAddFolderMutation: " + Cookies.get('auth_jwt'));
     return useMutation({
         mutationFn: (folder: Partial<WidgetFolder>) => {
             const token = Cookies.get('auth_jwt');

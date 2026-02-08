@@ -46,6 +46,9 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
     React.useEffect(() => {
         const checkCV = async () => {
             setIsLoading(true);
+            const response = await axios.get(CVPDFLink);
+            console.log("===================================")
+            console.log(response);
             try {
                 const response = await axios.get(CVPDFLink);
                 setIsCVExist(response.status === 200 || response.status === 304);
@@ -57,7 +60,7 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
             }
         };
         checkCV();
-    }, [CVPDFLink]);
+    }, []);
 
     const handleDownload = () => {
         window.open(CVPDFLink, '_blank');
@@ -105,77 +108,7 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
             variants={containerVariants}
             className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto"
         >
-            {/* Header: Personal Info Hero */}
-            {/* <GlassCard className="p-8 md:p-12 overflow-hidden relative group" color="from-indigo-600/80 via-blue-600/70 to-indigo-800/80">
-                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                    <Award size={120} />
-                </div>
 
-                <div className="flex flex-col md:flex-row gap-8 items-center md:items-start relative z-10">
-                    <motion.div
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="relative"
-                    >
-                        <div className="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-4 border-white/30 shadow-2xl bg-indigo-500/50">
-                            <img
-                                src={userStore.information.profiles.profileImageUrl}
-                                alt="Profile"
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                    (e.target as HTMLImageElement).src = "https://backend.duylong.art/object/duylongwebappobjectdatabase/admin.png";
-                                }}
-                            />
-                        </div>
-                        <div className="absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-indigo-700 shadow-lg" />
-                    </motion.div>
-
-                    <div className="text-center md:text-left space-y-4 flex-1">
-                        <div>
-                            <Typography variant="h2" color="white" className="font-extrabold tracking-tight text-4xl md:text-5xl" {...commonProps}>
-                                {userStore.information.profiles.firstName} {userStore.information.profiles.lastName}
-                            </Typography>
-                            <Typography variant="h5" className="text-indigo-100 font-medium mt-1 flex items-center justify-center md:justify-start gap-2" {...commonProps}>
-                                <Briefcase size={20} /> {userStore.information.details.occupation || "Software Engineer"}
-                            </Typography>
-                        </div>
-
-                        <div className="flex flex-wrap justify-center md:justify-start gap-4 text-white/80 text-sm">
-                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
-                                <MapPin size={14} className="text-indigo-300" />
-                                {userStore.information.details.location}, {userStore.information.details.country}
-                            </div>
-                            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10">
-                                <GraduationCap size={14} className="text-indigo-300" />
-                                {userStore.information.details.university}
-                            </div>
-                        </div>
-
-                        <div className="flex justify-center md:justify-start gap-4 pt-2">
-                            {userStore.information.details.github_url && (
-                                <Tooltip content="GitHub Profile">
-                                    <IconButton variant="text" color="white" className="bg-white/10 hover:bg-white/20" onClick={() => window.open(userStore.information.details.github_url, '_blank')} {...commonProps}>
-                                        <Github size={20} />
-                                    </IconButton>
-                                </Tooltip>
-                            )}
-                            {userStore.information.details.linkedin_url && (
-                                <Tooltip content="LinkedIn Profile">
-                                    <IconButton variant="text" color="white" className="bg-white/10 hover:bg-white/20" onClick={() => window.open(userStore.information.details.linkedin_url, '_blank')} {...commonProps}>
-                                        <Linkedin size={20} />
-                                    </IconButton>
-                                </Tooltip>
-                            )}
-                            <Tooltip content="Email Me">
-                                <IconButton variant="text" color="white" className="bg-white/10 hover:bg-white/20" onClick={() => window.location.href = `mailto:contact@duylong.art`} {...commonProps}>
-                                    <Mail size={20} />
-                                </IconButton>
-                            </Tooltip>
-                        </div>
-                    </div>
-                </div>
-            </GlassCard> */}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Left Column: CV Preview */}
