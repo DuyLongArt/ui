@@ -51,7 +51,7 @@ const useMusicStore = create<MusicState>()(
                 set({ isLoading: true, error: null });
                 try {
                     console.log("🎵 Fetching music from API...");
-                    const response = await axios.get(`https://backend.duylong.art/gomedia/api/music?t=${Date.now()}`);
+                    const response = await axios.get(`https://media.duylong.art/gomedia/api/music?t=${Date.now()}`);
                     console.log("✅ Music fetched successfully:", response.data);
 
                     if (response.data && Array.isArray(response.data.files)) {
@@ -60,7 +60,7 @@ const useMusicStore = create<MusicState>()(
                             title: file.name.replace(/\.(mp3|wav|flac|ogg|opus|m4a|aac|wma)$/i, ''), // Remove extension
                             artist: 'Unknown Artist',
                             album: 'Unknown Album',
-                            url: `https://backend.duylong.art${file.url}`,
+                            url: `https://media.duylong.art${file.url}`,
                         }));
                         console.log(`✅ Mapped ${mappedSongs.length} songs`);
 
