@@ -214,6 +214,8 @@ const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
 
   if (currentStateValue === AUTHENTICATED_STATE || isPublicPage) {
     return <Box>{children}</Box>;
+  } else {
+    window.location.href = "/entry/index";
   }
 
   // Fallback: wait for navigation or show nothing if unauthorized
