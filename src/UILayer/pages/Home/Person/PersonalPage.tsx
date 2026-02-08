@@ -32,18 +32,9 @@ const DocumentIcon = () => (
 );
 
 const PersonalPage = () => {
-  const [activeTab, setActiveTab] = useState('cv');
-
-  // CV State
-  const [cvFile, setCvFile] = useState(null);
-  const [cvPreviewUrl, setCvPreviewUrl] = useState(null);
-  const fileInputRef = useRef(null);
-  const userStore = useUserProfileStore();  // Mock data
-  const user = userStore.information;
+  const userStore = useUserProfileStore();
   const userAccountStore = useUserAccountStore();
-  useEffect(() => {
-    // userAccountStore.getUserRole();
-  }, []);
+  const user = userStore.information;
 
   const stats = [
     { label: "Projects", value: 42 },
@@ -52,123 +43,51 @@ const PersonalPage = () => {
     { label: "Awards", value: 12 }
   ];
 
-  const skills = [
-    { name: "UI/UX Design", level: 95 },
-    { name: "Figma", level: 90 },
-    { name: "React", level: 75 },
-    { name: "Typography", level: 88 },
-    { name: "User Research", level: 82 }
-  ];
-
-  const recentProjects = [
-    {
-      title: "E-commerce App",
-      description: "Redesign of shopping experience",
-      status: "Completed",
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop"
-    },
-    {
-      title: "SaaS Dashboard",
-      description: "Analytics for B2B platform",
-      status: "In Progress",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop"
-    },
-    {
-      title: "Brand Identity",
-      description: "Visual identity for startup",
-      status: "Review",
-      image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=400&h=300&fit=crop"
-    }
-  ];
-
   const achievements = [
     { title: "Designer of the Year", org: "Design Awards", date: "Jan 2024" },
     { title: "UX Excellence", org: "Tech Summit", date: "Sep 2023" },
     { title: "Innovation Award", org: "Creative Guild", date: "Jun 2023" }
   ];
 
-  // Handlers
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type === "application/pdf") {
-      setCvFile(file);
-      const fileUrl = URL.createObjectURL(file);
-      setCvPreviewUrl(fileUrl);
-    } else {
-      alert("Please upload a PDF file.");
-    }
-  };
-
-  const triggerUpload = () => {
-    if (fileInputRef.current) fileInputRef.current.click();
-  }
-
-  // Styles
-
-  const glassContainer = "bg-white/40 backdrop-blur-2xl border border-white/50 shadow-2xl";
-  const glassCard = "bg-white/50 backdrop-blur-md border border-white/60 shadow-sm rounded-2xl transition-all duration-300 hover:shadow-md hover:bg-white/60";
-  // console.log("User permission parent: " + user.profiles.role);
   return (
-    // Normal Page Layout container
-    <div className="min-h-screen bg-slate-50 font-sans border-2 border-b-black py-2  relative overflow-x-hidden flex items-center justify-center">
+    <div className="min-h-screen bg-[#141430] font-sans py-4 md:py-8 relative overflow-hidden flex items-start justify-center">
+      {/* Dynamic Background Elements */}
+      <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-indigo-600/20 rounded-full mix-blend-screen filter blur-[120px] animate-blob pointer-events-none"></div>
+      <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-blue-600/20 rounded-full mix-blend-screen filter blur-[100px] animate-blob animation-delay-2000 pointer-events-none"></div>
+      <div className="absolute top-[20%] right-[15%] w-[400px] h-[400px] bg-purple-600/10 rounded-full mix-blend-screen filter blur-[80px] animate-blob animation-delay-4000 pointer-events-none"></div>
 
-      {/* Background Blobs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-200/60 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob pointer-events-none"></div>
-      <div className="absolute top-0 right-[-5%] w-[400px] h-[400px] bg-blue-200/60 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000 pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] bg-pink-200/60 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000 pointer-events-none"></div>
-
-      {/* Main Content Card - Fixed Width Constraints */}
-      <div className={`w-full max-h-min  max-w-7xl rounded-3xl flex flex-col relative z-10 ${glassContainer}`}>
-
-        {/* Header Section */}
-        <div className="shrink-0 p-8 md:p-8 border-b border-white/30 bg-white/10 rounded-t-3xl">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div>
-              <Typography variant="h3" className="text-black font-semibold tracking-tight" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}>
-                {user.profiles.firstName}
-              </Typography>
-              <Typography className="text-black font-medium flex items-center gap-2" placeholder="" onPointerEnterCapture={() => { }} onPointerLeaveCapture={() => { }} onResize={() => { }} onResizeCapture={() => { }}>
-                {user.details.occupation} <span className="w-1 h-1 bg-slate-400 rounded-full"></span> {user.details.location}
-              </Typography>
-            </div>
-
-            {/* Navigation Pills */}
-
+      {/* Main Content Container */}
+      <div className="w-full max-w-7xl px-4 md:px-6 relative z-10">
+        <div className="flex flex-col gap-6">
+          {/* Navigation & Content Wrapper */}
+          <div className="relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/5 backdrop-blur-3xl shadow-2xl">
+            <TabNavigation
+              tabs={[
+                { label: 'Overview', shortKey: 'overview', role: 'VIEWER' },
+                { label: 'Skills', shortKey: 'skills', role: 'VIEWER' },
+                { label: 'Project', shortKey: 'projects', role: 'VIEWER' },
+              ]}
+              user={userAccountStore.account}
+              listTab={{
+                overview: <AboutMePage stats={stats} achievements={achievements} />,
+                projects: <ProjectPage />,
+                skills: <SkillPage />,
+              }}
+              defaultTab="overview"
+            />
           </div>
-        </div>
-
-        {/* Content Area */}
-        <div className="relative min-h-[500px]">
-
-          <TabNavigation
-            tabs={[
-              { label: 'Overview', shortKey: 'overview', role: 'VIEWER' },
-
-              { label: 'Skills', shortKey: 'skills', role: 'VIEWER' },
-              { label: 'Project', shortKey: 'projects', role: 'VIEWER' },
-            ]}
-            user={userAccountStore.account}
-            listTab={{
-              overview: <AboutMePage stats={stats} achievements={achievements} />,
-              projects: <ProjectPage />,
-              skills: <SkillPage />,
-
-            }}
-            defaultTab="overview"
-          />
-
         </div>
       </div>
 
       <style>{`
         @keyframes blob {
           0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
+          33% { transform: translate(40px, -60px) scale(1.1); }
+          66% { transform: translate(-30px, 30px) scale(0.9); }
           100% { transform: translate(0px, 0px) scale(1); }
         }
         .animate-blob {
-          animation: blob 7s infinite;
+          animation: blob 10s infinite alternate cubic-bezier(0.45, 0, 0.55, 1);
         }
         .animation-delay-2000 {
           animation-delay: 2s;

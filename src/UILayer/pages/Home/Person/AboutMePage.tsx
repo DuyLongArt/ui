@@ -41,15 +41,13 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
     const [isCVExist, setIsCVExist] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
 
-    console.log("userStore.information.profiles.alias", userStore.information.profiles.alias);
-    const CVPDFLink = userStore.information.profiles.alias === "" || userStore.information.profiles.alias === undefined ? "https://backend.duylong.art/object/duylongwebappobjectdatabase/b265dab1-cf08-4643-8214-d380fa18063e/cv/cv.pdf" : `https://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/cv/cv.pdf`;
+    const CVPDFLink = userStore.information.profiles.alias === "" || userStore.information.profiles.alias === undefined
+        ? "https://backend.duylong.art/object/duylongwebappobjectdatabase/b265dab1-cf08-4643-8214-d380fa18063e/cv/cv.pdf"
+        : `https://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/cv/cv.pdf`;
 
     React.useEffect(() => {
         const checkCV = async () => {
             setIsLoading(true);
-            const response = await axios.get(CVPDFLink);
-            console.log("===================================")
-            console.log(response);
             try {
                 const response = await axios.get(CVPDFLink);
                 setIsCVExist(response.status === 200 || response.status === 304);
@@ -61,7 +59,7 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
             }
         };
         checkCV();
-    }, []);
+    }, [CVPDFLink]);
 
     const handleDownload = () => {
         window.open(CVPDFLink, '_blank');
@@ -77,29 +75,29 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
     };
 
     const containerVariants = {
-        hidden: { opacity: 0, y: 20 },
+        hidden: { opacity: 0 },
         visible: {
             opacity: 1,
-            y: 0,
             transition: {
-                duration: 0.6,
-                staggerChildren: 0.1
+                staggerChildren: 0.1,
+                delayChildren: 0.2
             }
         }
     };
 
     const itemVariants = {
-        hidden: { opacity: 0, x: -20 },
-        visible: { opacity: 1, x: 0 }
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { type: "spring" as const, stiffness: 100, damping: 20 }
+        }
     };
 
-    // Shared common props for Material Tailwind components to avoid boilerplate error
     const commonProps = {
         placeholder: "",
         onPointerEnterCapture: () => { },
         onPointerLeaveCapture: () => { },
-        onResize: () => { },
-        onResizeCapture: () => { },
     } as any;
 
     return (
@@ -107,182 +105,128 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto"
+            className="min-h-screen p-2 md:p-2 space-y-8 max-w-7xl mx-auto"
         >
+            {/* Header / Hero Section */}
+            <motion.div variants={itemVariants} className="relative z-10">
+                <GlassCard className="p-2 md:p-6 overflow-hidden relative group" >
+                    <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <GraduationCap size={160} />
+                    </div>
+
+                    <div className="flex flex-col md:flex-row gap-8 items-center md:items-start relative z-10">
 
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Left Column: CV Preview */}
-                <div className="md:col-span-2 space-y-6">
-                    <GlassCard className="p-0 overflow-hidden shadow-bold flex flex-col h-full group/cv" color='from-slate-800 via-slate-900 to-black'>
-                        {/* CV Toolbar */}
-                        <div className="p-4 md:px-6 md:py-4 border-b border-white/10 flex flex-wrap justify-between items-center bg-white/5 backdrop-blur-xl">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400">
-                                    <CheckCircle2 size={24} />
-                                </div>
-                                <div>
-                                    <Typography variant="h6" color="white" className="font-bold leading-tight" {...commonProps}>
-                                        Curriculum Vitae
-                                    </Typography>
-                                    <Typography variant="small" className="text-white/40 text-[10px] uppercase tracking-widest font-bold" {...commonProps}>
-                                        Professional Document
-                                    </Typography>
-                                </div>
+                        <div className="flex-1 text-center md:text-left space-y-4">
+                            <div>
+                                <p variant="h2" color="white" className="font-black tracking-tight text-2xl md:text-4xl" {...commonProps}>
+                                    {userStore.information.profiles.firstName} {userStore.information.profiles.lastName}
+                                </p>
+                                <p variant="h5" className="text-indigo-400 font-bold tracking-widest uppercase text-sm md:text-base mt-2" {...commonProps}>
+                                    {userStore.information.details.occupation || "Software Engineer / Designer"}
+                                </p>
                             </div>
 
-                            <div className="flex items-center gap-2 mt-2 sm:mt-0">
-                                <Tooltip content="Download PDF">
-                                    <IconButton size="sm" variant="text" className="text-white bg-white/5 hover:bg-white/10 p-2" onClick={handleDownload} {...commonProps}>
-                                        <Download size={18} />
+                            <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                                <div className="flex items-center gap-2 text-white/70 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                                    <MapPin size={16} className="text-indigo-400" />
+                                    <span className="text-sm">{userStore.information.details.location || "Remote"}, {userStore.information.details.country || "Earth"}</span>
+                                </div>
+
+                            </div>
+
+                            <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
+                                {userStore.information.details.github_url && (
+                                    <IconButton size="md" variant="text" color="white" className="bg-white/5 hover:bg-white/10" onClick={() => window.open(userStore.information.details.github_url, '_blank')} {...commonProps}>
+                                        <Github size={20} />
                                     </IconButton>
-                                </Tooltip>
-                                <Tooltip content="Print CV">
-                                    <IconButton size="sm" variant="text" className="text-white bg-white/5 hover:bg-white/10 p-2" onClick={handlePrint} {...commonProps}>
-                                        <Printer size={18} />
+                                )}
+                                {userStore.information.details.linkedin_url && (
+                                    <IconButton size="md" variant="text" color="white" className="bg-white/5 hover:bg-white/10" onClick={() => window.open(userStore.information.details.linkedin_url, '_blank')} {...commonProps}>
+                                        <Linkedin size={20} />
                                     </IconButton>
-                                </Tooltip>
-                                <Button
-                                    size="sm"
-                                    color="indigo"
-                                    variant="gradient"
-                                    className="flex items-center gap-2 normal-case py-2"
-                                    onClick={() => window.open(CVPDFLink, '_blank')}
-                                    {...commonProps}
-                                >
-                                    View Full Screen <ArrowTopRightOnSquareIcon />
-                                </Button>
+                                )}
+                                {userStore.information.details.website_url && (
+                                    <IconButton size="md" variant="text" color="white" className="bg-white/5 hover:bg-white/10" onClick={() => window.open(userStore.information.details.website_url, '_blank')} {...commonProps}>
+                                        <ExternalLink size={20} />
+                                    </IconButton>
+                                )}
                             </div>
                         </div>
+                    </div>
+                </GlassCard>
+            </motion.div>
 
-                        {/* PDF Embed Area */}
-                        <div className="w-full h-[70vh] min-h-[500px] bg-slate-900/50 relative overflow-hidden group">
-                            {isLoading ? (
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                                </div>
-                            ) : isCVExist ? (
-                                <iframe
-                                    src={`${CVPDFLink}#toolbar=0&navpanes=0&scrollbar=0`}
-                                    className="w-full h-full border-none opacity-90 group-hover:opacity-100 transition-opacity"
-                                    title="CV Preview"
-                                />
-                            ) : (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center text-white gap-4 p-8 text-center">
-                                    <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-white/20 mb-2">
-                                        <ExternalLink size={40} />
-                                    </div>
-                                    <Typography variant="h5" color="white" {...commonProps}>CV Document Not Found</Typography>
-                                    <Typography className="text-white/60 max-w-md" {...commonProps}>
-                                        We couldn't locate your CV at the expected location. Please ensure the file is uploaded correctly.
-                                    </Typography>
-                                    <Button variant="outlined" color="white" className="border-white/20" onClick={() => window.location.reload()} {...commonProps}>
-                                        Try Refreshing
-                                    </Button>
-                                </div>
-                            )}
-
-                            {/* Hover Overlay for direct link */}
-                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none md:hidden">
-                                <Typography className="text-white text-sm bg-black/60 px-4 py-2 rounded-full border border-white/20" {...commonProps}>
-                                    Viewing Preview
-                                </Typography>
-                            </div>
-                        </div>
-                    </GlassCard>
-                </div>
-
-                {/* Right Column: Dynamic Bio & Skills */}
-                <div className="space-y-6">
-                    {/* About Me Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                {/* Left Column: Details & Stats (4 cols) */}
+                <div className="lg:col-span-4 space-y-6 order-2 lg:order-1">
+                    {/* Bio Card */}
                     <motion.div variants={itemVariants}>
-                        <GlassCard className="p-8 relative overflow-hidden">
-                            <div className="absolute -top-4 -right-4 text-white/5 rotate-12">
-                                <Briefcase size={80} />
+                        <GlassCard className="p-8" color="from-slate-800/40 via-slate-900/40 to-slate-800/40">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400">
+                                    <Briefcase size={20} />
+                                </div>
+                                <Typography variant="h6" color="white" className="font-bold" {...commonProps}>Executive Bio</Typography>
                             </div>
-                            <Typography
-                                variant="small"
-                                className="text-black uppercase tracking-[0.2em] mb-4 font-black text-xs"
-                                {...commonProps}
-                            >
-                                Executive Summary
-                            </Typography>
-                            <Typography
-                                className="text-white leading-relaxed text-lg font-light italic border-l-2 border-indigo-500/50 pl-6 py-2"
-                                {...commonProps}
-                            >
+                            <Typography className="text-white/80 leading-relaxed font-light italic border-l-2 border-indigo-500/50 pl-4" {...commonProps}>
                                 "{userStore.information.details.bio || "Crafting digital experiences with passion and precision. Specializing in modern web architectures and performance-driven solutions."}"
                             </Typography>
                         </GlassCard>
                     </motion.div>
 
-                    {/* Skills Summary Section */}
-                    {skillStore.value && skillStore.value.length > 0 && (
-                        <motion.div variants={itemVariants}>
-                            <GlassCard className="p-8">
-                                <Typography
-                                    variant="small"
-                                    className="text-black uppercase tracking-[0.2em] mb-6 font-black text-xs"
-                                    {...commonProps}
-                                >
-                                    Technical Expertise
-                                </Typography>
-                                <div className="flex flex-wrap gap-2">
-                                    {skillStore.value.map((skill, i) => (
-                                        <motion.div
-                                            key={i}
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                        >
-                                            <Chip
-                                                size="sm"
-                                                variant="filled"
-                                                value={skill.name}
-                                                className="bg-indigo-500/20 text-indigo-100 border border-indigo-500/30 font-medium normal-case py-1.5 px-3"
-                                                {...commonProps}
-                                            />
-                                        </motion.div>
-                                    ))}
+                    {/* Stats / Skills Grid */}
+                    <motion.div variants={itemVariants}>
+                        <GlassCard className="p-8" color="from-slate-800/40 via-slate-900/40 to-slate-800/40">
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400">
+                                    <Code2 size={20} />
                                 </div>
-                                <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between group cursor-pointer" onClick={() => window.location.href = '/home/person/skill'}>
-                                    <div className="flex items-center gap-3">
-                                        <div className="p-2 rounded-lg bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all">
-                                            <Code2 size={18} />
-                                        </div>
-                                        <span className="text-sm font-bold text-white/80 group-hover:text-white">View detailed skills</span>
-                                    </div>
-                                    <ExternalLink size={14} className="text-white/40 group-hover:text-white transition-all" />
-                                </div>
-                            </GlassCard>
-                        </motion.div>
-                    )}
+                                <Typography variant="h6" color="white" className="font-bold" {...commonProps}>Tech Stack</Typography>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {skillStore.value.map((skill, i) => (
+                                    <Chip
+                                        key={i}
+                                        size="sm"
+                                        variant="filled"
+                                        value={skill.name}
+                                        className="bg-indigo-500/10 text-indigo-200 border border-indigo-500/20 font-medium normal-case py-1.5 px-3 hover:bg-indigo-500/30 transition-colors cursor-default"
+                                        {...commonProps}
+                                    />
+                                ))}
+                            </div>
+                            <Button
+                                variant="text"
+                                color="white"
+                                className="mt-6 flex items-center gap-2 normal-case w-full justify-center bg-white/5 hover:bg-white/10"
+                                onClick={() => window.location.href = '/home/person/skill'}
+                                {...commonProps}
+                            >
+                                View Detailed Skills <ExternalLink size={14} />
+                            </Button>
+                        </GlassCard>
+                    </motion.div>
 
-                    {/* Career Highlights Section */}
+                    {/* Career Highlights */}
                     {userArchive.archive && userArchive.archive.length > 0 && (
                         <motion.div variants={itemVariants}>
-                            <GlassCard className="p-8">
-                                <Typography
-                                    variant="small"
-                                    className="text-black uppercase tracking-[0.2em] mb-6 font-black text-xs"
-                                    {...commonProps}
-                                >
-                                    Career Highlights
-                                </Typography>
+                            <GlassCard className="p-8" color="from-slate-800/40 via-slate-900/40 to-slate-800/40">
+                                <div className="flex items-center gap-3 mb-8">
+                                    <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400">
+                                        <Award size={20} />
+                                    </div>
+                                    <Typography variant="h6" color="white" className="font-bold" {...commonProps}>Achievements</Typography>
+                                </div>
                                 <div className="space-y-8 relative before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-white/10">
-                                    {userArchive.archive.map((item, i) => (
-                                        <div key={i} className="flex gap-6 items-start relative list-none">
+                                    {userArchive.archive.slice(0, 4).map((item, i) => (
+                                        <div key={i} className="flex gap-6 items-start relative">
                                             <div className="w-6 h-6 rounded-full bg-indigo-500 border-4 border-slate-900 shrink-0 z-10 shadow-lg shadow-indigo-500/20 mt-1"></div>
-                                            <div>
-                                                <Typography
-                                                    className="text-xs font-black text-indigo-300 uppercase tracking-wider mb-1"
-                                                    {...commonProps}
-                                                >
-                                                    {item.category || "Achievement"}
+                                            <div className="space-y-1">
+                                                <Typography className="text-xs font-black text-indigo-300 uppercase tracking-widest" {...commonProps}>
+                                                    {item.category || "Milestone"}
                                                 </Typography>
-                                                <Typography
-                                                    className="text-sm text-white/90 leading-relaxed font-medium"
-                                                    {...commonProps}
-                                                >
+                                                <Typography className="text-sm text-white/80 leading-relaxed font-medium" {...commonProps}>
                                                     {item.content}
                                                 </Typography>
                                             </div>
@@ -292,6 +236,98 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                             </GlassCard>
                         </motion.div>
                     )}
+                </div>
+
+                {/* Right Column: CV Preview (8 cols) */}
+                <div className="lg:col-span-8 order-1 lg:order-2">
+                    <motion.div variants={itemVariants} className="h-full">
+                        <GlassCard className="p-0 overflow-hidden shadow-2xl flex flex-col h-full min-h-[1100px] border-white/20" color="from-slate-900 via-slate-950 to-black">
+                            {/* CV Toolbar */}
+                            <div className="p-4 md:px-6 md:py-4 border-b border-white/10 flex flex-wrap justify-between items-center bg-white/5 backdrop-blur-2xl">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 border border-indigo-500/30">
+                                        <CheckCircle2 size={24} />
+                                    </div>
+                                    <div>
+                                        <Typography variant="h6" color="white" className="font-black leading-tight" {...commonProps}>
+                                            RESUME / CV
+                                        </Typography>
+
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center gap-2 mt-4 sm:mt-0">
+                                    <div className="flex bg-white/5 p-1 rounded-xl border border-white/10 mr-2">
+                                        <Tooltip content="Download PDF">
+                                            <IconButton size="md" variant="text" color="white" className="hover:bg-indigo-500/20 hover:text-indigo-400" onClick={handleDownload} {...commonProps}>
+                                                <Download size={20} />
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip content="Print Document">
+                                            <IconButton size="md" variant="text" color="white" className="hover:bg-indigo-500/20 hover:text-indigo-400" onClick={handlePrint} {...commonProps}>
+                                                <Printer size={20} />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </div>
+                                    <Button
+                                        size="md"
+                                        color="indigo"
+                                        variant="gradient"
+                                        className="flex items-center gap-2 normal-case py-2.5 rounded-xl font-bold shadow-indigo-500/20"
+                                        onClick={() => window.open(CVPDFLink, '_blank')}
+                                        {...commonProps}
+                                    >
+                                        View Full <ArrowTopRightOnSquareIcon />
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {/* PDF Viewport with decorative frame */}
+                            <div className="flex-1 bg-slate-950 relative group/preview p-1 md:p-3 overflow-y-auto">
+                                <div className="absolute inset-0 bg-indigo-500/5 pointer-events-none"></div>
+
+                                {isLoading ? (
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm z-20">
+                                        <div className="w-16 h-16 border-4 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin mb-4" />
+                                        <Typography className="text-white/40 font-bold uppercase tracking-widest text-xs" {...commonProps}>Loading Document...</Typography>
+                                    </div>
+                                ) : isCVExist ? (
+                                    <div className="w-full h-full min-h-[1000px] relative rounded-lg border border-white/5 shadow-inner ">
+                                        <iframe
+                                            src={`${CVPDFLink}#toolbar=0&navpanes=0&scrollbar=1&view=FitW`}
+                                            className="absolute inset-0 w-full h-full border-none opacity-90 transition-all duration-500 grayscale-[0.2] group-hover/preview:grayscale-0 group-hover/preview:opacity-100"
+                                            title="CV Preview"
+                                        />
+
+
+
+                                        <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.4)]"></div>
+                                    </div>
+                                ) : (
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white gap-6 p-12 text-center bg-slate-950">
+                                        <div className="w-24 h-24 rounded-3xl bg-white/5 flex items-center justify-center text-white/10 mb-2 border border-white/10 group-hover:bg-indigo-500/10 group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-all duration-500">
+                                            <ExternalLink size={48} />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Typography variant="h4" color="white" className="font-black" {...commonProps}>Document Unavailable</Typography>
+                                            <Typography className="text-white/40 max-w-sm font-medium leading-relaxed" {...commonProps}>
+                                                The professional CV document could not be securely retrieved from the vault.
+                                            </Typography>
+                                        </div>
+                                        <Button
+                                            variant="outlined"
+                                            color="white"
+                                            className="border-white/10 hover:border-indigo-500 text-white/60 hover:text-white transition-all rounded-xl"
+                                            onClick={() => window.location.reload()}
+                                            {...commonProps}
+                                        >
+                                            Secure Re-sync
+                                        </Button>
+                                    </div>
+                                )}
+                            </div>
+                        </GlassCard>
+                    </motion.div>
                 </div>
             </div>
         </motion.div>
