@@ -239,7 +239,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
             )}
 
             <div className="cursor-pointer ">
-              <PersonProfileIcon onClick={() => navigate("/admin/person-profile/index")} />
+              <PersonProfileIcon onClick={() => navigate("/admin/person-profile")} />
             </div>
 
             <div className="flex items-center  lg:hidden md:hidden shrink-0.25">
