@@ -33,7 +33,7 @@ export default defineConfig({
 
       },
       '/object': {
-        target: 'https://backend.duylong.art', // Your Spring Boot URL
+        target: 'http://192.168.22.4:9000', // Your Spring Boot URL
         changeOrigin: true,
         secure: false,
       },
@@ -53,7 +53,7 @@ export default defineConfig({
         target: 'https://truenas.duylong.art',
         changeOrigin: true,
         secure: true,
-    }
+      }
     }
   }
 })
