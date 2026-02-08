@@ -48,7 +48,7 @@ const EntryPage: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col items-center justify-center gap-2 mt-2 mb-4 px-8  text-white rounded-2xl font-bold text-lgactive:scale-95 ">
-                        <div className="mt-4 text-primary-800 text-2xl  py-4  font-medium">Don't have an account? </div>
+                        <div className="mt-4 text-blue-900/70 text-3xl font-bold py-4 italic font-family-times-new-roman ">Don't have an account? </div>
 
                         <button
                             onClick={() => navigate('/personal/index')}
