@@ -3,7 +3,7 @@ import { Container } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import LiquidGlassCard from '../../components/LiquidGlassCard';
-import { LogIn, UserPlus } from 'lucide-react';
+import { LogIn, UserPlus, UserCheck } from 'lucide-react';
 
 const EntryPage: React.FC = () => {
     const navigate = useNavigate();
@@ -43,6 +43,19 @@ const EntryPage: React.FC = () => {
                         >
                             <UserPlus size={20} />
                             Sign Up
+                        </button>
+
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center gap-2 mt-2 mb-4 px-8  text-white rounded-2xl font-bold text-lgactive:scale-95 ">
+                        <div className="mt-4 text-primary-800 text-2xl  py-4  font-medium">Don't have an account? </div>
+
+                        <button
+                            onClick={() => navigate('/personal/index')}
+                            className="flex items-center justify-center gap-2 py-4 px-8 bg-white/10 text-white border border-white/30 rounded-2xl font-bold text-lg backdrop-blur-md transition-all hover:bg-white/20 active:scale-95 shadow-xl"
+                        >
+                            <UserCheck size={20} />
+                            Login as VIEWER
                         </button>
                     </div>
                 </LiquidGlassCard>

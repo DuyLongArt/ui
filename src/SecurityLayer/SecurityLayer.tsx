@@ -5,6 +5,8 @@ import type { ChildrenInterface } from "../OrchestraLayer/ChildrenComponent";
 import { AuthenticateFactor, checkCookies } from "../OrchestraLayer/StateManager/XState/AuthenticateMachine";
 import { useSelector } from "@xstate/react";
 import { useUserAccountStore } from "@/OrchestraLayer/StateManager/Zustand/userProfileStore";
+import { appRoutes } from "@/RouterLayer/RouterConfig";
+import type { Route } from "@/RouterLayer/RouterProtocol";
 // import console from "console";
 
 // Constants
@@ -19,6 +21,59 @@ const ROUTES = {
   LOGIN: '/login/index',
   ENTRY: '/entry/index'
 } as const;
+
+
+console.log("SecurityLayer | App Routes:", appRoutes);
+
+const childrenRoutes = appRoutes.map(element => element.children);
+// const allowRoutes = childrenRoutes.map(element => element.);
+let allowRoutes: Map<Object, Object>[] = [];
+for (let i = 0; i < appRoutes.length; i++) {
+  const elementLevel1 = appRoutes[i];
+  console.log("Parent path elements", elementLevel1.path);
+  if (elementLevel1.children && elementLevel1.children.length > 0) {
+    console.log("SecurityLayer | Level 2 children routes PATH:", elementLevel1.children.map(element => element.path));
+  } else {
+    console.log("SecurityLayer | Level 2 children routes PATH:", elementLevel1.path);
+  }
+  if (elementLevel1.children) {
+    for (let j = 0; j < elementLevel1.children.length; j++) {
+      let elementLevel2 = elementLevel1.children[j];
+      console.log("SecurityLayer | Level 2 Allows routes PATH:", elementLevel2.allowedRoles);
+
+
+      //  console.log("SecurityLayer | Level 2 children routes PATH:", elementLevel1.values().);
+      allowRoutes.push(new Map([[elementLevel2.allowedRoles, elementLevel1.path]]));
+    }
+  }
+}
+
+let publishRoutes: string[] = [];
+
+
+console.log("Outer Layer | Allow Routes:", allowRoutes);
+// while (allowRoutes.keys().next().value) {
+//   let valueOfAllowSetKey = allowRoutes.keys().next().value;
+//   console.log("SecurityLayer | Allow Routes Keys:", valueOfAllowSetKey);
+//   // if(valueOfAllowSetKey)
+// }
+allowRoutes.forEach((element) => {
+  if (element.keys().next().value) {
+    console.log("SecurityLayer | Allow Routes Keys==:", element.keys().next().value.toString().includes("VIEWER"));
+    if (element.keys().next().value.toString().includes("VIEWER")) {
+
+
+      if (element.values().next().value) {
+        console.log("===========================");
+        console.log("SecurityLayer | Allow Routes:", element);
+        console.log("SecurityLayer | Allow Routes Keys:", element.keys().next().value);
+        console.log("SecurityLayer | Allow Routes Values:", element.values().next().value);
+        publishRoutes.push(element.values().next().value);
+      }
+    }
+  }
+})
+
 
 const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
   const navigate = useNavigate();
@@ -78,12 +133,15 @@ const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
         const cookieJWT = checkCookies();
         const hasCookieJWT = !!(cookieJWT && cookieJWT.length > 0);
 
-        const isPublicPage = location.pathname === '/' ||
-          location.pathname.startsWith('/login') ||
-          location.pathname.startsWith('/register') ||
-          location.pathname.startsWith('/entry');
+        // const checkPublicRoutes = location.pathname.startsWith("/" + path);
+        let checkPublicRoutes = false;
+        publishRoutes.map((element) => {
+          if (location.pathname.startsWith("/" + element)) {
+            checkPublicRoutes = true;
+          }
+        })
 
-        console.log("SecurityLayer Check | State:", currentStateValue, " | Loading:", isLoading, " | Cookie JWT:", hasCookieJWT ? "✅" : "❌", " | Path:", location.pathname, " | Public:", isPublicPage);
+        console.log("SecurityLayer Check | State:", currentStateValue, " | Loading:", isLoading, " | Cookie JWT:", hasCookieJWT ? "✅" : "❌", " | Path:", location.pathname, " | Public:", checkPublicRoutes);
 
         // Skip if still loading
         if (isLoading) {
@@ -98,6 +156,7 @@ const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
             navigateToRoute(ROUTES.ENTRY);
             return;
           }
+
         }
 
         // Handle authenticated state
@@ -141,10 +200,17 @@ const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
   }
 
   // Render logic
+  let checkPublicRoutes = false;
+  publishRoutes.map((element) => {
+    if (location.pathname.startsWith("/" + element)) {
+      checkPublicRoutes = true;
+    }
+  })
   const isPublicPage = location.pathname === '/' ||
     location.pathname.startsWith('/login') ||
     location.pathname.startsWith('/register') ||
-    location.pathname.startsWith('/entry');
+    location.pathname.startsWith('/entry') ||
+    checkPublicRoutes;
 
   if (currentStateValue === AUTHENTICATED_STATE || isPublicPage) {
     return <Box>{children}</Box>;

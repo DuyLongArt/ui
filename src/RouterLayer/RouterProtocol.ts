@@ -25,6 +25,7 @@ export interface RedirectRoute extends BaseRoute {
     host?: string; // Optional host for external redirects
     path: string;
     title?: string;
+    children?: ChildRoute[];
     allowedRoles?: string[];
 }
 
@@ -55,6 +56,7 @@ export interface ErrorRoute extends BaseRoute {
     layout?: React.ReactNode;
     component: React.ReactNode;
     title?: string;
+    children?: ChildRoute[];
     allowedRoles?: string[];
 }
 

@@ -41,7 +41,8 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
     const [isCVExist, setIsCVExist] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
 
-    const CVPDFLink = `https://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/cv/cv.pdf`;
+    console.log("userStore.information.profiles.alias", userStore.information.profiles.alias);
+    const CVPDFLink = userStore.information.profiles.alias === "" || userStore.information.profiles.alias === undefined ? `https://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/cv/cv.pdf` : "https://backend.duylong.art/object/duylongwebappobjectdatabase/b265dab1-cf08-4643-8214-d380fa18063e/cv/cv.pdf";
 
     React.useEffect(() => {
         const checkCV = async () => {

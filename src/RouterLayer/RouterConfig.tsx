@@ -35,6 +35,7 @@ const BlankPage = () => (
 );
 
 export const appRoutes: Route[] = [
+    
     {
         type: "redirect",
         host: "192.168.3.1:6699",
@@ -109,7 +110,7 @@ export const appRoutes: Route[] = [
                     {
                 type: "entry",
                 path: "index",
-                  allowedRoles: ["ADMIN","USER"],
+                  allowedRoles: ["ADMIN","USER","VIEWER"],
                 component: <PersonalPage />,
                 title: "Personal",
                 children: [
