@@ -234,7 +234,7 @@ const AvatarFloatButton: React.FC<AvatarFloatButtonProps> = ({
     const imageObjectStore = useObjectImageEtagStore();
     const userStore = useUserProfileStore();
     // const admisnUrl = "http://192.168.22.4:9000/duylongwebappobjectdatabase/admin.png";
-    const ADMIN_IMAGE_URL = `https://backend.duylong.art/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
+    const ADMIN_IMAGE_URL = `/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
     // URL is stable (until version changes), so let the browser handle caching naturally.
     // We don't need to manually fetch blob and create object URL, which causes "reloading" effect.
 
