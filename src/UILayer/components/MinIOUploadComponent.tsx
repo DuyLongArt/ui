@@ -114,16 +114,21 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
     };
 
     return (
-        <div className="w-full max-w-md mx-auto p-6 bg-white rounded-xl shadow-sm border border-gray-100">
-            <div className="mb-4">
-                <h3 className="text-lg font-semibold text-black">Upload File</h3>
-                <p className="text-sm text-black">Attach your documents or images here</p>
+        <div className="w-full max-w-md mx-auto p-8 bg-white/40 backdrop-blur-3xl rounded-4xl border border-white/40 shadow-[0_20px_50px_rgba(0,0,0,0.1)] relative overflow-hidden group/container">
+            {/* Background Decorative element */}
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl group-hover/container:bg-indigo-500/20 transition-colors duration-700"></div>
+
+            <div className="mb-6 relative z-10">
+                <h3 className="text-2xl font-bold bg-linear-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Update {mode === 'cover' ? 'Cover' : 'Profile'}</h3>
+                <p className="text-slate-500 font-medium text-sm mt-1">High quality images recommended</p>
             </div>
 
             <div
-                className={`relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg transition-colors duration-200 ease-in-out cursor-pointer overflow-hidden
-                    ${dragActive ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300 bg-gray-50 hover:bg-gray-100'}
-                    ${localError || error ? 'border-red-300 bg-red-50' : ''}`}
+                className={`relative flex flex-col items-center justify-center w-full h-56 border-2 border-dashed rounded-3xl transition-all duration-500 ease-out cursor-pointer overflow-hidden z-10
+                    ${dragActive
+                        ? 'border-indigo-400 bg-indigo-50/50 scale-[1.02] shadow-inner'
+                        : 'border-slate-200 bg-white/30 hover:bg-white/50 hover:border-slate-300 hover:scale-[1.01] hover:shadow-xl'}
+                    ${localError || error ? 'border-red-200 bg-red-50/30' : ''}`}
                 onDragEnter={handleDrag}
                 onDragLeave={handleDrag}
                 onDragOver={handleDrag}
@@ -143,49 +148,66 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
                     {selectedFile ? (
                         <motion.div
                             key="file-preview"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="flex flex-col items-center justify-center p-4 text-center w-full h-full z-10"
+                            initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                            className="flex flex-col items-center justify-center p-6 text-center w-full h-full"
                         >
-                            <div className="w-12 h-12 mb-3 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            <div className="w-20 h-20 mb-4 rounded-3xl bg-indigo-600 shadow-2xl shadow-indigo-200 flex items-center justify-center text-white transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                             </div>
-                            <p className="text-sm font-medium text-white truncate max-w-[90%]">{selectedFile.name}</p>
-                            <p className="text-xs text-white">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                            <p className="text-base font-bold text-slate-800 truncate max-w-[85%] mb-1">{selectedFile.name}</p>
+                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">{(selectedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+
+                            <button
+                                onClick={(e) => { e.stopPropagation(); handleClear(); }}
+                                className="mt-4 text-xs font-bold text-red-500 hover:text-red-600 underline underline-offset-4 decoration-red-200"
+                            >
+                                Remove file
+                            </button>
                         </motion.div>
                     ) : (
                         <motion.div
                             key="empty-state"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
-                            className="flex flex-col items-center justify-center p-4 text-center"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="flex flex-col items-center justify-center p-6 text-center"
                         >
-                            <svg className={`w-10 h-10 mb-3 ${dragActive ? 'text-indigo-500' : 'text-black'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                            </svg>
-                            <p className="mb-2 text-sm text-black"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                            <p className="text-xs text-black">SVG, PNG, JPG or PDF (MAX. {maxSizeInMB}MB)</p>
+                            <div className={`w-16 h-16 mb-4 rounded-2xl flex items-center justify-center transition-colors duration-500 ${dragActive ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200' : 'bg-slate-100 text-slate-400'}`}>
+                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                            </div>
+                            <p className="mb-2 text-base text-slate-700 font-semibold italic"><span className="text-indigo-600 not-italic">Choose a file</span> or drag it here</p>
+                            <p className="text-xs text-slate-400 font-medium tracking-wide">{acceptedFileTypes.split(',')[0].toUpperCase()} • UP TO {maxSizeInMB}MB</p>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
                 {isUploading && (
                     <motion.div
-                        className="absolute inset-0 bg-white/80 flex items-center justify-center z-20"
+                        className="absolute inset-0 bg-white/90 backdrop-blur-md flex items-center justify-center z-20 p-8"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                     >
-                        <div className="w-full max-w-[80%]">
-                            <div className="flex justify-between mb-1">
-                                <span className="text-xs font-medium text-indigo-700">Uploading...</span>
-                                <span className="text-xs font-medium text-indigo-700">{Math.round(progress)}%</span>
+                        <div className="w-full text-center">
+                            <div className="flex justify-between items-end mb-3">
+                                <div className="text-left">
+                                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest block mb-1">Status</span>
+                                    <span className="text-base font-bold text-indigo-600">Uploading Assets...</span>
+                                </div>
+                                <span className="text-2xl font-black text-indigo-600 tracking-tighter">{Math.round(progress)}%</span>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2.5">
-                                <div className="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style={{ width: `${progress}%` }}></div>
+                            <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden shadow-inner">
+                                <motion.div
+                                    className="bg-linear-to-r from-indigo-500 via-purple-500 to-indigo-600 h-full rounded-full"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${progress}%` }}
+                                    transition={{ duration: 0.5 }}
+                                ></motion.div>
                             </div>
                         </div>
                     </motion.div>
@@ -196,30 +218,35 @@ const MinIOUploadComponent: React.FC<MinIOUploadComponentProps> = ({
                 <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
-                    className="mt-2 text-sm text-red-600 flex items-center"
+                    className="mt-4 p-4 rounded-2xl bg-red-50 border border-red-100 text-sm text-red-600 font-semibold flex items-start z-10 relative"
                 >
-                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <svg className="w-5 h-5 mr-3 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     {localError || error}
                 </motion.div>
             )}
 
-            <div className="mt-4 flex gap-3 justify-end">
+            <div className="mt-8 flex gap-4 justify-end relative z-10">
                 <button
                     onClick={() => {
                         handleClear();
                         onHandleClose();
                     }}
-                    disabled={isUploading || !selectedFile}
-                    className="px-4 py-2 text-sm font-medium text-white bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none  focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    disabled={isUploading}
+                    className="px-6 py-3 text-sm font-bold text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-2xl transition-all disabled:opacity-30"
                 >
-                    Cancel
+                    Dismiss
                 </button>
                 <button
                     onClick={() => handleUploadClick(nameFromInput)}
                     disabled={isUploading || !selectedFile}
-                    className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95"
+                    className="px-8 py-3 text-sm font-bold text-white bg-linear-to-r from-indigo-600 to-indigo-700 rounded-2xl hover:shadow-2xl hover:shadow-indigo-200 transition-all hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:translate-y-0 disabled:shadow-none shadow-xl shadow-indigo-100"
                 >
-                    {isUploading ? 'Uploading...' : 'Submit!'}
+                    {isUploading ? (
+                        <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            Processing...
+                        </div>
+                    ) : 'Upload Now'}
                 </button>
             </div>
         </div>

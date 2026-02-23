@@ -12,9 +12,12 @@ import {
     Settings,
     ArrowRight,
     Activity,
-    Network
+    Network,
+    LayoutGrid,
+    Server
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import MusicPlayerWidget from './MusicPlayerWidget';
 
 const UtilitiesDashboardPage = () => {
     const navigate = useNavigate();
@@ -57,10 +60,10 @@ const UtilitiesDashboardPage = () => {
             usage: 65
         },
         {
-            title: "System Logs",
-            description: "Review automated system actions and security alerts.",
-            icon: <Clock size={24} />,
-            path: "#",
+            title: "All Applications",
+            description: "Launch system tools and external services.",
+            icon: <LayoutGrid size={24} />,
+            path: "/utilities/index/apps",
             usage: 40
         }
     ];
@@ -103,37 +106,46 @@ const UtilitiesDashboardPage = () => {
                 {/* Available Services & Load */}
                 <div className="lg:col-span-2 space-y-8">
 
-                    {/* Load Chart */}
-                    <GlassCard className="p-8 min-h-[300px]">
-                        <div className="flex justify-between items-center mb-8">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg">
-                                    <Activity size={20} />
+                    {/* Load Chart & Music Player */}
+                    <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                        <div className="xl:col-span-2">
+                            <GlassCard className="p-8 min-h-[300px]">
+                                <div className="flex justify-between items-center mb-8">
+                                    <div className="flex items-center gap-3">
+                                        <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg">
+                                            <Activity size={20} />
+                                        </div>
+                                        <Typography variant="h5" className="text-white font-bold" {...commonProps}>Server Load Distribution</Typography>
+                                    </div>
+                                    <span className="text-[10px] font-black text-white/40 bg-white/5 px-2 py-1 rounded-md tracking-widest uppercase">Real-time</span>
                                 </div>
-                                <Typography variant="h5" className="text-white font-bold" {...commonProps}>Server Load Distribution</Typography>
-                            </div>
-                            <span className="text-[10px] font-black text-white/40 bg-white/5 px-2 py-1 rounded-md tracking-widest uppercase">Real-time</span>
+
+                                <div className="h-48 flex items-end justify-between gap-2 px-4">
+                                    {[65, 45, 75, 55, 90, 40, 60, 85, 50, 70, 45, 80].map((h, i) => (
+                                        <div key={i} className="flex-1 bg-white/5 rounded-t-lg relative group h-full flex items-end">
+                                            <div
+                                                className="w-full bg-linear-to-t from-blue-500 to-blue-300 rounded-t-lg transition-all duration-1000 group-hover:from-blue-400 group-hover:to-blue-200"
+                                                style={{ height: `${h}%` }}
+                                            ></div>
+                                            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-white text-[10px] py-1 px-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 font-bold">
+                                                Core {i + 1}: {h}%
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="flex justify-between mt-4 text-[10px] font-bold text-white/40 uppercase tracking-widest px-2">
+                                    <span>Primary Nodes</span>
+                                    <span>Scale Cluster</span>
+                                    <span>Edge Nodes</span>
+                                </div>
+                            </GlassCard>
                         </div>
 
-                        <div className="h-48 flex items-end justify-between gap-2 px-4">
-                            {[65, 45, 75, 55, 90, 40, 60, 85, 50, 70, 45, 80].map((h, i) => (
-                                <div key={i} className="flex-1 bg-white/5 rounded-t-lg relative group h-full flex items-end">
-                                    <div
-                                        className="w-full bg-linear-to-t from-blue-500 to-blue-300 rounded-t-lg transition-all duration-1000 group-hover:from-blue-400 group-hover:to-blue-200"
-                                        style={{ height: `${h}%` }}
-                                    ></div>
-                                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white text-white text-[10px] py-1 px-1.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 font-bold">
-                                        Core {i + 1}: {h}%
-                                    </div>
-                                </div>
-                            ))}
+                        {/* Music Widget */}
+                        <div className="h-full min-h-[300px]">
+                            <MusicPlayerWidget />
                         </div>
-                        <div className="flex justify-between mt-4 text-[10px] font-bold text-white/40 uppercase tracking-widest px-2">
-                            <span>Primary Nodes</span>
-                            <span>Scale Cluster</span>
-                            <span>Edge Nodes</span>
-                        </div>
-                    </GlassCard>
+                    </div>
 
                     <div className="space-y-6">
                         <div className="flex justify-between items-center">
@@ -175,6 +187,30 @@ const UtilitiesDashboardPage = () => {
                                             {...commonProps}
                                         />
                                     </div>
+                                </GlassCard>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Quick Launch Apps */}
+                    <div className="space-y-6">
+                        <Typography variant="h5" className="text-white font-bold" {...commonProps}>Quick Launch</Typography>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {[
+                                { name: "Nextcloud", icon: <Database size={20} />, color: "text-blue-400", bg: "bg-blue-500/10", url: "http://192.168.3.1:6699" },
+                                { name: "Proxmox", icon: <Server size={20} />, color: "text-orange-400", bg: "bg-orange-500/10", url: "#" },
+                                { name: "Portainer", icon: <Share2 size={20} />, color: "text-cyan-400", bg: "bg-cyan-500/10", url: "#" },
+                                { name: "Pi-hole", icon: <ShieldCheck size={20} />, color: "text-red-400", bg: "bg-red-500/10", url: "#" },
+                            ].map((app, i) => (
+                                <GlassCard
+                                    key={i}
+                                    className="p-4 flex flex-col items-center justify-center gap-3 cursor-pointer hover:bg-white/10 transition-colors group"
+                                    onClick={() => window.open(app.url, '_blank')}
+                                >
+                                    <div className={`p-3 rounded-xl ${app.bg} ${app.color} group-hover:scale-110 transition-transform`}>
+                                        {app.icon}
+                                    </div>
+                                    <span className="text-white font-bold text-sm">{app.name}</span>
                                 </GlassCard>
                             ))}
                         </div>

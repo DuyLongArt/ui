@@ -168,7 +168,7 @@ const LoginForm = () => {
           </form>
 
           <motion.div variants={itemVariants} className="mt-8 pt-6 border-t border-gray-100/80 text-center">
-            <span className="text-indigo-700 text-sm font-medium">
+            <span className="text-indigo-500 text-sm font-medium">
               Don't have an account?{' '}
             </span>
             <button

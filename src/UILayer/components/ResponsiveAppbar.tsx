@@ -8,7 +8,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import PersonProfileIcon from "./PersonProfileIcon";
 import { useMusicStore } from "../../OrchestraLayer/StateManager/Zustand/musicStore";
-import { Play, Pause, SkipForward, Square, Music as MusicIcon, SkipBack, Headphones, HeartCrackIcon, DiamondMinus } from "lucide-react";
+import { Play, Pause, SkipForward, Square, Music as MusicIcon, SkipBack, Headphones, HeartCrackIcon, DiamondMinus, Activity } from "lucide-react";
+import AppAnalysisWidget from "./AppAnalysisWidget";
 import { MusicList, type MusicListProps } from "../pages/Home/Music/MusicList";
 
 interface ResponsiveListProps {
@@ -31,6 +32,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
   const { currentSong, isPlaying, playlist, setIsPlaying, playNext, setCurrentSong, playPrev, fetchPlaylist } = useMusicStore();
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [openMusicList, setOpenMusicList] = useState(false);
+  const [openAnalysis, setOpenAnalysis] = useState(false);
 
   // Global Audio Logic
   useEffect(() => {
@@ -59,6 +61,12 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
   const openMusicListAction = () => {
     console.log("Toggling music list. Previous state:", openMusicList);
     setOpenMusicList(!openMusicList);
+    if (!openMusicList) setOpenAnalysis(false); // Close analysis if opening music
+  }
+
+  const toggleAnalysis = () => {
+    setOpenAnalysis(!openAnalysis);
+    if (!openAnalysis) setOpenMusicList(false); // Close music if opening analysis
   }
   const navigationItems = useMemo(() => {
     if (!Array.isArray(pageList)) return [];
@@ -102,37 +110,41 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
 
   const NavList = ({ mobile = false }: { mobile?: boolean }) => (
 
-    <ul className={`flex flex-col gap-2 lg:mb-0  lg:mt-0 lg:flex-row lg:items-center lg:gap-6 ${mobile ? "mt-4 mb-4" : ""}`}>
+    <ul className={`flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 whitespace-nowrap ${mobile ? "mt-4 mb-4" : ""}`}>
       {mobile && onOpenDrawer && (
         <div className="font-bold text-lg">
           <div
             onClick={() => { onOpenDrawer(); setOpenNav(false); }}
-            className="cursor-pointer rounded-lg px-4 py-2 transition-all duration-300 text-indigo-100 hover:bg-white/10 flex items-center gap-2"
+            className="cursor-pointer rounded-lg py-2 transition-all duration-300 text-indigo-100 hover:bg-white/10 flex items-center gap-2"
           >
             <div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
             Main Menu
           </div>
         </div>
       )}
+      {mobile && (
+        <div className="font-bold text-lg">
+          <div
+            onClick={() => { toggleAnalysis(); setOpenNav(false); }}
+            className={`cursor-pointer rounded-lg py-2 transition-all duration-300 flex items-center gap-2 ${openAnalysis ? 'bg-white/10 text-green-400' : 'text-indigo-100 hover:bg-white/10'}`}
+          >
+            <Activity size={18} />
+            System Analysis
+          </div>
+        </div>
+      )}
       {navigationItems.map(({ name, path }) => (
         <div
           key={name}
-          as="li"
-          variant="small"
-          className="font-bold text-lg"
-          {...commonProps}
+          className="font-bold text-lg shrink-0"
         >
           <div
             onClick={() => {
               handleNavigation(path);
               setNavName(path);
-              // console.log("NavName:", navName);
-              // console.log("Name:", name); 
               console.log("Navigation to:", path);
-
-            }
-            }
-            className={`cursor-pointer rounded-lg px-4 py-2 transition-all duration-300 ${window.location.pathname.includes(path) ? "text-white! bg-indigo-400!" : ""} 
+            }}
+            className={`cursor-pointer rounded-lg  py-2 transition-all duration-300 ${window.location.pathname.includes(path) ? "text-white! bg-indigo-400!" : ""} 
               ${mobile
                 ? " hover:bg-white/10 hover:shadow-lg border border-transparent hover:border-white/10"
                 : " hover:bg-white/10 hover:shadow-[0_4px_30px_rgba(0,0,0,0.1)] hover:backdrop-blur-sm border border-transparent hover:border-white/20"}`}
@@ -145,11 +157,11 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
   );
 
   return (
-    <div className="w-full phone:border-2 phone:border-red-700   sticky top-0 z-100  py-1 ">
+    <div className="w-full sticky top-0 z-100 py-1">
       {/* Custom Appbar Body - Replacing restrictive library Navbar */}
-      <div className="h-max    md:px-2 lg:px-4 sm:px-4 sm:w-full max-[600px]:w-screen! max-[410px]:rounded-xl  md:w-full lg:w-full px-1  py-2 md:rounded-xl lg:rounded-xl phone:border-2 phone:border-red-700 sm:rounded-2xl bg-indigo-600/60 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300 ">
+      <div className="h-max w-full px-2 py-2 rounded-xl sm:rounded-2xl bg-indigo-600/60 backdrop-blur-md shadow-lg border border-white/20 flex flex-col transition-all duration-300">
 
-        <div className="flex items-center min-[410px]:justify-between w-full  h-10 sm:h-12 flex-nowrap gap-1">
+        <div className="flex items-center min-[410px]:justify-between w-full h-10 sm:h-12 flex-nowrap gap-2 sm:gap-4">
 
           {/* Logo Section */}
           <div className="flex items-center shrink max-[410px]:text-sm max-[410px]:ml-1 floating-text lg:pr-2 md:pr-2 phone:pr-1">
@@ -163,27 +175,32 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden max-[1020px]:hidden! md:flex border  border-white/10 bg-indigo-500/60 rounded-2xl items-center ml-auto">
-            <NavList />
+          <div className="hidden lg:flex flex-1 min-w-0 mx-2 justify-center">
+            <div className="overflow-x-auto no-scrollbar custom-scrollbar border border-white/10 bg-indigo-500/60 rounded-2xl flex items-center p-1 scroll-smooth">
+              <NavList />
+            </div>
           </div>
 
           {/* Mini Player Section - Restored to previous UI */}
 
 
           {/* Action Section (Profile and Hamburger) */}
-          <div className="flex items-center gap-0.5  ml-auto" >
+          <div className="flex items-center gap-0.5" >
+
+
+
             {currentSong && (
-              <div className="items-center   md:flex lg:flex    justify-center">
+              <div className="items-center flex justify-center">
                 <div
                   onClick={openMusicListAction}
-                  className=" md:flex items-center gap-3 shrink-0   w-fit bg-black/20 backdrop-blur-md rounded-full min-[410px]:px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
+                  className="flex items-center gap-3 shrink-0 w-fit bg-black/20 backdrop-blur-md rounded-full min-[410px]:px-4 py-1.5 phone:mr-1 md:mr-4 lg:mr-4 border border-white/10 hover:bg-black/30 transition-all cursor-pointer group"
                 >
-                  <div className="w-8 h-8 max-[780px]:hidden rounded-full overflow-hidden relative">
+                  <div className="w-8 h-8 max-[410px]:hidden rounded-full overflow-hidden relative">
                     <div className={`w-full h-full bg-indigo-500   flex items-center justify-center`} onDoubleClick={() => { navigate('/utilities/index/music') }}>
                       <MusicIcon size={14} className="text-white" />
                     </div>
                   </div>
-                  <div className="flex flex-col max-[780px]:hidden max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[150px]">
+                  <div className="flex flex-col max-[410px]:hidden max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-[150px]">
                     <span className="text-xs text-white font-bold truncate">{currentSong.title}</span>
                     <span className="text-[10px] text-white truncate">{currentSong.artist || 'Unknown'}</span>
                   </div>
@@ -192,6 +209,8 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
 
 
                   <div className="flex items-center  min-[410px]:gap-2 min-[410px]:mr-3">
+
+
 
 
 
@@ -242,7 +261,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
               <PersonProfileIcon onClick={() => navigate("/admin/person-profile")} />
             </div>
 
-            <div className="flex items-center  lg:hidden md:hidden shrink-0.25">
+            <div className="flex items-center lg:hidden shrink-0">
               <IconButton
                 variant="text"
                 className="h-9 w-9 text-white! hover:bg-white/10 rounded-full flex items-center justify-center p-0"
@@ -256,7 +275,7 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
           </div>
         </div>
         {/* Mobile Menu */}
-        <div className={` w-full    overflow-hidden transition-all duration-500 ease-in-out ${openNav ? 'max-h-[600px] opacity-100 mt-2' : 'max-h-0 opacity-0'}`}>
+        <div className={` w-full overflow-hidden transition-all duration-500 ease-in-out ${openNav ? 'max-h-[80vh] overflow-y-auto mt-2' : 'max-h-0'}`}>
           <div className="w-full pb-4 px-1">
             <NavList mobile />
 
@@ -265,6 +284,12 @@ const ResponsiveAppBar: React.FC<ResponsiveListProps> = ({ pageList, pathList, o
           </div>
         </div>
       </div>
+
+      {openAnalysis && (
+        <div className="absolute top-full right-4 z-50 mt-2">
+          <AppAnalysisWidget />
+        </div>
+      )}
 
       {openMusicList && (
         <div className="absolute top-full right-0 z-200 w-full max-w-[320px] sm:hidden lg:block md:block p-2 mt-2">

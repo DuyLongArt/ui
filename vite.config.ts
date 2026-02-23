@@ -53,6 +53,11 @@ export default defineConfig({
         target: 'https://truenas.duylong.art',
         changeOrigin: true,
         secure: true,
+      },
+      '/gomedia': {
+        target: 'https://media.duylong.art',
+        changeOrigin: true,
+        secure: true,
       }
     }
   }

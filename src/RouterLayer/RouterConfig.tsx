@@ -26,6 +26,9 @@ const AdminOverviewPage = lazy(() => import("../UILayer/pages/Admin/AdminOvervie
 const MusicPage = lazy(() => import("../UILayer/pages/Home/Music/MusicPage.tsx"));
 const TailscaleDashboard = lazy(() => import("../UILayer/pages/Home/Utilities/TailscaleDashboard.tsx"));
 const CloudflareDnsDashboard = lazy(() => import("../UILayer/pages/Home/Utilities/CloudflareDnsDashboard.tsx"));
+const WebAppPage = lazy(() => import("../UILayer/pages/Home/Utilities/WebAppPage.tsx"));
+const HealthPage = lazy(() => import("../UILayer/pages/Home/Health/HealthPage.tsx"));
+const ProjectPage = lazy(() => import("../UILayer/pages/Home/Person/ProjectPage.tsx"));
 
 // Placeholder for BlankPage if it's not exported elsewhere
 const BlankPage = () => (
@@ -198,6 +201,34 @@ export const appRoutes: Route[] = [
                     }
                 ]
             },
+            {
+                type: "domain",
+                path: "health",
+                component: <HomeLayout />,
+                title: "Health",
+                children: [
+                    {
+                        type: "entry",
+                        path: "index",
+                        component: <HealthPage />,
+                        title: "Health Dashboard",
+                    }
+                ]
+            },
+            {
+                type: "domain",
+                path: "projects",
+                component: <HomeLayout />,
+                title: "Projects",
+                children: [
+                    {
+                        type: "entry",
+                        path: "index",
+                        component: <ProjectPage />,
+                        title: "All Projects",
+                    }
+                ]
+            },
 
 
     {
@@ -241,6 +272,12 @@ export const appRoutes: Route[] = [
                         allowedRoles: ["ADMIN"],
                         component: <TailscaleDashboard />,
                         title: "Tailscale",
+                    },
+                    {
+                        type:"component",
+                        path: "apps",
+                        component: <WebAppPage />,
+                        title: "Web Apps",
                     },
                     {
                         type:"component",

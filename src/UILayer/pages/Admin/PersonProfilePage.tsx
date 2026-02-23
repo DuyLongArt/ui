@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { CameraIcon, PencilIcon, PlusIcon, ShieldCheckIcon, XMarkIcon, CheckCircleIcon, ArrowLeftOnRectangleIcon, EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/solid';
 import { MapPinIcon, AcademicCapIcon, ComputerDesktopIcon, HomeIcon, PhotoIcon as PhotographIcon, UsersIcon, ChatBubbleOvalLeftIcon as ChatIcon, BellIcon } from '@heroicons/react/24/outline';
 import { useUserAccountStore, useUserProfileStore } from '../../../OrchestraLayer/StateManager/Zustand/userProfileStore';
-import { Activity, Eye, TrendingUp, Users } from 'lucide-react';
+import { Activity, Eye, TrendingUp, Users, Footprints, Heart, Flame, Moon } from 'lucide-react';
 import { AuthenticateFactor } from '../../../OrchestraLayer/StateManager/XState/AuthenticateMachine';
 import MinIOUploadComponent from '../../components/MinIOUploadComponent';
 import { useActor } from '@xstate/react';
@@ -37,6 +37,7 @@ const PersonProfilePage: React.FC = () => {
     };
     const user = useUserProfileStore((state) => state.information);
     const updateProfileImageUrl = useUserProfileStore((state) => state.updateProfileImageUrl);
+    const updateCoverImageUrl = useUserProfileStore((state) => state.updateCoverImageUrl);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [mode, setMode] = useState('');
     const [nameFromInput, setNameFromInput] = useState('');
@@ -59,10 +60,50 @@ const PersonProfilePage: React.FC = () => {
     } as any;
 
     const stats = [
-        { label: "Profile Views", value: "2.4k", icon: <Eye size={20} />, color: "bg-blue-500", trend: "+12%" },
-        { label: "Projects", value: "42", icon: <Activity size={20} />, color: "bg-purple-500", trend: "+5%" },
-        { label: "Followers", value: "847", icon: <Users size={20} />, color: "bg-pink-500", trend: "+18%" },
-        { label: "Engagement", value: "95%", icon: <TrendingUp size={20} />, color: "bg-green-500", trend: "+2%" },
+        {
+            label: "Steps",
+            value: "8,432",
+            unit: "steps",
+            icon: <Footprints size={28} />,
+            color: "bg-green-500",
+            textColor: "text-green-600",
+            bgLight: "bg-green-50",
+            trend: "+12%",
+            progress: 84
+        },
+        {
+            label: "Heart Rate",
+            value: "72",
+            unit: "bpm",
+            icon: <Heart size={28} />,
+            color: "bg-red-500",
+            textColor: "text-red-600",
+            bgLight: "bg-red-50",
+            trend: "Normal",
+            progress: 72 // Used for visualization
+        },
+        {
+            label: "Calories",
+            value: "1,850",
+            unit: "kcal",
+            icon: <Flame size={28} />,
+            color: "bg-orange-500",
+            textColor: "text-orange-600",
+            bgLight: "bg-orange-50",
+            trend: "+5%",
+            progress: 65
+        },
+        {
+            label: "Sleep",
+            value: "7h 12m",
+            unit: "duration",
+            icon: <Moon size={28} />,
+            color: "bg-indigo-500",
+            textColor: "text-indigo-600",
+            bgLight: "bg-indigo-50",
+            trend: "Good",
+            progress: 90
+        },
     ];
 
     useEffect(() => {
@@ -114,7 +155,7 @@ const PersonProfilePage: React.FC = () => {
         };
     }, [user.profiles.alias, imageObjectStore.versions.avatarVersion, imageObjectStore.versions.coverVersion]);
     const handleUploadStart = (file: File) => {
-        send({ type: 'FILE_SELECTED', file, name: 'profileImage' });
+        send({ type: 'FILE_SELECTED', file, mode: mode as 'admin' | 'cover' });
         send({ type: 'UPLOAD_STARTED' });
     };
 
@@ -131,24 +172,29 @@ const PersonProfilePage: React.FC = () => {
     // Sync uploaded URL with Zustand store
     useEffect(() => {
         if (state.matches('success') && state.context.uploadedUrl) {
-            updateProfileImageUrl(state.context.uploadedUrl);
-            console.log("🔄 Updated store with new profile image URL:", state.context.uploadedUrl);
+            if (state.context.mode === 'admin') {
+                updateProfileImageUrl(state.context.uploadedUrl);
+                console.log("🔄 Updated store with new profile image URL:", state.context.uploadedUrl);
+            } else if (state.context.mode === 'cover') {
+                updateCoverImageUrl(state.context.uploadedUrl);
+                console.log("🔄 Updated store with new cover image URL:", state.context.uploadedUrl);
+            }
         }
-    }, [state.matches('success'), state.context.uploadedUrl, updateProfileImageUrl]);
+    }, [state.matches('success'), state.context.uploadedUrl, state.context.mode, updateProfileImageUrl, updateCoverImageUrl]);
 
     return (
         <div className="bg-white min-h-screen pb-20 animate-fade-in-up">
             <GlassCard className="max-w-5xl mx-auto shadow-xl overflow-hidden mb-6 " color='from-white via-white to-white'>
                 {/* Cover Image */}
-                <div className="relative h-[250px] md:h-[350px] bg-gray-200">
-                    <img src={coverBlobUrl} alt="Cover" className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="relative h-[300px] md:h-[400px] bg-gray-100 overflow-hidden group">
+                    <img src={coverBlobUrl} alt="Cover" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-black/60"></div>
 
                     <button
-                        className="absolute bottom-4 z-40 right-4 bg-white/20 backdrop-blur-md border border-white/40 text-white font-bold py-2 px-4 rounded-xl flex items-center hover:bg-white/30 transition-all shadow-lg text-sm"
+                        className="absolute bottom-6 z-40 right-6 bg-white/10 backdrop-blur-xl border border-white/20 text-white font-semibold py-2.5 px-5 rounded-2xl flex items-center hover:bg-white/20 transition-all shadow-2xl group/btn"
                         onClick={() => { setMode('cover'); setIsEditModalOpen(true); }}
                     >
-                        <CameraIcon className="h-4 w-4 mr-2" />
+                        <CameraIcon className="h-5 w-5 mr-2 group-hover/btn:scale-110 transition-transform" />
                         Edit Cover
                     </button>
                 </div>
@@ -168,17 +214,20 @@ const PersonProfilePage: React.FC = () => {
                         </div>
 
                         {/* Info */}
-                        <div className="mt-4 md:mt-0 md:ml-6 flex-1 text-center md:text-left">
-                            <Typography variant="h2" className="text-4xl [text-stroke:1px_indigo]   [-webkit-text-stroke:1px_indigo] text-shadow-lg text-shadow-color-black font-extrabold text-indigo-500" {...commonProps}>
+                        <div className="mt-4 md:mt-0 md:ml-8 flex-1 text-center md:text-left pt-2">
+                            <Typography variant="h2" className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-2" {...commonProps}>
                                 {user.profiles.firstName} {user.profiles.lastName}
                             </Typography>
-                            <Typography className="text-black font-medium mb-3" {...commonProps}>
-                                {user.profiles.friends.toLocaleString()} friends • {user.profiles.mutual} mutual
-                            </Typography>
-                            {/* {}USER ROLE */}
-                            <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-4 md:mb-0">
-                                <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-md font-bold rounded-full border border-indigo-200 shadow-sm">{userAccountStore.account.role}</span>
-                                {/* <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200 shadow-sm">ACTIVE</span> */}
+
+                            <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-4 text-gray-600">
+                                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-sm font-medium">
+                                    <UsersIcon className="w-4 h-4 text-indigo-500" />
+                                    {user.profiles.friends.toLocaleString()} connections
+                                </span>
+                                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-sm font-medium">
+                                    <ShieldCheckIcon className="w-4 h-4 text-emerald-500" />
+                                    {userAccountStore.account.role}
+                                </span>
                             </div>
                         </div>
 
@@ -205,26 +254,30 @@ const PersonProfilePage: React.FC = () => {
 
                     {/* Bio */}
                     {user.details.bio && (
-                        <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-black italic text-center md:text-left text-xl">
-                            "{user.details.bio}"
+                        <div className="bg-linear-to-r from-slate-50 to-white p-5 rounded-2xl border border-slate-100 shadow-xs mb-6 mx-8">
+                            <p className="text-gray-700 italic text-center md:text-left text-lg leading-relaxed font-light">
+                                "{user.details.bio}"
+                            </p>
                         </div>
                     )}
                 </div>
 
                 {/* Navigation Tabs */}
-                <div className="flex px-8 border-t gap-2 p-4 border-slate-100">
-                    {['Posts', 'About', 'Photos', 'Security', 'Contact'].map((tab) => (
-                        <button
-                            key={tab}
-                            onClick={() => setActiveTab(tab as any)}
-                            className={`px-6 py-4 font-bold text-sm transition-all border-b-2 ${activeTab === tab
-                                ? 'text-indigo-600 border-indigo-600 bg-indigo-50/50'
-                                : 'text-white border-transparent hover:bg-slate-50 hover:text-white'
-                                }`}
-                        >
-                            {tab}
-                        </button>
-                    ))}
+                <div className="px-8 pb-6 border-t border-slate-50/50">
+                    <div className="flex p-1.5 bg-slate-100/50 rounded-xl overflow-x-auto no-scrollbar gap-1 max-w-full">
+                        {['Posts', 'About', 'Photos', 'Security', 'Contact'].map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab as any)}
+                                className={`px-5 py-2.5 font-semibold text-sm rounded-lg transition-all duration-300 min-w-max flex-1 md:flex-none ${activeTab === tab
+                                    ? 'bg-white text-indigo-600 shadow-sm ring-1 ring-slate-100'
+                                    : 'text-slate-500 hover:text-indigo-600 hover:bg-white/60'
+                                    }`}
+                            >
+                                {tab}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             </GlassCard>
 
@@ -233,62 +286,97 @@ const PersonProfilePage: React.FC = () => {
                 {/* Left Column */}
                 <div className="w-full md:w-[350px] space-y-6">
                     {/* Intro Card */}
-                    <GlassCard className="p-6" color='from-white to-white'>
-                        <Typography variant="h5" className="font-bold text-black mb-4" {...commonProps}>Intro</Typography>
-                        <div className="space-y-4">
-                            <div className="flex items-center text-black">
-                                <AcademicCapIcon className="h-5 w-5 text-black mr-3" />
-                                {(editAdminInformationState.value !== "onEdit" && editAdminInformationState.value !== "onType")
-                                    ? <span>Studied at <strong className="text-black">{user.details.university}</strong></span>
-                                    : <input type="text" className="border rounded p-1 w-full text-sm" value={university} onChange={(e) => setUniversity(e.target.value)} />}
+                    <GlassCard className="p-0 overflow-hidden bg-white/60! backdrop-blur-xl border border-white/40 shadow-sm hover:shadow-md transition-all duration-300">
+                        <div className="p-6 border-b border-slate-100/50 bg-white/40">
+                            <Typography variant="h5" className="font-bold text-gray-800" {...commonProps}>Intro</Typography>
+                        </div>
+                        <div className="p-6 space-y-5">
+                            <div className="flex items-start gap-4 text-gray-600 group">
+                                <div className="p-2 rounded-lg bg-indigo-50 text-indigo-500 group-hover:bg-indigo-100 transition-colors">
+                                    <AcademicCapIcon className="h-5 w-5" />
+                                </div>
+                                <div className="flex-1">
+                                    {(editAdminInformationState.value !== "onEdit" && editAdminInformationState.value !== "onType")
+                                        ? <div className="text-sm">Studied at <span className="font-semibold text-gray-900 block text-base">{user.details.university}</span></div>
+                                        : <input type="text" className="border-b-2 border-indigo-200 focus:border-indigo-500 rounded-none px-0 py-1 w-full text-sm outline-none bg-transparent transition-colors" value={university} onChange={(e) => setUniversity(e.target.value)} placeholder="University" />}
+                                </div>
                             </div>
-                            <div className="flex items-center text-black">
-                                <MapPinIcon className="h-5 w-5 text-black mr-3" />
-                                {(editAdminInformationState.value !== "onEdit" && editAdminInformationState.value !== "onType")
-                                    ? <span>Lives in <strong className="text-black">{user.details.country}</strong></span>
-                                    : <input type="text" className="border rounded p-1 w-full text-sm" value={location} onChange={(e) => setLocation(e.target.value)} />}
+
+                            <div className="flex items-start gap-4 text-gray-600 group">
+                                <div className="p-2 rounded-lg bg-emerald-50 text-emerald-500 group-hover:bg-emerald-100 transition-colors">
+                                    <MapPinIcon className="h-5 w-5" />
+                                </div>
+                                <div className="flex-1">
+                                    {(editAdminInformationState.value !== "onEdit" && editAdminInformationState.value !== "onType")
+                                        ? <div className="text-sm">Lives in <span className="font-semibold text-gray-900 block text-base">{user.details.country}</span></div>
+                                        : <input type="text" className="border-b-2 border-indigo-200 focus:border-indigo-500 rounded-none px-0 py-1 w-full text-sm outline-none bg-transparent transition-colors" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" />}
+                                </div>
                             </div>
-                            <div className="flex items-center text-black">
-                                <ComputerDesktopIcon className="h-5 w-5 text-black mr-3" />
-                                <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded">Reg IP: {userAccountStore.account.ip}</span>
+
+                            <div className="flex items-start gap-4 text-gray-600 group">
+                                <div className="p-2 rounded-lg bg-violet-50 text-violet-500 group-hover:bg-violet-100 transition-colors">
+                                    <ComputerDesktopIcon className="h-5 w-5" />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="text-sm text-gray-500">Registry IP</div>
+                                    <div className="font-mono text-xs bg-slate-100 px-2 py-1 rounded inline-block mt-1 text-slate-600 border border-slate-200">
+                                        {userAccountStore.account.ip}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <button className="w-full mt-6 bg-slate-100 hover:bg-slate-200 text-white font-bold py-2 rounded-xl transition-colors text-sm">
-                            Edit Public Details
-                        </button>
+                        <div className="p-4 bg-slate-50/50 border-t border-slate-100">
+                            <button className="w-full bg-white hover:bg-slate-50 text-indigo-600 font-semibold py-2.5 rounded-xl border border-indigo-100 hover:border-indigo-200 transition-all text-sm shadow-xs hover:shadow-sm">
+                                Edit Public Details
+                            </button>
+                        </div>
                     </GlassCard>
 
                     {/* Admin Access */}
-                    <GlassCard className="p-6 bg-indigo-50/50 border-indigo-100">
-                        <div className="flex items-center mb-4">
-                            <ShieldCheckIcon className="h-5 w-5 text-indigo-600 mr-2" />
-                            <Typography variant="h6" className="font-bold text-indigo-900" {...commonProps}>Admin Control</Typography>
-                        </div>
-                        <div className="space-y-2">
-                            <button className="w-full text-left p-2.5 rounded-lg bg-white border border-indigo-100 hover:shadow-md text-indigo-800 text-sm font-semibold transition-all">
-                                View System Logs
-                            </button>
-                            <button className="w-full text-left p-2.5 rounded-lg bg-white border border-indigo-100 hover:shadow-md text-indigo-800 text-sm font-semibold transition-all">
-                                Manage User Permissions
-                            </button>
-                        </div>
-                    </GlassCard>
+
                 </div>
 
                 {/* Right Column (Tabs Content) */}
                 <div className="flex-1 space-y-6">
                     {/* Stats Grid */}
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    {/* Stats Grid - Enhanced Industry Standard Design */}
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                         {stats.map((stat, index) => (
-                            <GlassCard key={index} className="p-4 hover:-translate-y-1 transition-transform duration-300">
-                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-white mb-2 shadow-md ${stat.color}`}>
-                                    {stat.icon}
+                            <GlassCard key={index} className="p-6 hover:-translate-y-1 transition-all duration-300 border border-slate-100 shadow-sm hover:shadow-lg bg-white/80! backdrop-blur-xl">
+                                <div className="flex items-start justify-between mb-4">
+                                    <div className={`p-3 rounded-2xl ${stat.bgLight} ${stat.textColor} shadow-xs`}>
+                                        {stat.icon}
+                                    </div>
+                                    <div className={`px-2.5 py-1 rounded-full text-xs font-bold ${stat.color.replace('bg-', 'text-')} bg-white border border-slate-100 shadow-xs`}>
+                                        {stat.trend}
+                                    </div>
                                 </div>
-                                <div>
-                                    <Typography className="text-white text-xs font-bold uppercase tracking-wider" {...commonProps}>{stat.label}</Typography>
-                                    <div className="flex items-end gap-1">
-                                        <Typography variant="h5" className="text-white font-bold leading-none" {...commonProps}>{stat.value}</Typography>
-                                        <span className="text-green-500 text-[10px] font-bold bg-green-50 px-1 rounded">{stat.trend}</span>
+
+                                <div className="space-y-1">
+                                    <Typography className="text-slate-500 text-sm font-semibold uppercase tracking-wider" {...commonProps}>
+                                        {stat.label}
+                                    </Typography>
+                                    <div className="flex items-baseline gap-2">
+                                        <Typography variant="h3" className="text-3xl font-bold text-slate-800 tracking-tight" {...commonProps}>
+                                            {stat.value}
+                                        </Typography>
+                                        <span className="text-sm font-medium text-slate-400">{stat.unit}</span>
+                                    </div>
+                                </div>
+
+                                {/* Progress Indicator */}
+                                <div className="mt-5 space-y-2">
+                                    <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                                        <motion.div
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${stat.progress}%` }}
+                                            transition={{ duration: 1, ease: "easeOut" }}
+                                            className={`h-full rounded-full ${stat.color}`}
+                                        />
+                                    </div>
+                                    <div className="flex justify-between text-xs font-medium text-slate-400">
+                                        <span>Daily Goal</span>
+                                        <span>{stat.progress}%</span>
                                     </div>
                                 </div>
                             </GlassCard>
@@ -388,7 +476,7 @@ const PersonProfilePage: React.FC = () => {
                                 </form>
                             </GlassCard>
 
-                            <GlassCard className="bg-gradient-to-br from-indigo-600 to-purple-700 p-8 text-white">
+                            <GlassCard className="bg-linear-to-br from-indigo-600 to-purple-700 p-8 text-white">
                                 <h3 className="text-2xl font-bold mb-6">Our Information</h3>
                                 <div className="flex flex-col gap-6">
 
@@ -463,7 +551,7 @@ const PersonProfilePage: React.FC = () => {
                                 />
 
                                 <MinIOUploadComponent
-                                    onUpload={mode === 'cover' ? (f) => send({ type: 'FILE_SELECTED', file: f, name: 'profileImage' }) : handleUploadStart}
+                                    onUpload={handleUploadStart}
                                     progress={state.context.progress}
                                     isUploading={state.matches('uploading')}
                                     error={state.context.error}

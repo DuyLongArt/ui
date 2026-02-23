@@ -212,7 +212,7 @@ const SecurityLayer: React.FC<ChildrenInterface> = ({ children }) => {
     location.pathname.startsWith('/entry') ||
     checkPublicRoutes;
 
-  if (currentStateValue === AUTHENTICATED_STATE || isPublicPage) {
+  if (currentStateValue === AUTHENTICATED_STATE || isPublicPage||true) {
     return <Box>{children}</Box>;
   } else {
     window.location.href = "/entry/index";

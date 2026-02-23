@@ -27,6 +27,7 @@ export interface UserProfile {
     friends: number;
     mutual: number;
     profileImageUrl: string;
+    coverImageUrl: string;
     alias: string;
 }
 
@@ -47,6 +48,7 @@ interface UserAccountState {
 interface UserInformationState {
     information: UserInformation;
     updateProfileImageUrl: (url: string) => void;
+    updateCoverImageUrl: (url: string) => void;
     updateProfile: () => Promise<void>;
     editProfile: (university: string, location: string) => void;
 }
@@ -73,9 +75,10 @@ const useUserProfileStore = create<UserInformationState>()(
                     id: null,
                     firstName: '',
                     lastName: '',
-                    friends: 208,
-                    mutual: 5,
+                    friends: 0,
+                    mutual: 0,
                     profileImageUrl: 'https://backend.duylong.art/object/duylongwebappobjectdatabase/admin.png',
+                    coverImageUrl: '',
                     alias: '',
                 },
             },
@@ -86,6 +89,16 @@ const useUserProfileStore = create<UserInformationState>()(
                     profiles: {
                         ...state.information.profiles,
                         profileImageUrl: url
+                    }
+                }
+            })),
+
+            updateCoverImageUrl: (url: string) => set((state) => ({
+                information: {
+                    ...state.information,
+                    profiles: {
+                        ...state.information.profiles,
+                        coverImageUrl: url
                     }
                 }
             })),

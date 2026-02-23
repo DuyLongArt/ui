@@ -9,24 +9,29 @@ export const EditAdminProfileMachine = setup({
             progress: number;
             uploadedUrl: string | null;
             error: string | null;
+            mode: 'admin' | 'cover' | null;
         },
         events: {} as
-            | { type: "FILE_SELECTED"; file: File;name:String }
+            | { type: "FILE_SELECTED"; file: File; mode: 'admin' | 'cover' }
             | { type: "UPLOAD_STARTED" }
             | { type: "UPLOAD_CANCELLED" }
             | { type: "RESET" }
     },
     actors: {
         updateImageUrl: fromPromise(
-            async ({ input: { file } }: { input: { file: File } }) => {
+            async ({ input: { file, mode } }: { input: { file: File, mode: string } }) => {
                 const formData = new FormData();
 
                 // 2. Append the file. 
                 // The key 'file' must match @RequestParam("file") in Java
                 formData.append("file", file);
 
+                const endpoint = mode === 'cover'
+                    ? "/backend/person/cover/update"
+                    : "/backend/person/avatar/update";
+
                 // 3. Send via Axios
-                const response = await axios.post("/backend/object/add", formData);
+                const response = await axios.post(endpoint, formData);
 
                 // 4. Return the result to XState (event.output)
                 return response.data;
@@ -40,7 +45,8 @@ export const EditAdminProfileMachine = setup({
         file: null,
         progress: 0,
         uploadedUrl: null,
-        error: null
+        error: null,
+        mode: null
     },
     states: {
         idle: {
@@ -48,6 +54,7 @@ export const EditAdminProfileMachine = setup({
                 FILE_SELECTED: {
                     actions: assign({
                         file: ({ event }) => event.file,
+                        mode: ({ event }) => event.mode,
                         error: null,
                         progress: 0
                     }),
@@ -76,7 +83,7 @@ export const EditAdminProfileMachine = setup({
             invoke: {
                 id: "uploadService",
                 src: "updateImageUrl",
-                input: ({ context }) => ({ file: context.file! }),
+                input: ({ context }) => ({ file: context.file!, mode: context.mode! }),
                 onDone: {
                     target: "success",
                     actions: assign({
