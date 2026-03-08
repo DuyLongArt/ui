@@ -38,7 +38,7 @@ export default defineConfig({
         secure: false,
       },
       '/user-profiles': {
-        target: 'http://192.168.22.4:9100',
+        target: 'http://192.168.22.4:9000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/user-profiles/, ''),
         secure: false,
