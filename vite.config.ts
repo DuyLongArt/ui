@@ -37,6 +37,12 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/user-profiles': {
+        target: 'http://192.168.22.4:9100',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/user-profiles/, ''),
+        secure: false,
+      },
       '/tailscale-api': {
         target: 'https://api.tailscale.com',
         changeOrigin: true,

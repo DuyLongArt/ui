@@ -119,8 +119,8 @@ const PersonProfilePage: React.FC = () => {
         }
     }, [state.value]);
 
-    const ADMIN_IMAGE_URL = `/object/duylongwebappobjectdatabase/${user.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
-    const COVER_PHOTO_URL = `/object/duylongwebappobjectdatabase/${user.profiles.alias}/cover.png?v=${imageObjectStore.versions.coverVersion}`;
+    const ADMIN_IMAGE_URL = `/user-profiles/user-profiles/${user.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
+    const COVER_PHOTO_URL = `/user-profiles/user-profiles/${user.profiles.alias}/cover.png?v=${imageObjectStore.versions.coverVersion}`;
     const [profileBlobUrl, setProfileBlobUrl] = useState<string>('');
     const [coverBlobUrl, setCoverBlobUrl] = useState<string>('');
 
