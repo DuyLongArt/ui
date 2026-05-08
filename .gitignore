@@ -1,5 +1,7 @@
 node_modules
 dist
 .env
+.DS_Store
+tsconfig.app.tsbuildinfo
 src/DataLayer/LocalDataLayer/.DS_Store
 src/UILayer/.DS_Store
