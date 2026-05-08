@@ -2,6 +2,8 @@ import { createActorContext } from "@xstate/react";
 import { assign, createMachine, type ActorRefFrom, fromPromise } from "xstate";
 import axios from 'axios';
 import type { RegistrationPayload, RoleTypes } from "../../../DataLayer/Protocol/RegistrationProtocol";
+import { queryClient } from "../../../main.tsx";
+import { getSupabase, isSupabaseConfigured } from "../../../DataLayer/APILayer/supabase/supabaseClient";
 
 // --- Types ---
 const mockDelay = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
@@ -75,14 +77,22 @@ const getJWT = fromPromise(async () => {
 const authenticateWithCredentials = fromPromise(
   async ({ input }: { input: { username: string; password: string; jwt?: string; } }) => {
     try {
-      // if (ADMIN_MOCK_JWT) {
-      //   console.log("⚠️ Using MOCK Login service.");
-      //   await mockDelay(1000);
-      //   if (input.username === "duylong@duylong.art" && input.password === "duylongadminpass") {
-      //     return { jwt: MOCK_JWT_TOKEN };
-      //   }
-      //   throw new Error("Invalid mock credentials");
-      // }
+      if (isSupabaseConfigured()) {
+        const supabase = getSupabase();
+        if (!supabase) throw new Error("Supabase client unavailable");
+        const identifier = input.username.trim();
+        if (!identifier.includes("@")) {
+          throw new Error("Use your email address to sign in when Supabase auth is enabled.");
+        }
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: identifier,
+          password: input.password,
+        });
+        if (error) throw new Error(error.message);
+        const token = data.session?.access_token;
+        if (!token) throw new Error("No session returned from Supabase.");
+        return { token };
+      }
 
       const response = await axios.post("/backend/auth/login", {
         userName: input.username,
@@ -104,6 +114,34 @@ const registerWithCredentials = fromPromise(
         console.log("⚠️ Using MOCK Register service with payload:", input.payload);
         await mockDelay(1000);
         return { jwt: MOCK_JWT_TOKEN };
+      }
+
+      if (isSupabaseConfigured()) {
+        const supabase = getSupabase();
+        if (!supabase) throw new Error("Supabase client unavailable");
+        const { data, error } = await supabase.auth.signUp({
+          email: input.payload.email.trim(),
+          password: input.payload.password,
+          options: {
+            data: {
+              first_name: input.payload.firstName,
+              last_name: input.payload.lastName,
+              user_name: input.payload.userName,
+              bio: input.payload.bio,
+              country: input.payload.country,
+              location: input.payload.location ?? "",
+            },
+          },
+        });
+        if (error) throw new Error(error.message);
+        if (data.session?.access_token) {
+          saveJWTToCookies(data.session.access_token);
+        }
+        const message =
+          data.user && !data.session
+            ? "Account created. Confirm your email if required, then sign in."
+            : "Registration successful.";
+        return { message };
       }
 
       const response = await axios.post("/backend/auth/signup", input.payload);
@@ -164,6 +202,20 @@ const authenState = createMachine({
     onAuthen: {
       entry: () => {
         console.log("🔍 Step 2: Attempting to fetch JWT from API...");
+      },
+      // Allow sign-up while JWT bootstrap runs; otherwise REGISTER was dropped and Supabase never ran.
+      on: {
+        REGISTER: {
+          target: 'registering',
+          actions: [
+            assign({
+              username: ({ event }) => (event as any).payload.userName,
+              password: ({ event }) => (event as any).payload.password,
+              error: undefined,
+            }),
+            () => console.log("📝 Registration (from onAuthen) → registering"),
+          ],
+        },
       },
       invoke: {
         id: "fetchJWT",
@@ -366,13 +418,29 @@ const authenState = createMachine({
       on: {
         LOGOUT: {
           target: "onLogout"
-        }
+        },
+        // Register another account without silent failure when an old auth_jwt cookie exists.
+        REGISTER: {
+          target: 'registering',
+          actions: [
+            assign({
+              username: ({ event }) => (event as any).payload.userName,
+              password: ({ event }) => (event as any).payload.password,
+              error: undefined,
+            }),
+            () => console.log("📝 Registration (from onLogin) → registering"),
+          ],
+        },
       }
     },
 
     onLogout: {
       entry: [
         () => console.log("👋 Logging out..."),
+        () => {
+          void getSupabase()?.auth.signOut();
+        },
+        () => queryClient.clear(),
         clearCookies,
         assign({
           jwt: "",

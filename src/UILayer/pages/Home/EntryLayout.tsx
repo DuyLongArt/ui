@@ -8,7 +8,7 @@ import CustomDrawer from '../../components/CustomDrawer.tsx';
 import { orchestraButton } from '../../../OrchestraLayer/StateManager/XState/OrchestraButton.tsx';
 import { useMachine } from '@xstate/react';
 // import AvatarFloatButton from '../../components/AvatarFloatButton.tsx';
-import backgroundImage from '@assets/backgroundentry.png';
+import backgroundImage from '@assets/anime_entry_bg.png';
 
 
 const EntryLayout: React.FC<ChildrenInterface> = ({ children }) => {

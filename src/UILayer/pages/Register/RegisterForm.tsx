@@ -290,8 +290,11 @@ const RegisterForm = () => {
                         </div>
 
                         <div className="mt-6">
-                            {/* {(validationError || (errorFromMachine && errorFromMachine.includes("Success")) && <p className="text-green-400 text-sm font-semibold">{validationError}</p>)} */}
-                            {validationError || (errorFromMachine && errorFromMachine.includes("failed") && <p className="text-red-400 text-sm font-semibold">{validationError}</p>)}
+                            {(validationError || errorFromMachine) && (
+                                <p className="text-red-400 text-sm font-semibold">
+                                    {validationError || errorFromMachine}
+                                </p>
+                            )}
 
                             {successMessage && <p className="text-green-400 text-sm font-semibold">{successMessage}</p>}
                         </div>

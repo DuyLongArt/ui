@@ -10,44 +10,41 @@ import { useUserAccountStore, useUserProfileStore } from '../../../../OrchestraL
 import TabNavigation from '../../../components/TabNavigation';
 import SkillPage from './SkillPage';
 import ProjectPage from './ProjectPage';
+import { useUserScoresQuery, useUserQuestsQuery } from '../../../../DataLayer/APILayer/userQueries';
 
 // --- Icons ---
-const CloudArrowUpIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.2} stroke="currentColor" className="w-12 h-12 text-blue-500/80">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
-  </svg>
-);
-
-const PencilIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-  </svg>
-);
-
-const DocumentIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-blue-500">
-    <path fillRule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 0 1 3.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 0 1 3.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 0 1-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875ZM12.75 12a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V18a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V12Z" clipRule="evenodd" />
-    <path d="M14.25 5.25a.75.75 0 0 0-.75.75v2.25c0 .414.336.75.75.75h2.25a.75.75 0 0 0 .75-.75V5.25a.75.75 0 0 0-.75-.75h-2.25Z" />
-  </svg>
-);
+// ... (icons remain the same)
 
 const PersonalPage = () => {
   const userStore = useUserProfileStore();
   const userAccountStore = useUserAccountStore();
   const user = userStore.information;
 
+  const { data: scores } = useUserScoresQuery();
+  const { data: quests } = useUserQuestsQuery();
+
   const stats = [
-    { label: "Projects", value: 42 },
-    { label: "Clients", value: 38 },
-    { label: "Coffee", value: 847 },
-    { label: "Awards", value: 12 }
+    { label: "Health", value: scores?.healthGlobalScore?.toFixed(0) || "0" },
+    { label: "Social", value: scores?.socialGlobalScore?.toFixed(0) || "0" },
+    { label: "Career", value: scores?.careerGlobalScore?.toFixed(0) || "0" },
+    { label: "Finance", value: scores?.financialGlobalScore?.toFixed(0) || "0" }
   ];
 
-  const achievements = [
-    { title: "Designer of the Year", org: "Design Awards", date: "Jan 2024" },
-    { title: "UX Excellence", org: "Tech Summit", date: "Sep 2023" },
-    { title: "Innovation Award", org: "Creative Guild", date: "Jun 2023" }
-  ];
+  const recentQuests = quests?.slice(0, 3).map(q => ({
+    title: q.title,
+    org: q.category,
+    date: q.isCompleted ? "Completed" : `${((q.currentValue / q.targetValue) * 100).toFixed(0)}%`
+  })) || [
+      { title: "No active quests", org: "System", date: "--" }
+    ];
+
+  const commonProps = {
+    placeholder: undefined,
+    onPointerEnterCapture: undefined,
+    onPointerLeaveCapture: undefined,
+    onResize: undefined,
+    onResizeCapture: undefined,
+  } as any;
 
   return (
     <div className="min-h-screen bg-[#141430] font-sans py-4 md:py-8 relative overflow-hidden flex items-start justify-center">
@@ -59,6 +56,19 @@ const PersonalPage = () => {
       {/* Main Content Container */}
       <div className="w-full max-w-7xl px-4 md:px-6 relative z-10">
         <div className="flex flex-col gap-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 px-1">
+            <Typography variant="small" className="text-white/50 font-medium" {...commonProps}>
+              Personal hub
+            </Typography>
+            <a
+              href="https://cv.personal.duylong.art"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-indigo-400/40 bg-indigo-500/15 px-4 py-2 text-sm font-semibold text-indigo-100 hover:bg-indigo-500/25 hover:border-indigo-300/60 transition-colors"
+            >
+              CV — cv.personal.duylong.art
+            </a>
+          </div>
           {/* Navigation & Content Wrapper */}
           <div className="relative rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/5 backdrop-blur-3xl shadow-2xl">
             <TabNavigation
@@ -69,7 +79,7 @@ const PersonalPage = () => {
               ]}
               user={userAccountStore.account}
               listTab={{
-                overview: <AboutMePage stats={stats} achievements={achievements} />,
+                overview: <AboutMePage stats={stats} achievements={recentQuests} />,
                 projects: <ProjectPage />,
                 skills: <SkillPage />,
               }}

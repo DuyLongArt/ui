@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { motion } from 'framer-motion';
 import PersonProfileIcon from "../../../components/PersonProfileIcon";
 import { useTruenasStorageStore } from '@/OrchestraLayer/StateManager/Zustand/truenasStorageStore';
@@ -147,7 +148,12 @@ const StoragePage = () => {
             formData.append('file', fileWrapper.file);
 
             try {
+                const token = Cookies.get('auth_jwt');
                 await axios.post('/backend/object/add', formData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data'
+                    },
                     onUploadProgress: (progressEvent) => {
                         const percent = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 100));
                         setFiles(prev => prev.map(f => f.id === fileWrapper.id ? { ...f, progress: percent } : f));

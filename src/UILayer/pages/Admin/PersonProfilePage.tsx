@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { CameraIcon, PencilIcon, PlusIcon, ShieldCheckIcon, XMarkIcon, CheckCircleIcon, ArrowLeftOnRectangleIcon, EnvelopeIcon, PhoneIcon } from '@heroicons/react/24/solid';
 import { MapPinIcon, AcademicCapIcon, ComputerDesktopIcon, HomeIcon, PhotoIcon as PhotographIcon, UsersIcon, ChatBubbleOvalLeftIcon as ChatIcon, BellIcon } from '@heroicons/react/24/outline';
 import { useUserAccountStore, useUserProfileStore } from '../../../OrchestraLayer/StateManager/Zustand/userProfileStore';
@@ -16,9 +17,11 @@ import { Typography } from "@material-tailwind/react";
 
 // useUserAccountStore
 import axios from 'axios';
+import { usePersonInformationQuery, useInformationDetailsQuery } from '../../../DataLayer/APILayer/userQueries';
 
 
 const PersonProfilePage: React.FC = () => {
+    const { alias } = useParams<{ alias: string }>();
     const [activeTab, setActiveTab] = useState<'Posts' | 'About' | 'Photos' | 'Security' | 'Contact'>('Posts');
     const [formData, setFormData] = useState({
         name: '',
@@ -48,6 +51,18 @@ const PersonProfilePage: React.FC = () => {
     const [location, setLocation] = useState('');
     const [university, setUniversity] = useState('');
     const userAccountStore = useUserAccountStore();
+    const userStore = useUserProfileStore();
+
+    // Fetch data for the specific alias if provided, otherwise 'me'
+    const { data: personData } = usePersonInformationQuery(alias);
+    const { data: detailsData } = useInformationDetailsQuery(alias);
+
+    const displayPerson = personData || userStore.information.profiles;
+    const displayDetails = detailsData || userStore.information.details;
+
+    // Check if viewing own profile
+    const isOwnProfile = !alias || alias === userStore.information.profiles.alias;
+
     const [editAdminInformationState, editAdminInformationSend] = useActor(editAdminInformationMachine);
 
     // Common props to fix TS errors with Material Tailwind
@@ -119,8 +134,8 @@ const PersonProfilePage: React.FC = () => {
         }
     }, [state.value]);
 
-    const ADMIN_IMAGE_URL = `/user-profiles/user-profiles/${user.profiles.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
-    const COVER_PHOTO_URL = `/user-profiles/user-profiles/${user.profiles.alias}/cover.png?v=${imageObjectStore.versions.coverVersion}`;
+    const ADMIN_IMAGE_URL = `/object/duylongwebappobjectdatabase/${displayPerson.alias}/admin.png?v=${imageObjectStore.versions.avatarVersion}`;
+    const COVER_PHOTO_URL = `/object/duylongwebappobjectdatabase/${displayPerson.alias}/cover.png?v=${imageObjectStore.versions.coverVersion}`;
     const [profileBlobUrl, setProfileBlobUrl] = useState<string>('');
     const [coverBlobUrl, setCoverBlobUrl] = useState<string>('');
 
@@ -130,7 +145,7 @@ const PersonProfilePage: React.FC = () => {
         let coverUrl = '';
 
         const loadImage = async (url: string, setter: (val: string) => void) => {
-            if (!user.profiles.alias) return;
+            if (!displayPerson.alias) return;
             try {
                 const response = await axios.get(url, { responseType: 'blob' });
                 const localUrl = URL.createObjectURL(response.data);
@@ -153,7 +168,7 @@ const PersonProfilePage: React.FC = () => {
             if (profileUrl) URL.revokeObjectURL(profileUrl);
             if (coverUrl) URL.revokeObjectURL(coverUrl);
         };
-    }, [user.profiles.alias, imageObjectStore.versions.avatarVersion, imageObjectStore.versions.coverVersion]);
+    }, [displayPerson.alias, imageObjectStore.versions.avatarVersion, imageObjectStore.versions.coverVersion]);
     const handleUploadStart = (file: File) => {
         send({ type: 'FILE_SELECTED', file, mode: mode as 'admin' | 'cover' });
         send({ type: 'UPLOAD_STARTED' });
@@ -183,32 +198,36 @@ const PersonProfilePage: React.FC = () => {
     }, [state.matches('success'), state.context.uploadedUrl, state.context.mode, updateProfileImageUrl, updateCoverImageUrl]);
 
     return (
-        <div className="bg-white min-h-screen pb-20 animate-fade-in-up">
+        <div className="bg-white min-h-screen pb-20">
             <GlassCard className="max-w-5xl mx-auto shadow-xl overflow-hidden mb-6 " color='from-white via-white to-white'>
                 {/* Cover Image */}
                 <div className="relative h-[300px] md:h-[400px] bg-gray-100 overflow-hidden group">
                     <img src={coverBlobUrl} alt="Cover" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                     <div className="absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-black/60"></div>
 
-                    <button
-                        className="absolute bottom-6 z-40 right-6 bg-white/10 backdrop-blur-xl border border-white/20 text-white font-semibold py-2.5 px-5 rounded-2xl flex items-center hover:bg-white/20 transition-all shadow-2xl group/btn"
-                        onClick={() => { setMode('cover'); setIsEditModalOpen(true); }}
-                    >
-                        <CameraIcon className="h-5 w-5 mr-2 group-hover/btn:scale-110 transition-transform" />
-                        Edit Cover
-                    </button>
+                    {isOwnProfile && (
+                        <button
+                            className="absolute bottom-6 z-40 right-6 bg-white/10 backdrop-blur-xl border border-white/20 text-white font-semibold py-2.5 px-5 rounded-2xl flex items-center hover:bg-white/20 transition-all shadow-2xl group/btn"
+                            onClick={() => { setMode('cover'); setIsEditModalOpen(true); }}
+                        >
+                            <CameraIcon className="h-5 w-5 mr-2 group-hover/btn:scale-110 transition-transform" />
+                            Edit Cover
+                        </button>
+                    )}
                 </div>
 
                 {/* Profile Header */}
                 <div className="relative px-8 pb-8">
                     <div className="flex flex-col md:flex-row items-end -mt-[70px] mb-6">
                         {/* Avatar */}
-                        <div className="relative group cursor-pointer" onClick={() => { setMode('admin'); setIsEditModalOpen(true); }}>
+                        <div className={`relative group ${isOwnProfile ? 'cursor-pointer' : ''}`} onClick={() => { if (isOwnProfile) { setMode('admin'); setIsEditModalOpen(true); } }}>
                             <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] rounded-full border-4 border-white shadow-2xl overflow-hidden bg-white ring-4 ring-white/50">
                                 <img src={profileBlobUrl} alt="Profile" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:border-indigo-900! group-hover:border flex items-center justify-center transition-opacity duration-300">
-                                    <CameraIcon className="w-8 h-8 text-white" />
-                                </div>
+                                {isOwnProfile && (
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                                        <CameraIcon className="w-8 h-8 text-white" />
+                                    </div>
+                                )}
                             </div>
                             <div className="absolute bottom-5 right-5 h-5 w-5 bg-green-500 rounded-full border-4 border-white shadow-md"></div>
                         </div>
@@ -216,47 +235,57 @@ const PersonProfilePage: React.FC = () => {
                         {/* Info */}
                         <div className="mt-4 md:mt-0 md:ml-8 flex-1 text-center md:text-left pt-2">
                             <Typography variant="h2" className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-2" {...commonProps}>
-                                {user.profiles.firstName} {user.profiles.lastName}
+                                {displayPerson.firstName} {displayPerson.lastName}
                             </Typography>
 
                             <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mb-4 text-gray-600">
                                 <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-sm font-medium">
                                     <UsersIcon className="w-4 h-4 text-indigo-500" />
-                                    {user.profiles.friends.toLocaleString()} connections
+                                    {displayPerson.friends.toLocaleString()} connections
                                 </span>
-                                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-sm font-medium">
-                                    <ShieldCheckIcon className="w-4 h-4 text-emerald-500" />
-                                    {userAccountStore.account.role}
-                                </span>
+                                {isOwnProfile && (
+                                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/80 backdrop-blur-sm border border-slate-200 text-sm font-medium">
+                                        <ShieldCheckIcon className="w-4 h-4 text-emerald-500" />
+                                        {userAccountStore.account.role}
+                                    </span>
+                                )}
                             </div>
                         </div>
 
                         {/* Actions */}
                         <div className="flex gap-3 mt-6 md:mt-0 w-full md:w-auto">
-                            <button onClick={handleLogout} className="flex-1 md:flex-none flex items-center justify-center bg-white border border-red-200 text-red-600 hover:bg-red-50 font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm text-sm">
-                                <ArrowLeftOnRectangleIcon className="h-4 w-4 mr-2" /> Logout
-                            </button>
-                            <button className="flex-1 md:flex-none flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-lg shadow-indigo-200 text-sm">
-                                <PlusIcon className="h-4 w-4 mr-2" /> Add Story
-                            </button>
-                            <button
-                                onClick={() => {
-                                    editAdminInformationSend({ type: "EDIT" });
-                                    if (editAdminInformationState.value === "onEdit") editAdminInformationSend({ type: "TYPE" });
-                                    if (editAdminInformationState.value === "onType") editAdminInformationSend({ type: "SAVE", location, university });
-                                }}
-                                className="flex-1 md:flex-none flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm text-sm"
-                            >
-                                <PencilIcon className="h-4 w-4 mr-2" /> Edit
-                            </button>
+                            {isOwnProfile ? (
+                                <>
+                                    <button onClick={handleLogout} className="flex-1 md:flex-none flex items-center justify-center bg-white border border-red-200 text-red-600 hover:bg-red-50 font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm text-sm">
+                                        <ArrowLeftOnRectangleIcon className="h-4 w-4 mr-2" /> Logout
+                                    </button>
+                                    <button className="flex-1 md:flex-none flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-lg shadow-indigo-200 text-sm">
+                                        <PlusIcon className="h-4 w-4 mr-2" /> Add Story
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            editAdminInformationSend({ type: "EDIT" });
+                                            if (editAdminInformationState.value === "onEdit") editAdminInformationSend({ type: "TYPE" });
+                                            if (editAdminInformationState.value === "onType") editAdminInformationSend({ type: "SAVE", location, university });
+                                        }}
+                                        className="flex-1 md:flex-none flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm text-sm"
+                                    >
+                                        <PencilIcon className="h-4 w-4 mr-2" /> Edit
+                                    </button>
+                                </>
+                            ) : (
+                                <button className="flex-1 md:flex-none flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-8 rounded-xl transition-all shadow-lg shadow-indigo-200 text-sm">
+                                    Follow
+                                </button>
+                            )}
                         </div>
                     </div>
 
                     {/* Bio */}
-                    {user.details.bio && (
+                    {displayDetails.bio && (
                         <div className="bg-linear-to-r from-slate-50 to-white p-5 rounded-2xl border border-slate-100 shadow-xs mb-6 mx-8">
                             <p className="text-gray-700 italic text-center md:text-left text-lg leading-relaxed font-light">
-                                "{user.details.bio}"
+                                "{displayDetails.bio}"
                             </p>
                         </div>
                     )}
@@ -297,7 +326,7 @@ const PersonProfilePage: React.FC = () => {
                                 </div>
                                 <div className="flex-1">
                                     {(editAdminInformationState.value !== "onEdit" && editAdminInformationState.value !== "onType")
-                                        ? <div className="text-sm">Studied at <span className="font-semibold text-gray-900 block text-base">{user.details.university}</span></div>
+                                        ? <div className="text-sm">Studied at <span className="font-semibold text-gray-900 block text-base">{displayDetails.university}</span></div>
                                         : <input type="text" className="border-b-2 border-indigo-200 focus:border-indigo-500 rounded-none px-0 py-1 w-full text-sm outline-none bg-transparent transition-colors" value={university} onChange={(e) => setUniversity(e.target.value)} placeholder="University" />}
                                 </div>
                             </div>
@@ -308,7 +337,7 @@ const PersonProfilePage: React.FC = () => {
                                 </div>
                                 <div className="flex-1">
                                     {(editAdminInformationState.value !== "onEdit" && editAdminInformationState.value !== "onType")
-                                        ? <div className="text-sm">Lives in <span className="font-semibold text-gray-900 block text-base">{user.details.country}</span></div>
+                                        ? <div className="text-sm">Lives in <span className="font-semibold text-gray-900 block text-base">{displayDetails.country}</span></div>
                                         : <input type="text" className="border-b-2 border-indigo-200 focus:border-indigo-500 rounded-none px-0 py-1 w-full text-sm outline-none bg-transparent transition-colors" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" />}
                                 </div>
                             </div>

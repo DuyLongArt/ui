@@ -28,11 +28,12 @@ const useTruenasStorageStore = create<TruenasStorageStore>((set, get) => ({
     percentageUsed: [],
 
     setPercentage: async () => {
-        var percentage: number[] = [];
-        get().pools.forEach(pool => {
-            percentage.push((pool.allocated) / pool.size);
+        const percentage: number[] = [];
+        get().pools.forEach((pool) => {
+            const pct = pool.size > 0 ? pool.allocated / pool.size : 0;
+            percentage.push(Number.isFinite(pct) ? pct : 0);
         });
-        set({ percentageUsed: percentage })
+        set({ percentageUsed: percentage });
     }
 
 }));

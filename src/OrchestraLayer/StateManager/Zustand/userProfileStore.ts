@@ -49,8 +49,8 @@ interface UserInformationState {
     information: UserInformation;
     updateProfileImageUrl: (url: string) => void;
     updateCoverImageUrl: (url: string) => void;
-    updateProfile: () => Promise<void>;
-    editProfile: (university: string, location: string) => void;
+    setInformation: (info: UserInformation) => void;
+    editProfileDetails: (details: Partial<UserDetails>) => void;
 }
 
 const useUserProfileStore = create<UserInformationState>()(
@@ -103,43 +103,42 @@ const useUserProfileStore = create<UserInformationState>()(
                 }
             })),
 
-            editProfile: (editUniversity: string, editLocation: string) => set((state) => ({
+            setInformation: (info: UserInformation) => set({ information: info }),
+
+            editProfileDetails: (details: Partial<UserDetails>) => set((state) => ({
                 information: {
                     ...state.information,
-                    profiles: {
-                        ...state.information.profiles,
-                        details: {
-                            ...state.information.details,
-                            university: editUniversity,
-                            location: editLocation,
-                        }
-                    } as any // Temporary cast to bypass structure mismatch if 'details' is not directly under 'profiles' in intended schema, but keeping logically consistent with previous code
+                    details: {
+                        ...state.information.details,
+                        ...details,
+                    }
                 }
             })),
-
-
-            updateProfile: async () => {
-                try {
-                    const token = Cookies.get('auth_jwt');
-                    const { details } = get().information;
-
-                    const response = await axios.post(
-                        `${API_BASE_URL}/information/edit?university=${details.university}&location=${details.location}`,
-                        {},
-                        {
-                            headers: { Authorization: `Bearer ${token}` }
-                        }
-                    );
-
-                    console.log("✅ Database Update Successful:", response.data);
-                } catch (error) {
-                    console.error("❌ Failed to update profile in database:", error);
-                }
-            },
         }),
         {
+            // Local cache; canonical “me” profile/details can also live in Supabase (`user_information`) when configured.
             name: 'user-profile-storage',
             storage: createJSONStorage(() => localStorage),
+            // Rehydration runs after first paint and can overwrite in-memory fixes — re-apply Supabase Auth names if still empty.
+            onRehydrateStorage: () => () => {
+                void import('../../../DataLayer/APILayer/supabase/userInformationSync').then(
+                    async ({ tryBootstrapProfileFromAuthMetadata }) => {
+                        const cur = useUserProfileStore.getState().information.profiles;
+                        if (cur.firstName?.trim()) return;
+                        const partial = await tryBootstrapProfileFromAuthMetadata();
+                        if (!partial?.firstName?.trim()) return;
+                        useUserProfileStore.setState((state) => ({
+                            information: {
+                                ...state.information,
+                                profiles: {
+                                    ...state.information.profiles,
+                                    ...partial,
+                                },
+                            },
+                        }));
+                    }
+                );
+            },
         }
     )
 );

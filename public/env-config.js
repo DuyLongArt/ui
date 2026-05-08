@@ -4,4 +4,6 @@ window._env_ = {
     VITE_TAILSCALE_USERNAME: "",
     VITE_TRUENAS_BEAR: "",
     VITE_GROQ_API_KEY: "",
+    VITE_SUPABASE_URL: "",
+    VITE_SUPABASE_ANON_KEY: "",
 };

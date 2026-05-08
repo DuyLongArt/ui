@@ -5,7 +5,9 @@ import { useUserProfileStore, useUserSkillStore } from '../../../../OrchestraLay
 import { userArhiveStore } from '../../../../OrchestraLayer/StateManager/Zustand/userArhives';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { useParams } from 'react-router-dom';
 import {
+    Activity,
     Download,
     Printer,
     ExternalLink,
@@ -17,8 +19,13 @@ import {
     GraduationCap,
     Award,
     Code2,
-    CheckCircle2
+    CheckCircle2,
+    Camera,
+    Save,
+    X
 } from 'lucide-react';
+import { usePersonInformationQuery, useInformationDetailsQuery, useUpdateAvatarMutation, useUpdateCoverMutation, useEditInformationMutation } from '../../../../DataLayer/APILayer/userQueries';
+import MinIOUploadComponent from '../../../components/MinIOUploadComponent';
 
 // --- Icons ---
 const ArrowTopRightOnSquareIcon = () => (
@@ -33,17 +40,61 @@ interface AboutMePageProps {
     achievements?: any[];
 }
 
-const AboutMePage: React.FC<AboutMePageProps> = () => {
+const AboutMePage: React.FC<AboutMePageProps> = ({ stats, achievements }) => {
+    const { alias } = useParams<{ alias: string }>();
     const userArchive = userArhiveStore();
     const userStore = useUserProfileStore();
     const skillStore = useUserSkillStore();
 
+    // Fetch data for the specific alias if provided, otherwise 'me'
+    const { data: personData } = usePersonInformationQuery(alias);
+    const { data: detailsData } = useInformationDetailsQuery(alias);
+
     const [isCVExist, setIsCVExist] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(true);
+    const [isEditing, setIsEditing] = React.useState(false);
 
-    const CVPDFLink = userStore.information.profiles.alias === "" || userStore.information.profiles.alias === undefined
+    // Use fetched data or fallback to store
+    const displayPerson = personData || userStore.information.profiles;
+    const displayDetails = detailsData || userStore.information.details;
+
+    const [editData, setEditData] = React.useState({
+        university: displayDetails.university || "",
+        location: displayDetails.location || "",
+        country: displayDetails.country || "",
+        occupation: displayDetails.occupation || "",
+        bio: displayDetails.bio || "",
+        github_url: displayDetails.github_url || "",
+        linkedin_url: displayDetails.linkedin_url || "",
+        website_url: displayDetails.website_url || "",
+    });
+
+    // Update editData when data is loaded
+    React.useEffect(() => {
+        if (displayDetails) {
+            setEditData({
+                university: displayDetails.university || "",
+                location: displayDetails.location || "",
+                country: displayDetails.country || "",
+                occupation: displayDetails.occupation || "",
+                bio: displayDetails.bio || "",
+                github_url: displayDetails.github_url || "",
+                linkedin_url: displayDetails.linkedin_url || "",
+                website_url: displayDetails.website_url || "",
+            });
+        }
+    }, [displayDetails]);
+
+    const [uploadMode, setUploadMode] = React.useState<'avatar' | 'cover' | null>(null);
+
+    const updateAvatar = useUpdateAvatarMutation();
+    const updateCover = useUpdateCoverMutation();
+    const editInfo = useEditInformationMutation();
+
+    const currentAlias = alias || userStore.information.profiles.alias;
+    const CVPDFLink = !currentAlias
         ? "/object/duylongwebappobjectdatabase/b265dab1-cf08-4643-8214-d380fa18063e/cv/cv.pdf"
-        : `/object/duylongwebappobjectdatabase/${userStore.information.profiles.alias}/cv/cv.pdf`;
+        : `/object/duylongwebappobjectdatabase/${currentAlias}/cv/cv.pdf`;
 
     React.useEffect(() => {
         const checkCV = async () => {
@@ -60,6 +111,14 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
         };
         checkCV();
     }, [CVPDFLink]);
+
+    const handleSave = async () => {
+        await editInfo.mutateAsync({
+            university: editData.university,
+            location: editData.location,
+        });
+        setIsEditing(false);
+    };
 
     const handleDownload = () => {
         window.open(CVPDFLink, '_blank');
@@ -115,41 +174,149 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                     </div>
 
                     <div className="flex flex-col md:flex-row gap-8 items-center md:items-start relative z-10">
+                        <div className="relative group/avatar">
+                            <div className="w-32 h-32 md:w-40 md:h-40 rounded-3xl overflow-hidden border-4 border-white/10 shadow-2xl relative">
+                                <img
+                                    src={displayPerson.profileImageUrl || "https://backend.duylong.art/object/duylongwebappobjectdatabase/admin.png"}
+                                    alt="Profile"
+                                    className="w-full h-full object-cover"
+                                />
+                                {isEditing && (
+                                    <div
+                                        className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover/avatar:opacity-100 transition-opacity cursor-pointer"
+                                        onClick={() => setUploadMode('avatar')}
+                                    >
+                                        <Camera className="text-white" size={32} />
+                                    </div>
+                                )}
+                            </div>
+                        </div>
 
-                        <div className="flex-1 flex flex-row md:flex-row gap-8 items-center md:items-start">
+                        <div className="flex-1 flex flex-col md:flex-row gap-8 items-center md:items-start">
                             <div className="flex-1 text-center  md:text-left space-y-4">
                                 <div>
-                                    <p variant="h2" color="white" className="font-black tracking-tight text-2xl md:text-4xl" {...commonProps}>
-                                        {userStore.information.profiles.firstName} {userStore.information.profiles.lastName}
-                                    </p>
-                                    <p variant="h5" className="text-indigo-400 font-bold tracking-widest uppercase text-sm md:text-base mt-2" {...commonProps}>
-                                        {userStore.information.details.occupation || "Software Engineer / Designer"}
-                                    </p>
-
+                                    <Typography variant="h2" color="white" className="font-black tracking-tight text-2xl md:text-4xl" {...commonProps}>
+                                        {displayPerson.firstName} {displayPerson.lastName}
+                                    </Typography>
+                                    <div className="mt-2">
+                                        {isEditing ? (
+                                            <input
+                                                className="bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-indigo-400 font-bold uppercase text-sm w-full"
+                                                value={editData.occupation}
+                                                onChange={(e) => setEditData({ ...editData, occupation: e.target.value })}
+                                            />
+                                        ) : (
+                                            <Typography variant="h5" className="text-indigo-400 font-bold tracking-widest uppercase text-sm md:text-base" {...commonProps}>
+                                                {displayDetails.occupation || "Software Engineer / Designer"}
+                                            </Typography>
+                                        )}
+                                    </div>
                                 </div>
-                              
+                                <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                                    <div className="flex items-center gap-2 text-white/70 bg-white/5 px-4 py-2 rounded-full border border-white/10">
+                                        <MapPin size={16} className="text-indigo-400" />
+                                        {isEditing ? (
+                                            <div className="flex gap-2">
+                                                <input
+                                                    className="bg-transparent border-b border-white/20 text-sm focus:outline-none text-white"
+                                                    value={editData.location}
+                                                    onChange={(e) => setEditData({ ...editData, location: e.target.value })}
+                                                    placeholder="Location"
+                                                />
+                                                <input
+                                                    className="bg-transparent border-b border-white/20 text-sm focus:outline-none text-white"
+                                                    value={editData.country}
+                                                    onChange={(e) => setEditData({ ...editData, country: e.target.value })}
+                                                    placeholder="Country"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="text-sm">{displayDetails.location || "Remote"}, {displayDetails.country || "Earth"}</span>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
-                              <div className="flex items-center gap-2 text-white/70 bg-white/5 px-4 py-2 rounded-full border border-white/10 max-[410px]:hidden">
-                                    <MapPin size={16} className="text-indigo-400" />
-                                    <span className="text-sm">{userStore.information.details.location || "Remote"}, {userStore.information.details.country || "Earth"}</span>
+
+                            <div className="flex flex-col gap-4 items-end">
+                                <div className="flex gap-2">
+                                    {!isEditing ? (
+                                        <Button
+                                            size="sm"
+                                            variant="text"
+                                            color="white"
+                                            className="flex items-center gap-2 bg-white/5 hover:bg-white/10 normal-case"
+                                            onClick={() => setIsEditing(true)}
+                                            {...commonProps}
+                                        >
+                                            <Briefcase size={16} /> Edit Profile
+                                        </Button>
+                                    ) : (
+                                        <>
+                                            <Button
+                                                size="sm"
+                                                color="green"
+                                                className="flex items-center gap-2 normal-case"
+                                                onClick={handleSave}
+                                                {...commonProps}
+                                            >
+                                                <Save size={16} /> Save
+                                            </Button>
+                                            <Button
+                                                size="sm"
+                                                color="red"
+                                                variant="text"
+                                                className="flex items-center gap-2 normal-case"
+                                                onClick={() => setIsEditing(false)}
+                                                {...commonProps}
+                                            >
+                                                <X size={16} /> Cancel
+                                            </Button>
+                                        </>
+                                    )}
                                 </div>
 
-                            <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
-                                {userStore.information.details.github_url && (
-                                    <IconButton size="md" variant="text" color="white" className="bg-white/5 hover:bg-white/10" onClick={() => window.open(userStore.information.details.github_url, '_blank')} {...commonProps}>
-                                        <Github size={20} />
-                                    </IconButton>
-                                )}
-                                {userStore.information.details.linkedin_url && (
-                                    <IconButton size="md" variant="text" color="white" className="bg-white/5 hover:bg-white/10" onClick={() => window.open(userStore.information.details.linkedin_url, '_blank')} {...commonProps}>
-                                        <Linkedin size={20} />
-                                    </IconButton>
-                                )}
-                                {userStore.information.details.website_url && (
-                                    <IconButton size="md" variant="text" color="white" className="bg-white/5 hover:bg-white/10" onClick={() => window.open(userStore.information.details.website_url, '_blank')} {...commonProps}>
-                                        <ExternalLink size={20} />
-                                    </IconButton>
-                                )}
+                                <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
+                                    {isEditing ? (
+                                        <div className="flex flex-col gap-2 bg-white/5 p-4 rounded-2xl border border-white/10">
+                                            <div className="flex items-center gap-2">
+                                                <Github size={16} className="text-white/50" />
+                                                <input
+                                                    className="bg-transparent border-b border-white/20 text-xs focus:outline-none text-white w-40"
+                                                    value={editData.github_url}
+                                                    onChange={(e) => setEditData({ ...editData, github_url: e.target.value })}
+                                                    placeholder="Github URL"
+                                                />
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Linkedin size={16} className="text-white/50" />
+                                                <input
+                                                    className="bg-transparent border-b border-white/20 text-xs focus:outline-none text-white w-40"
+                                                    value={editData.linkedin_url}
+                                                    onChange={(e) => setEditData({ ...editData, linkedin_url: e.target.value })}
+                                                    placeholder="Linkedin URL"
+                                                />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            {displayDetails.github_url && (
+                                                <IconButton size="md" variant="text" color="white" className="bg-white/5 hover:bg-white/10" onClick={() => window.open(displayDetails.github_url, '_blank')} {...commonProps}>
+                                                    <Github size={20} />
+                                                </IconButton>
+                                            )}
+                                            {displayDetails.linkedin_url && (
+                                                <IconButton size="md" variant="text" color="white" className="bg-white/5 hover:bg-white/10" onClick={() => window.open(displayDetails.linkedin_url, '_blank')} {...commonProps}>
+                                                    <Linkedin size={20} />
+                                                </IconButton>
+                                            )}
+                                            {displayDetails.website_url && (
+                                                <IconButton size="md" variant="text" color="white" className="bg-white/5 hover:bg-white/10" onClick={() => window.open(displayDetails.website_url, '_blank')} {...commonProps}>
+                                                    <ExternalLink size={20} />
+                                                </IconButton>
+                                            )}
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -159,6 +326,28 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 {/* Left Column: Details & Stats (4 cols) */}
                 <div className="lg:col-span-4 space-y-6 order-2 lg:order-1">
+                    {/* Global Scores Card */}
+                    {stats && stats.length > 0 && (
+                        <motion.div variants={itemVariants}>
+                            <GlassCard className="p-8" color="from-indigo-900/40 via-slate-900/40 to-indigo-800/40">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400">
+                                        <Activity size={20} />
+                                    </div>
+                                    <Typography variant="h6" color="white" className="font-bold" {...commonProps}>Global Scores</Typography>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {stats.map((stat, i) => (
+                                        <div key={i} className="bg-white/5 p-4 rounded-2xl border border-white/10 hover:border-indigo-500/30 transition-all">
+                                            <Typography className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-1" {...commonProps}>{stat.label}</Typography>
+                                            <Typography variant="h4" color="white" className="font-black" {...commonProps}>{stat.value}</Typography>
+                                        </div>
+                                    ))}
+                                </div>
+                            </GlassCard>
+                        </motion.div>
+                    )}
+
                     {/* Bio Card */}
                     <motion.div variants={itemVariants}>
                         <GlassCard className="p-8" color="from-slate-800/40 via-slate-900/40 to-slate-800/40">
@@ -169,7 +358,16 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                                 <Typography variant="h6" color="white" className="font-bold" {...commonProps}>Executive Bio</Typography>
                             </div>
                             <Typography className="text-white/80 leading-relaxed font-light italic border-l-2 border-indigo-500/50 pl-4" {...commonProps}>
-                                "{userStore.information.details.bio || "Crafting digital experiences with passion and precision. Specializing in modern web architectures and performance-driven solutions."}"
+                                {isEditing ? (
+                                    <textarea
+                                        className="bg-white/5 border border-white/10 rounded-lg p-2 text-white/80 w-full min-h-[100px] focus:outline-none"
+                                        value={editData.bio}
+                                        onChange={(e) => setEditData({ ...editData, bio: e.target.value })}
+                                        placeholder="Enter your bio..."
+                                    />
+                                ) : (
+                                    `"${displayDetails.bio || "Crafting digital experiences with passion and precision. Specializing in modern web architectures and performance-driven solutions."}"`
+                                )}
                             </Typography>
                         </GlassCard>
                     </motion.div>
@@ -207,19 +405,45 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                         </GlassCard>
                     </motion.div>
 
-                    {/* Career Highlights */}
-                    {userArchive.archive && userArchive.archive.length > 0 && (
+                    {/* Career Highlights & Quests */}
+                    {((userArchive.archive && userArchive.archive.length > 0) || (achievements && achievements.length > 0)) && (
                         <motion.div variants={itemVariants}>
                             <GlassCard className="p-8" color="from-slate-800/40 via-slate-900/40 to-slate-800/40">
                                 <div className="flex items-center gap-3 mb-8">
                                     <div className="p-2 rounded-lg bg-indigo-500/20 text-indigo-400">
                                         <Award size={20} />
                                     </div>
-                                    <Typography variant="h6" color="white" className="font-bold" {...commonProps}>Achievements</Typography>
+                                    <Typography variant="h6" color="white" className="font-bold" {...commonProps}>Achievements & Quests</Typography>
                                 </div>
                                 <div className="space-y-8 relative before:absolute before:inset-y-0 before:left-[11px] before:w-[2px] before:bg-white/10">
-                                    {userArchive.archive.slice(0, 4).map((item, i) => (
-                                        <div key={i} className="flex gap-6 items-start relative">
+                                    {/* Merged Timeline: Quests first, then Archives */}
+                                    {achievements?.map((quest, i) => (
+                                        <div key={`quest-${i}`} className="flex gap-6 items-start relative">
+                                            <div className="w-6 h-6 rounded-full bg-amber-500 border-4 border-slate-900 shrink-0 z-10 shadow-lg shadow-amber-500/20 mt-1"></div>
+                                            <div className="space-y-1">
+                                                <div className="flex justify-between items-center w-full min-w-[200px]">
+                                                    <Typography className="text-xs font-black text-amber-300 uppercase tracking-widest" {...commonProps}>
+                                                        Quest / {quest.org}
+                                                    </Typography>
+                                                    <Typography className="text-[10px] text-white/40 font-bold" {...commonProps}>
+                                                        {quest.date}
+                                                    </Typography>
+                                                </div>
+                                                <Typography className="text-sm text-white font-bold leading-relaxed" {...commonProps}>
+                                                    {quest.title}
+                                                </Typography>
+                                                <div className="w-full bg-white/5 h-1 rounded-full overflow-hidden mt-1">
+                                                    <div
+                                                        className="h-full bg-amber-500"
+                                                        style={{ width: quest.date.includes('%') ? quest.date : (quest.date === "Completed" ? "100%" : "0%") }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    {userArchive.archive?.slice(0, 3).map((item, i) => (
+                                        <div key={`archive-${i}`} className="flex gap-6 items-start relative">
                                             <div className="w-6 h-6 rounded-full bg-indigo-500 border-4 border-slate-900 shrink-0 z-10 shadow-lg shadow-indigo-500/20 mt-1"></div>
                                             <div className="space-y-1">
                                                 <Typography className="text-xs font-black text-indigo-300 uppercase tracking-widest" {...commonProps}>
@@ -329,6 +553,24 @@ const AboutMePage: React.FC<AboutMePageProps> = () => {
                     </motion.div>
                 </div>
             </div>
+            {uploadMode && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-100 flex items-center justify-center p-4">
+                    <MinIOUploadComponent
+                        mode={uploadMode}
+                        onUpload={async (file) => {
+                            if (uploadMode === 'avatar') {
+                                await updateAvatar.mutateAsync(file);
+                            } else {
+                                await updateCover.mutateAsync(file);
+                            }
+                            setUploadMode(null);
+                            return "";
+                        }}
+                        onHandleClose={() => setUploadMode(null)}
+                        isUploading={updateAvatar.isPending || updateCover.isPending}
+                    />
+                </div>
+            )}
         </motion.div>
     );
 };

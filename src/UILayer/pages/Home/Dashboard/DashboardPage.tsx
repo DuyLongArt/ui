@@ -25,13 +25,18 @@ import LiquidGlassCard from '../../../components/LiquidGlassCard';
 import ColorGlassCard from '@/UILayer/components/ColorGlassCard';
 import { useTruenasStorageStore } from '@/OrchestraLayer/StateManager/Zustand/truenasStorageStore';
 import { useCloudflareDnsDataQuery } from '@/DataLayer/APILayer/infrastructureQueries';
+import { usePersonInformationQuery } from '@/DataLayer/APILayer/userQueries';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
     const userStore = useUserProfileStore();
+    const { data: personRow } = usePersonInformationQuery();
     const { dnsData } = useCloudflareStore();
     const { devices } = useTailScaleStore();
-    const userFirstName = userStore.information.profiles.firstName || "Guest";
+    const userFirstName =
+        personRow?.firstName?.trim() ||
+        userStore.information.profiles.firstName?.trim() ||
+        'Guest';
 
     const truenasStorageStore = useTruenasStorageStore();
 
@@ -60,6 +65,19 @@ const DashboardPage = () => {
     const onlineNodes = useMemo(() => devices.filter(d => d.connectedToControl).length, [devices]);
     const maxCount = Math.max(...analytics.timeline.map(t => t[1]), 1);
 
+    const storageStats = useMemo(() => {
+        const p = truenasStorageStore.pools[0];
+        const raw = truenasStorageStore.percentageUsed[0];
+        const ratio = typeof raw === 'number' && Number.isFinite(raw) ? raw : 0;
+        const pct = ratio * 100;
+        const gb = p && p.size > 0 ? (p.size / 1024 / 1024 / 1024).toFixed(2) : '0.00';
+        return {
+            value: `${Number.isFinite(pct) ? pct.toFixed(2) : '0.00'}%`,
+            status: `${gb}GB`,
+            trend: p?.status?.trim() ? p.status : '—',
+        };
+    }, [truenasStorageStore.pools, truenasStorageStore.percentageUsed]);
+
     const stats = [
         {
             label: "DNS Queries",
@@ -79,16 +97,16 @@ const DashboardPage = () => {
         },
         {
             label: "Storage Health",
-            value: `${(truenasStorageStore.percentageUsed[0] * 100).toFixed(2)}%`,
-            status: `${(truenasStorageStore.pools[0].size / 1024 / 1024 / 1024).toFixed(2)}GB`,
+            value: storageStats.value,
+            status: storageStats.status,
             icon: <HardDrive size={20} />,
             color: "text-green-600",
             bg: "bg-green-50",
-            trend: `${truenasStorageStore.pools[0].status}`
+            trend: storageStats.trend
         },
         {
             label: "Threats Blocked",
-            value: "NaN",
+            value: "—",
             icon: <Shield size={20} />,
             color: "text-blue-600",
             bg: "bg-blue-50",

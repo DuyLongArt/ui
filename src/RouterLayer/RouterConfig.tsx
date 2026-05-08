@@ -13,6 +13,10 @@ const HomeLayout = lazy(() => import("../UILayer/pages/Home/HomeLayout.tsx"));
 const WidgetMainPage = lazy(() => import("../UILayer/pages/Home/Widget/WidgetMainPage.tsx"));
 const PersonProfilePage = lazy(() => import("../UILayer/pages/Admin/PersonProfilePage.tsx"));
 const IOTPage = lazy(() => import("../UILayer/pages/Home/IOT/IOTPage.tsx"));
+const PolicyPage = lazy(() => import("../UILayer/pages/Public/PolicyPage.tsx"));
+const SupportPage = lazy(() => import("../UILayer/pages/Public/SupportPage.tsx"));
+const FeedbackPage = lazy(() => import("../UILayer/pages/Public/FeedbackPage.tsx"));
+const HelpCenterPage = lazy(() => import("../UILayer/pages/Public/HelpCenterPage.tsx"));
 
 // New lazy loads
 const NotFoundPage = lazy(() => import("../UILayer/pages/Error/NotFoundPage.tsx"));
@@ -80,7 +84,7 @@ export const appRoutes: Route[] = [
                 path: "index",
                 component: <EntryPage />,
                 title: "Welcome",
-            }
+            },
         ]
     },
     
@@ -163,7 +167,7 @@ export const appRoutes: Route[] = [
         title: "Admin",
         children: [
             {
-                path: "person-profile",
+                path: "person-profile/:alias?",
                 component: <PersonProfilePage />,
                 title: "Person Profile",
             },
@@ -326,6 +330,40 @@ export const appRoutes: Route[] = [
                 component: <ApproveProcessPage />,
                 title: "Process Approval",
             }*/
+        ]
+    },
+    {
+        type: "page",
+        path: "policy",
+        component: <EntryLayout />,
+        children: [
+            {
+                path: "index",
+                component: <PolicyPage />,
+                title: "Policy",
+            }
+        ]
+    },
+    {
+        type: "page",
+        path: "support",
+        component: <EntryLayout />,
+        children: [
+            {
+                path: "index",
+                component: <SupportPage />,
+                title: "Support",
+            },
+            {
+                path: "feedback",
+                component: <FeedbackPage />,
+                title: "Feedback",
+            },
+            {
+                path: "help",
+                component: <HelpCenterPage />,
+                title: "Help Center",
+            },
         ]
     },
     {

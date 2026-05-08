@@ -11,6 +11,10 @@ import AvatarFloatButton from '../../components/AvatarFloatButton.tsx';
 import Draggable from 'react-draggable';
 import type { DraggableData, DraggableEvent } from 'react-draggable';
 import { usePersonInformationQuery, useInformationDetailsQuery, useUserAccountQuery, useUserSkillsQuery } from '../../../DataLayer/APILayer/userQueries';
+import {
+  syncUserInformationToSupabase,
+  tryBootstrapProfileFromAuthMetadata,
+} from '../../../DataLayer/APILayer/supabase/userInformationSync';
 import { useTruenasPoolsQuery, useTailscaleDevicesQuery, useCloudflareDnsDataQuery } from '../../../DataLayer/APILayer/infrastructureQueries';
 import { useUserAccountStore, useUserProfileStore, useUserSkillStore } from '../../../OrchestraLayer/StateManager/Zustand/userProfileStore.ts';
 import { useTruenasStorageStore } from '../../../OrchestraLayer/StateManager/Zustand/truenasStorageStore';
@@ -52,6 +56,7 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
             id: personInfo.id,
             firstName: personInfo.firstName,
             lastName: personInfo.lastName,
+            friends: personInfo.friends ?? state.information.profiles.friends,
             profileImageUrl: personInfo.profileImageUrl || state.information.profiles.profileImageUrl,
             alias: personInfo.alias,
           },
@@ -59,6 +64,25 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
       }));
     }
   }, [personInfo]);
+
+  // If backend/DB left names empty, fill from Supabase Auth user_metadata (sign-up payload).
+  useEffect(() => {
+    void (async () => {
+      const cur = useUserProfileStore.getState().information.profiles;
+      if (cur.firstName?.trim()) return;
+      const partial = await tryBootstrapProfileFromAuthMetadata();
+      if (!partial) return;
+      useUserProfileStore.setState((state) => ({
+        information: {
+          ...state.information,
+          profiles: {
+            ...state.information.profiles,
+            ...partial,
+          },
+        },
+      }));
+    })();
+  }, [personInfo, detailsInfo]);
 
   // Sync Details to Zustand
   useEffect(() => {
@@ -84,6 +108,12 @@ const HomeLayout: React.FC<ChildrenInterface> = ({ children }) => {
       }));
     }
   }, [detailsInfo]);
+
+  // Mirror “me” profile + details to Supabase for cross-device sync (see userInformationSync.ts SQL).
+  useEffect(() => {
+    if (!personInfo || !detailsInfo) return;
+    void syncUserInformationToSupabase(personInfo, detailsInfo);
+  }, [personInfo, detailsInfo]);
 
   // Sync Account to Zustand
   useEffect(() => {

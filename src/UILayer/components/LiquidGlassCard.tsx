@@ -6,13 +6,15 @@ interface LiquidGlassCardProps {
     className?: string;
     containerClassName?: string;
     blobColor?: string;
+    onClick?: () => void;
 }
 
 const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
     children,
     className = "",
     containerClassName = "",
-    blobColor = "bg-indigo-500/30"
+    blobColor = "bg-indigo-500/30",
+    onClick
 }) => {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
@@ -49,6 +51,7 @@ const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
             className={`relative group ${containerClassName}`}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            onClick={onClick}
         >
             <motion.div
                 style={{

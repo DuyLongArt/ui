@@ -1,6 +1,6 @@
 import axios from "axios";
 import { fromPromise, setup, assign } from "xstate";
-// import uploadImage from "../../../DataLayer/APILayer/MinIO/MinIOClient";
+import Cookies from 'js-cookie';
 
 export const EditAdminProfileMachine = setup({
     types: {
@@ -30,8 +30,15 @@ export const EditAdminProfileMachine = setup({
                     ? "/backend/person/cover/update"
                     : "/backend/person/avatar/update";
 
+                const token = Cookies.get('auth_jwt');
+
                 // 3. Send via Axios
-                const response = await axios.post(endpoint, formData);
+                const response = await axios.post(endpoint, formData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
 
                 // 4. Return the result to XState (event.output)
                 return response.data;
